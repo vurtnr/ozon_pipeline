@@ -22,7 +22,7 @@ from config import BAILIAN_API_KEY, BAILIAN_BASE_URL
 ROOT = Path(__file__).parent
 GEN = ROOT / "data/gen"
 SIZE = "928x1232"  # 3:4，Ozon 官方推荐比例
-PROMPT_VERSION = "main_image_v1"
+PROMPT_VERSION = "slot2_white_bg_v1"
 PRICE_PER_IMAGE = 0.03  # USD，qwen-image-3.0 标准版（输入图 +$0.003）
 COST_PER_IMAGE = PRICE_PER_IMAGE + 0.003
 

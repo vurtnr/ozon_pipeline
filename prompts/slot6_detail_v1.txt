@@ -1,0 +1,5 @@
+# slot6 细节/材质特写｜适用：材质工艺是卖点的品类｜size 928x1232｜I2I
+# 占位符：{{DETAIL}}=特写部位(英文,如 "the brushed metal ring and liquid window") {{COPY_WORD}}=材质关键词(俄语,1-3词)
+Using the reference product photo, keep the exact same product materials and colors. Extreme close-up macro shot of {{DETAIL}}, showing texture and build quality, soft directional lighting, shallow depth of field, premium product photography.
+Render one small Russian label in an elegant thin font at the bottom: "{{COPY_WORD}}"
+No other text, no logos, no watermarks.

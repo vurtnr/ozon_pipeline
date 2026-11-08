@@ -1,0 +1,6 @@
+# slot4 使用演示图｜适用：需要演示操作的商品｜size 928x1232｜I2I
+# 失败模式：手部畸形（AI 画手通病——如翻车改"无手，商品悬浮使用状态"版本）
+# 占位符：{{ACTION}}=动作描述(英文,如 "a hand holding a cup under the dispenser nozzle") {{COPY_LINE}}=一句俄语短句(≤5词)
+Using the reference product photo, keep the exact same product unchanged. Show it in real use: {{ACTION}}. Photorealistic, warm home environment, shallow depth of field, natural skin tones, product clearly visible and occupying about half the frame.
+Optionally render one short handwritten-style Russian phrase with a thin hand-drawn arrow pointing to the product: "{{COPY_LINE}}"
+No other text, no logos, no watermarks.

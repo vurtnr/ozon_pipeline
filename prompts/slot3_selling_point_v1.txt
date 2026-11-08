@@ -1,0 +1,7 @@
+# slot3 核心卖点图｜适用：参数强的品类（小电器/工具）｜size 928x1232｜I2I
+# 失败模式：数字渲染错（生成后必须人工核对数字）、背景抢主体
+# 占位符：{{COPY_HEADLINE}}=卖点大标题(3-6词,数字优先) {{COPY_BADGE}}=1个数字徽章(如 2000 мА·ч)
+Using the reference product photo, keep the exact same product unchanged. Place it centered on a clean light gradient studio background (soft beige-to-white), product occupying 50% of the frame, soft floor shadow.
+Render one large bold Russian headline at the top third: "{{COPY_HEADLINE}}" — dark navy sans-serif, up to two lines.
+Render one rounded-corner badge in a single accent color near the lower third with this exact text: "{{COPY_BADGE}}" — white bold letters on the badge.
+Minimal, premium, high contrast, no other text, no logos, no price, no discount words.
