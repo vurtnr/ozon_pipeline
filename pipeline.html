@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ozon 电商选品上架自动化流程 v1.0</title>
+<style>
+  :root {
+    --bg: #0f1115; --card: #1a1d24; --card2: #22262f; --border: #2e3440;
+    --text: #e6e8ec; --dim: #9aa3b2; --accent: #4f8cff;
+    --green: #34c759; --yellow: #ffb340; --red: #ff5f57; --purple: #b48cff;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: var(--bg); color: var(--text); font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif; line-height: 1.7; padding: 40px 20px; }
+  .container { max-width: 980px; margin: 0 auto; }
+  h1 { font-size: 28px; margin-bottom: 6px; }
+  h2 { font-size: 20px; margin: 40px 0 16px; padding-left: 12px; border-left: 4px solid var(--accent); }
+  h3 { font-size: 16px; margin: 20px 0 10px; }
+  .subtitle { color: var(--dim); font-size: 14px; margin-bottom: 30px; }
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px 24px; margin-bottom: 16px; }
+  .tag { display: inline-block; padding: 1px 8px; border-radius: 4px; font-size: 12px; font-weight: 600; margin-right: 6px; vertical-align: 2px; }
+  .t-ok { background: rgba(52,199,89,.15); color: var(--green); }
+  .t-warn { background: rgba(255,179,64,.15); color: var(--yellow); }
+  .t-bad { background: rgba(255,95,87,.15); color: var(--red); }
+  .t-info { background: rgba(79,140,255,.15); color: var(--accent); }
+  .t-manual { background: rgba(180,140,255,.15); color: var(--purple); }
+  table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 14px; }
+  th, td { padding: 8px 12px; border: 1px solid var(--border); text-align: left; vertical-align: top; }
+  th { background: var(--card2); font-weight: 600; }
+  code { background: var(--card2); padding: 1px 6px; border-radius: 4px; font-size: 13px; color: #7ecfff; font-family: "SF Mono", Menlo, monospace; }
+  .flow { display: flex; flex-direction: column; align-items: center; gap: 0; margin: 24px 0; }
+  .fnode { background: var(--card2); border: 1px solid var(--border); border-radius: 10px; padding: 12px 28px; text-align: center; max-width: 640px; width: 100%; }
+  .fnode b { color: var(--accent); }
+  .farrow { color: var(--dim); font-size: 18px; line-height: 1.4; }
+  .fcost { font-size: 12px; color: var(--dim); }
+  .note { background: rgba(255,179,64,.08); border: 1px solid rgba(255,179,64,.3); border-radius: 8px; padding: 12px 16px; margin: 12px 0; font-size: 14px; }
+  .danger { background: rgba(255,95,87,.08); border-color: rgba(255,95,87,.3); }
+  .ok { background: rgba(52,199,89,.08); border-color: rgba(52,199,89,.3); }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media (max-width: 700px) { .grid2 { grid-template-columns: 1fr; } }
+  .small { font-size: 13px; color: var(--dim); }
+  ul { padding-left: 20px; }
+  li { margin: 4px 0; }
+  .stage-head { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+  .stage-num { background: var(--accent); color: #fff; width: 26px; height: 26px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; flex-shrink: 0; }
+</style>
+</head>
+<body>
+<div class="container">
+
+<h1>Ozon 电商选品上架自动化流程</h1>
+<div class="subtitle">v1.0 · 2026-11-08 · 基于实测验证整理（跨境 realFBS / 跟卖+自建卡混合模式）<br>
+标注约定：<span class="tag t-ok">✅已实测</span><span class="tag t-warn">⚠️待验证</span><span class="tag t-manual">👤人工环节</span><span class="tag t-bad">⛔红线</span></div>
+
+<!-- ================= 总览 ================= -->
+<h2>一、全流程总览</h2>
+<div class="card">
+<div class="flow">
+  <div class="fnode"><b>Layer 0 类目剪枝</b>（官方类目树 7,363 叶，免费）<br><span class="fcost">剪掉 EAC认证 / 品牌敏感 / 大件重货</span></div>
+  <div class="farrow">↓</div>
+  <div class="fnode"><b>Layer 1 热销类目四维评分</b>（Nexscope，~¥0.1–0.2/类目）<br><span class="fcost">规模 × 动销率 × 头部集中度 × 跨境(RFBS)份额</span></div>
+  <div class="farrow">↓</div>
+  <div class="fnode"><b>Layer 2 关键词漏斗</b>（Nexscope，13–32 credits/词）<br><span class="fcost">月搜·增长·竞对·价格带·跨境可售·重量·转化·集中度</span></div>
+  <div class="farrow">↓</div>
+  <div class="fnode"><b>Layer 3 商品体检</b>（ozon-product-trend 日序列）<br><span class="fcost">真动销？促销脉冲？评分≥4.4？跟卖需 modelId 并入预检</span></div>
+  <div class="farrow">↓</div>
+  <div class="fnode"><b>Layer 4 单位经济闸门</b><br><span class="fcost">1688价+头程+佣金+费率 → 负毛利直接杀（先于素材投入）</span></div>
+  <div class="farrow">↓</div>
+  <div class="fnode"><b>1688 图搜找货</b>（官方 Ocean Gateway skill，免费）<br><span class="fcost">爆款主图 → 同款货源 → sold_count/供应商筛选</span></div>
+  <div class="farrow">↓</div>
+  <div class="fnode"><b>AI 主图+套图</b>（阿里百炼 qwen-image-3.0，$0.03/张）<br><span class="fcost">3:4 ≥900×1200 去水印 · 俄语卖点 · 👤人工抽检 20%</span></div>
+  <div class="farrow">↓</div>
+  <div class="fnode"><b>Ozon 上架</b>（Seller API，每日限额 100 卡）<br><span class="fcost">import(v3) → 轮询 → 全量图片 → 价格库存</span></div>
+  <div class="farrow">↓</div>
+  <div class="fnode"><b>AI 视频</b>（wan3.0-video，¥6/条·仅爆款）<br><span class="fcost">上架后跑 3–7 天数据 → winning 才做 → 👤手动挂卡</span></div>
+  <div class="farrow">↓</div>
+  <div class="fnode"><b>数据反哺</b>（analytics/product-queries，需 Premium）<br><span class="fcost">自家出单数据回灌选品词库，迭代阈值</span></div>
+</div>
+</div>
+
+<!-- ================= 分阶段 ================= -->
+<h2>二、各环节详解与注意点</h2>
+
+<div class="card">
+  <div class="stage-head"><span class="stage-num">0</span><h3 style="margin:0">类目剪枝 — 官方类目树 <span class="tag t-ok">✅已实测</span></h3></div>
+  <ul>
+    <li><b>工具</b>：<code>POST /v1/description-category/tree</code>（Seller API，免费），已落表 <code>data/categories-leaf.json</code>（7,363 末级类目，26 一级类目）。</li>
+    <li><b>注意</b>：中间层字段是 <code>description_category_id/category_name</code>，末级是 <code>type_id/type_name</code>；Nexscope 的 categoryId 是下划线拼接格式（如 <code>17027494_17027905_92014</code>）。</li>
+    <li><b>注意</b>：旧路径 <code>/v2/category/tree</code>、<code>/v3/category/attribute</code> 已 404 下线，正确属性接口是 <code>/v1/description-category/attribute</code>（+ <code>/values</code>）。</li>
+  </ul>
+</div>
+
+<div class="card">
+  <div class="stage-head"><span class="stage-num">1</span><h3 style="margin:0">热销类目四维评分 <span class="tag t-ok">✅接口已验证</span></h3></div>
+  <ul>
+    <li><b>工具</b>：Nexscope <code>ozon-category-search</code>，实测返回类目总盘（totalSales/totalRevenue/avgPrice）+ bestsellers（月销/价格/评分）。</li>
+    <li><b>四维</b>：规模（totalRevenue）× 动销率（sales&gt;0 商品占比）× 头部集中度（top10 营收份额，垄断类不进）× RFBS 份额（<code>fulfillment=RFBS</code> 过滤）。</li>
+    <li><b>注意</b>：<code>ozon-category-products</code>（按俄语路径查）深层路径实测返回 0，<b>用 categoryId 方案替代</b>。</li>
+    <li><b>成本</b>：每类目 1 次调用（13–32 credits），全扫 7,363 类目需 10–23 万 credits 超出 Starter 月额（3 万）——<b>必须先剪枝再扫描</b>。</li>
+  </ul>
+</div>
+
+<div class="card">
+  <div class="stage-head"><span class="stage-num">2</span><h3 style="margin:0">关键词漏斗 <span class="tag t-ok">✅已跑通</span></h3></div>
+  <ul>
+    <li><b>工具</b>：Nexscope <code>market-keyword-search</code>（43 字段，含 queryCn 中文翻译），脚本 <code>select_products.py</code>。</li>
+    <li><b>六维+四新闸门</b>（阈值均为初始值，500 词样本后重校准）：
+      <table>
+        <tr><th>闸门</th><th>阈值</th><th>说明</th></tr>
+        <tr><td>月搜索量</td><td>≥ 5,000</td><td>需求基本盘</td></tr>
+        <tr><td>30 天增长</td><td>≥ -5%</td><td>允许微跌，排除跳水</td></tr>
+        <tr><td>竞争商品数</td><td>≤ 3,000</td><td>拥挤度</td></tr>
+        <tr><td>均价带</td><td><b>700–5,000₽</b></td><td>下沿从 300 上调：低价毛利被头程+佣金吃穿（realFBS 单位经济）</td></tr>
+        <tr><td>跨境可售</td><td><code>crossBorderSellable=true</code></td><td>⭐硬闸门：类目能卖≠跨境能卖</td></tr>
+        <tr><td>重量</td><td>≤ 2kg（体积重 ≤3kg）</td><td>RFBS 运费结构推断</td></tr>
+        <tr><td>加购转化 ca</td><td>≥ 类目中位数</td><td>需求质量（相对判据）</td></tr>
+        <tr><td>集中度 conversionSharing</td><td>≤ 0.4</td><td>头部垄断的词不进</td></tr>
+        <tr><td>退货取消率</td><td>≤ 20%</td><td>已知风险</td></tr>
+      </table>
+    </li>
+    <li><b>产出</b>：候选词 + 爆款商品（ozonId/sku/主图URL）→ 直接生成 1688 图搜任务清单。</li>
+  </ul>
+</div>
+
+<div class="card">
+  <div class="stage-head"><span class="stage-num">3</span><h3 style="margin:0">商品体检（找货前必做）<span class="tag t-warn">⚠️待实现</span></h3></div>
+  <ul>
+    <li><b>工具</b>：Nexscope <code>ozon-product-trend</code>（任意 SKU 的 T-1 日级 price/sales/balance/rating 序列）。</li>
+    <li><b>拦什么</b>：促销脉冲（单日暴涨后归零）、假动销、评分 &lt;4.4 的烂卡。</li>
+    <li><b>跟卖分支</b>：用 <code>ozon-product-detail</code> 的 <code>modelId</code> 做并入预检——<b>进不了同一合并卡 = 一票否决</b>；卡主可"禁止复制"。</li>
+  </ul>
+</div>
+
+<div class="card">
+  <div class="stage-head"><span class="stage-num">4</span><h3 style="margin:0">单位经济闸门（先算账再花钱）<span class="tag t-warn">⚠️待实现</span></h3></div>
+  <ul>
+    <li><b>位置设计</b>：在 AI 素材投入<b>之前</b>——一张卡素材成本 ¥1.5–2，死在利润上的品不该花这个钱。</li>
+    <li><b>公式</b>：到手利润 = Ozon 售价 − 1688 拿货价 − 头程运费 − Ozon 佣金 − 支付/汇损 − 预期退货损耗。</li>
+    <li><b>纪律</b>：第三方销量数字<b>只作序数（排名）不作基数（算账）</b>——利润测算只用我方成本+官方费率（calculator.ozon.ru）。</li>
+    <li><b>实测教训</b>：皂液器 1688 拿货 ¥23，Ozon 头部卖 350₽(≈¥25)——看着美的品可能毛利为负。</li>
+  </ul>
+</div>
+
+<div class="card">
+  <div class="stage-head"><span class="stage-num">5</span><h3 style="margin:0">1688 图搜找货 <span class="tag t-ok">✅已跑通（官方通道）</span></h3></div>
+  <ul>
+    <li><b>工具</b>：1688 官方 Ocean Gateway skill（<code>next-1688/1688-product-find</code>），AK 走 OAuth（<code>cli.py get_ak</code>）本地 keyring 存储，<b>不需要企业开发者入驻</b>，免费。脚本 <code>sourcing_agent.py</code>。</li>
+    <li><b>实测</b>：6 个候选词 5 个找到货源；皂液器 ¥23·已售1万·相似度 0.91；销量排序 <code>sold_desc</code> 严格有效。</li>
+    <li><b>返回字段</b>：product_id / title / price / sold_count / supplier / yx_index（严选指数）/ quantity_begin / detail_url / image_url / similarity_score。<b>compare 能力追加</b>：sku_id/sku_title（单 SKU）+ stock_amount（库存）。</li>
+    <li class="note"><b>⚠️ 相似度阈值不能一刀切</b>：实拍图搜同款 0.85+ 有效；Ozon 精修设计图（黄底大字）搜同款 0.70+ 即可能对——用"相似度+类目一致性"双判据。</li>
+    <li><b>全详情缺口</b>：拿不到阶梯价/全 SKU 表/属性参数——但<b>不阻塞</b>（见"十、参数获取策略"）；补齐路径：万邦 item_get（¥0.022–0.05/次）。</li>
+    <li><b>备胎</b>：大吉 API（与官方接口同构，¥499/月/千次日）、万邦（¥0.05/次）——供应商做成可替换 adapter。</li>
+  </ul>
+</div>
+
+<div class="card">
+  <div class="stage-head"><span class="stage-num">6</span><h3 style="margin:0">AI 主图+套图 <span class="tag t-warn">⚠️待接入</span><span class="tag t-manual">👤抽检20%</span></h3></div>
+  <ul>
+    <li><b>工具</b>：阿里云百炼 <code>qwen-image-3.0</code>（$0.03/张，1K/2K 同价，参考图 +$0.003/张）。选它的原因：12 国语言文字渲染（俄语卖点套图的决定性优势）+ 支持 3:4。</li>
+    <li><b>Ozon 图片硬要求</b>（后台原文实锤）：<b>"请上传 3:4 格式的照片，这是所有类别推荐的比例"</b>；≥900×1200、≤10MB、无第三方水印。</li>
+    <li><b>prompt 双轨</b>：合规轨（去文字/水印/logo、白底、主体居中 ~80%）+ 本地化轨（俄式审美：写实、功能直给、信息密度高）。prompt 模板按类目分文件维护（<code>prompts/</code>），每版记录过审率。</li>
+    <li class="note danger"><b>⛔ 人工抽检不可省</b>：AI 图形变/颜色失真会被 Ozon 判"信息不实"——批量前先人工抽检 20%，首 20 张卡全检。</li>
+    <li><b>备选</b>：火山方舟 Seedream 4.5（¥0.25/张，图像编辑/参考图保真略强）——接口都是 OpenAI 兼容，换 base URL 即可。</li>
+  </ul>
+</div>
+
+<div class="card">
+  <div class="stage-head"><span class="stage-num">7</span><h3 style="margin:0">Ozon 上架 <span class="tag t-ok">✅链路全验证</span></h3></div>
+  <ul>
+    <li><b>链路</b>（全部 endpoint 实测存在）：<br>
+      <code>/v1/description-category/tree</code> → <code>/v1/description-category/attribute</code>（字典值必须映射 <code>dictionary_value_id</code>，禁自由文本）→ <code>/v3/product/import</code>（≤100卡/次，异步 task_id）→ <code>/v1/product/import/info</code>（轮询）→ <code>/v1/product/pictures/import</code>（<b>全量覆盖语义</b>：传 1 张会删掉之前 10 张！）→ 价格 <code>/v1/product/import/prices</code> + 库存 <code>/v2/products/stocks</code></li>
+    <li><b>跟卖</b>：<code>/v1/product/import-by-sku</code> 或后台"复制现成商品"入口（已实锤存在）。</li>
+    <li class="note danger"><b>⛔ 每日限额（后台实显）</b>：基础 994 + 附加 400，<b>每天最多添加 100 张卡、可更改 2,000</b>——铺货节奏按此设计；2026-02-24 起商品操作统一限流，超限 429 退避 10–15 分钟。</li>
+    <li><b>图片传入</b>：必须是<b>公网可直链 URL</b>——alicdn 图有防盗链，必须先下载转存自家 OSS。</li>
+    <li><b>文案</b>：LLM 生成俄语标题（≤200 字符）+ rich-content JSON（先拿同类爆款现卡 JSON 当模板）。</li>
+  </ul>
+</div>
+
+<div class="card">
+  <div class="stage-head"><span class="stage-num">8</span><h3 style="margin:0">AI 视频（仅爆款）<span class="tag t-warn">⚠️待接入</span><span class="tag t-manual">👤手动挂卡</span></h3></div>
+  <ul>
+    <li><b>工具</b>：阿里百炼 <code>wan3.0-video</code>（720P ¥0.6/秒，原生带音效/台词/BGM，最长 30s）——与图片同账号同 key，架构收敛。</li>
+    <li><b>触发条件</b>：上架后跑 3–7 天数据，出单/转化达标才做——<b>视频永远不进主链路</b>。</li>
+    <li><b>做法</b>：AI 主图（OSS URL）→ 图生视频（prompt 只写动作+声音，画面跟随首帧）→ 下载立即转存 OSS（链接有时效）→ 👤后台"媒体"步骤手动挂卡（API 挂法未验证，首张 PoC 时确认）。</li>
+    <li><b>成本</b>：10s@720P = ¥6/条；月 10 条爆款含重试 ≈ ¥120/月。</li>
+  </ul>
+</div>
+
+<!-- ================= 数据纪律 ================= -->
+<h2>三、三条数据纪律（全局）</h2>
+<div class="card">
+  <table>
+    <tr><th>#</th><th>纪律</th><th>原因</th></tr>
+    <tr><td>1</td><td><b>第三方销量只作序数，不作基数</b></td><td>MPStats/萌啦/Nexscope 等全是库存差分估算，公开对比误差可达 2.8–6.3 倍；排名可用，算账不可</td></tr>
+    <tr><td>2</td><td><b>跨期比较必须同时间窗口</b></td><td>30 天对 30 天，否则增长率无意义</td></tr>
+    <tr><td>3</td><td><b>候选表必带三列</b>：<code>snapshot_date</code> + <code>阈值版本</code> + <code>成本假设快照</code></td><td>复盘时能回溯"当时为什么这么选"</td></tr>
+  </table>
+</div>
+
+<!-- ================= 成本 ================= -->
+<h2>四、月度成本预算</h2>
+<div class="card">
+  <table>
+    <tr><th>项</th><th>单价</th><th>量级（日更 50 卡）</th><th>月成本</th></tr>
+    <tr><td>选品数据（Nexscope Starter）</td><td>$29/月 = 3 万 credits</td><td>关键词+类目调用 ~1,500 次</td><td><b>≈¥210</b></td></tr>
+    <tr><td>AI 生图（qwen-image-3.0）</td><td>$0.03/张</td><td>50 卡 × 5 图 × 30 天 = 7,500 张</td><td><b>≈¥1,600</b></td></tr>
+    <tr><td>AI 视频（wan3.0-video）</td><td>¥0.6/s@720P</td><td>10 条爆款 × 10s × 重试 2 次</td><td><b>≈¥120</b></td></tr>
+    <tr><td>1688 图搜（官方 skill）</td><td>免费</td><td>50 次/日</td><td><b>¥0</b></td></tr>
+    <tr><td>Ozon API / 类目树</td><td>免费</td><td>—</td><td><b>¥0</b></td></tr>
+    <tr><td colspan="3"><b>合计</b></td><td><b>≈¥2,000/月</b></td></tr>
+  </table>
+  <div class="note ok">对比初版估算（¥2.5k–4k/月）：1688 官方免费通道 + 阿里百炼图视一体让成本降了约 1/3，且省掉 MPStats（¥500–1100/月）和 Premium Pro（49,990₽/月+2.5% 抽成）两个订阅。</div>
+</div>
+
+<!-- ================= 红线 ================= -->
+<h2>五、红线与合规</h2>
+<div class="card">
+  <table>
+    <tr><th>红线</th><th>后果</th><th>执行方式</th></tr>
+    <tr><td>⛔ EAC 强制认证类目（电子/儿童用品/化妆品/食品接触…）</td><td>海关卡货 + 下架封店</td><td>Layer 0 类目黑名单写死，选品个案复核</td></tr>
+    <tr><td>⛔ 品牌词/品牌图（Nike/Samsung…）</td><td>知识产权投诉封店</td><td>品牌词过滤清单，一律不跟不蹭</td></tr>
+    <tr><td>⛔ 直接用 1688 原图上架</td><td>水印/中文文案判"信息不实"+版权风险</td><td>必须 AI 重制 + 人工抽检 20%</td></tr>
+    <tr><td>⛔ 图片非全量上传</td><td>pictures/import 是覆盖语义，传 1 张删 10 张</td><td>代码里强制一次传全量</td></tr>
+    <tr><td>⛔ 1688 接口申请提"爬虫"</td><td>审核直接驳回</td><td>理由统一写"内部采购 ERP 选品"</td></tr>
+  </table>
+</div>
+
+<!-- ================= 账号状态 ================= -->
+<h2>六、账号 / Key 状态清单</h2>
+<div class="card">
+  <table>
+    <tr><th>服务</th><th>用途</th><th>状态</th></tr>
+    <tr><td>Ozon Seller API（Client ID 4101758）</td><td>类目树/上架/库存/分析</td><td><span class="tag t-ok">已验证可用</span></td></tr>
+    <tr><td>Nexscope（nk- key）</td><td>选品数据源（关键词/类目/趋势）</td><td><span class="tag t-ok">免费试用中，1000 credits</span></td></tr>
+    <tr><td>1688 官方 skill（Ocean Gateway）</td><td>图搜找货</td><td><span class="tag t-ok">AK 已配置，实测出数</span></td></tr>
+    <tr><td>阿里云百炼</td><td>AI 生图 + AI 视频</td><td><span class="tag t-bad">⛔ 待开通（当前唯一硬卡点）</span></td></tr>
+    <tr><td>1688 开放平台企业开发者</td><td>长期全量 API 备胎：商品详情/SKU 阶梯价/跨境解决方案（图搜已由上方 skill 解决，<b>此卡点在主链路上不阻塞</b>）</td><td><span class="tag t-warn">入驻被卡（控制台登录死循环，排查中）</span></td></tr>
+    <tr><td>OSS / 图床</td><td>图片公网中转</td><td><span class="tag t-ok">已就绪（用户声明）</span></td></tr>
+  </table>
+</div>
+
+<!-- ================= 待验证 ================= -->
+<h2>七、首张 PoC 待验证清单</h2>
+<div class="card">
+  <ul>
+    <li>⚠️ <b>视频挂卡路径</b>：创建向导"媒体"步骤的视频字段（需建真实草稿卡）；</li>
+    <li>⚠️ <b>统一限流真实数值</b>：首批 10–20 张卡试传观察 429；</li>
+    <li>⚠️ <b>1688 skill 限流额度</b>：批量跑时观察；</li>
+    <li>⚠️ <b>Nexscope 数据精度回归</b>：拿自家后台真值对比 5 个已知热词；</li>
+    <li>⚠️ <b>Wan 3.0 竖版（3:4/9:16）出片质量</b>：用皂液器主图实测一条；</li>
+    <li>⚠️ <b>属性映射工作量</b>：首个类目的必填属性实测（决定 listing_worker 自动化范围）。</li>
+  </ul>
+</div>
+
+<!-- ================= 全自动化架构 ================= -->
+<h2>八、全自动化架构（一键运行，仅图/视频两道人审）</h2>
+<div class="card">
+  <h3>状态机（唯一事实源）</h3>
+  <p><code>pipeline.db</code>（SQLite）：<code>discovered→scored→sourced→checked→profitable→imaging→【待审】→listed→syncing→winning→videoing→【待审】→done</code>。唯一键 = <code>1688商品ID + Ozon SKU</code>，任何环节崩溃可续跑。</p>
+  <h3>两个审核闸的位置（人工界面只有一个：本地审核台）</h3>
+  <table>
+    <tr><th>闸</th><th>位置</th><th>按钮语义</th></tr>
+    <tr><td>👤图审</td><td><b>上架前</b>：<code>imaging→【待审】→listed</code></td><td>通过=进上架队列；打回=换 seed 重生（$0.03/张）；毙品=记录死因反哺阈值</td></tr>
+    <tr><td>👤视频审</td><td><b>上架后</b>：winning 之后才生成，独立于主链路</td><td>通过=挂卡；不过=该品保持无视频在架</td></tr>
+  </table>
+  <h3>三个“隐藏人工点”的对策</h3>
+  <ul>
+    <li><b>新类目属性映射首验</b>：进“类目首验队列”，首 3 张卡人工扫一眼，通过后该类目转全自动；</li>
+    <li><b>供应商异常</b>：涨价 >10% 自动重算利润→负毛利自动下架；断货自动清零 Ozon 库存（防超卖），回货自动恢复——规则化，不依赖人；</li>
+    <li><b>凭证续期</b>（AK/Ozon key 过期）：每日健康检查 + 通知，月级频率人工。</li>
+  </ul>
+  <h3>保险丝（无人值守底线）</h3>
+  <ul>
+    <li>日限额 100 卡硬顶 · 429 退避 10–15 分钟 · 每日费用上限熔断 · 异常通知（Telegram/邮件）。</li>
+    <li>图审模式开关 <code>review_mode: full | sample</code>：初期全检，过审率稳定 95%+ 后降抽审 20%。</li>
+  </ul>
+  <h3>里程碑</h3>
+  <table>
+    <tr><th>M</th><th>目标</th><th>出口标准</th></tr>
+    <tr><td>M1</td><td>单卡端到端（半自动）</td><td>皂液器走完选品→生图→手动上架，验证属性映射/媒体步骤/限流</td></tr>
+    <tr><td>M2</td><td>状态机串联</td><td>一条命令跑完全流程；生图挂百炼 key</td></tr>
+    <tr><td>M3</td><td>无人值守</td><td>cron 日跑 + 审核台 + 保险丝 + 通知</td></tr>
+    <tr><td>M4</td><td>自优化</td><td>阈值自动校准 + 断货监控 + 反哺闭环</td></tr>
+  </table>
+  <div class="note"><b>范围边界（user-decided）</b>：售后/客服/评价不在本系统；1688 采购下单暂不自动化（资金安全，M4 后议）；买样验货不进系统，列入运营 SOP（前 3 个月每类目买 1 样）。</div>
+</div>
+
+<!-- ================= 多SKU ================= -->
+<h2>九、多 SKU 数据与上架策略</h2>
+<div class="card">
+  <ul>
+    <li><b>数据通道</b>：万邦 <code>item_get</code>（全 SKU 表+阶梯价，¥0.022–0.05/次）&gt; 开放平台（被卡）&gt; 供应商要规格表；Ocean skill 只给匹配到的单 SKU。</li>
+    <li><b>核心认知</b>：自动化上架不需要 1688 全部 SKU——<b>让市场替你选</b>：Ozon 竞品卡反查其在售变体（俄语，市场已验证）→ 取 top 1–3 动销变体 → LLM 模糊匹配回 1688 sku_title（“белый,250мл”↔“P18白色”）+ 变体图相似度二次确认。</li>
+    <li><b>上架结构</b>：<code>import items[]</code> 每变体一条，独立 offer_id（<code>{1688商品ID}-{变体序号}</code>）、价格、库存、图片（变体图也走 AI 重制）。</li>
+    <li><b>库存同步按变体粒度</b>：cron 刷货源 SKU 库存 → 断货变体自动清零 → 回货恢复。</li>
+    <li><b>分期</b>：PoC/M2 只做单 SKU 卡（竞品最热变体）；M3 双变体+映射确认塞进审核台；M4 多变体全自动、滞销变体自动停售。</li>
+  </ul>
+</div>
+
+<!-- ================= 参数获取 ================= -->
+<h2>十、上架参数获取策略（不用爬虫）</h2>
+<div class="card">
+  <table>
+    <tr><th>参数</th><th>来源（按优先级）</th></tr>
+    <tr><td>类目/属性定义</td><td>Ozon 官方 API（<code>description-category/attribute</code>）——唯一权威</td></tr>
+    <tr><td>属性值（俄语 dictionary_value_id）</td><td>⭐ <b>竞品卡反查</b>（同产品=同属性模板，Nexscope ozon-product-detail）→ 供应商规格书 → 同款交叉验证</td></tr>
+    <tr><td>尺寸重量</td><td>买样实测（跟卖前本该买样）→ 竞品卡 attributes 反查 → 供应商确认</td></tr>
+    <tr><td>标题/描述</td><td>LLM 生成（竞品现卡 JSON 当 rich-content 模板）</td></tr>
+    <tr><td>价格</td><td>Layer 4 单位经济（只用我方成本+官方费率）</td></tr>
+    <tr><td>SKU 变体</td><td>竞品在售变体（决策）→ 1688 SKU 表（履约）</td></tr>
+  </table>
+  <div class="note danger"><b>⛔ 为什么不用爬虫抓 1688 详情页</b>：① 反爬成本（登录墙+签名+滑块，官方网关抓主图都被挡）；② 账号风险——爬虫 cookie 会连坐 Ocean skill（免费图搜的命根子）和企业入驻；③ 没必要——每个参数都有更便宜的合法来源。</div>
+</div>
+
+<!-- ================= 双视角评审 ================= -->
+<h2>十一、双视角评审（2026-11-08 第一性原理拷问）</h2>
+<div class="card">
+  <h3>🤖 AI Agent 架构师视角</h3>
+  <ul>
+    <li><b>做对了</b>：workflows over agents——确定性 worker 为主、LLM 只守判断点（选品打分/文案/驳回诊断）；状态机是唯一事实源；人工闸位置正确（不可逆动作前）。</li>
+    <li class="note danger"><b>最大缺口：没有 eval 闭环</b>。LLM 属性映射准确率、文案质量目前靠人眼——从第一天起就应把审核台的每次“通过/打回/毙品”<b>记录为评估标签</b>，形成 golden set，否则 prompt 迭代是在盲飞。</li>
+    <li><b>次要缺口</b>：决策可追溯性（每品为什么被选/被杀的完整 trace，是数据纪律第三条的落地载体）；prompt 版本管理（阈值有版本了，prompt 也要有）。</li>
+  </ul>
+  <h3>🛒 顶级电商运营总监视角</h3>
+  <ul>
+    <li class="note danger"><b>单位经济缺了最大一块：推广费</b>。Ozon 新卡几乎必须投广告起量，CPC 会吃掉 5–15% 毛利——Layer 4 不含广告成本的利润是假利润。必须加“推广准备金”参数（初期按售价 8–10% 预留）。</li>
+    <li class="note danger"><b>跟卖模式的结构性矛盾</b>：buy box 由价格指数+时效决定，而 realFBS（15–25 天）<b>自己就是最慢的那个渠道</b>——萌啦的跟卖六条件里“你走快渠道”我们不满足。结论：纯跟卖只适合“现 offer 更慢/缺货”的窗口；跑出数据的 winning 品要规划转 FBP/海外仓，否则跟卖出单≈陪跑。<b>我们的真实定位是“数据驱动铺货”，不是经典跟卖。</b></li>
+    <li><b>改价频率</b>：竞对是小时级自动改价，我们日级同步不够——价格指数掉了会被踢出 buy box。价格监控至少 4 次/日。</li>
+    <li><b>节奏风险</b>：新店日更 50 卡太激进（账户权重/审核通过率/迟发率指标），建议 10–20 张高质量卡起步，账户健康指标（取消率/迟发率）进保险丝。</li>
+    <li><b>现金流</b>：Ozon 回款周期 + 1688 预付采购 = 营运资金模型缺失，放量前必须算（卖 1 万/月的货要垫多少）。</li>
+  </ul>
+</div>
+
+<div class="small" style="margin-top:30px">
+最后更新：2026-11-08（新增 §八全自动化架构、§九多SKU策略、§十参数获取策略、§十一双视角评审）<br>
+依据文档：docs/ozon-dropshipping-research.md（主研究+§6.8 后台实测）· docs/ozon-selection-logic-review.md（选品方法论交叉论证）· docs/1688-api-access-research.md · docs/1688-image-search-alternatives.md · docs/1688-console-login-issue.md<br>
+代码：ozon-pipeline/（select_products.py · category_tree.py · sourcing_agent.py · vendor/1688-product-find）<br>
+阈值均为初始值，需按首批 500 词样本与 PoC 命中率重校准。
+</div>
+
+</div>
+</body>
+</html>
