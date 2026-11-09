@@ -94,6 +94,19 @@ def search_one(image: str, tmp: Path) -> dict:
             "raw_count": len(products)}
 
 
+def search_text(query_cn: str) -> dict:
+    """文字搜降级：图搜 sim 不过闸时用中文关键词找货（结果需人工确认匹配）"""
+    result = run_skill(["text_search", "-q", query_cn, "-l", "10", "-s", "sold_desc"])
+    if not result.get("success"):
+        return {"ok": False, "error": result.get("markdown", "unknown")}
+    data = result.get("data") or {}
+    if isinstance(data, dict) and isinstance(data.get("data"), dict):
+        data = data["data"]
+    products = data.get("similar_products") or data.get("products") or []
+    return {"ok": True, "mode": "text", "suppliers": pick_suppliers(products),
+            "raw_count": len(products)}
+
+
 def main() -> None:
     args = sys.argv[1:]
     with tempfile.TemporaryDirectory() as tmpdir:
@@ -111,13 +124,17 @@ def main() -> None:
         for t in tasks:
             by_query.setdefault(t["query"], t)
         items = list(by_query.values())[:limit]
+        text_qs = args[args.index("--text") + 1].split(",") if "--text" in args else None
 
         report = []
         for i, t in enumerate(items, 1):
             print(f"[{i}/{len(items)}] {t['query']} ...", file=sys.stderr)
-            r = search_one(t["imageUrl"], tmp)
+            if text_qs:  # 文字搜降级模式：任务文件里每项带 queryCn
+                r = search_text(t["queryCn"])
+            else:
+                r = search_one(t["imageUrl"], tmp)
             report.append({"query": t["query"], "ozonId": t.get("ozonId"),
-                           "ozonImage": t["imageUrl"], **r})
+                           "ozonImage": t.get("imageUrl", ""), **r})
         out = DATA / f"sourcing-{date.today().isoformat()}.json"
         json.dump(report, open(out, "w", encoding="utf-8"),
                   ensure_ascii=False, indent=2)

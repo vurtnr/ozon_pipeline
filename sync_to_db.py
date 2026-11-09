@@ -21,6 +21,13 @@ DATA = ROOT / "data"
 # PoC 手工生图目录名（非 offer_id 命名的遗留），image_worker 升级后统一 offer_id，此表可删
 GEN_DIR_ALIASES = {"дозатор для жидкого мыла": "soap"}
 
+# 同义 query 变体合并：多个俄语关键词指向同一物理品时共用一份货源/spec/套图，
+# 防止重复生图。key=变体 query，value=主 query（需在 GEN_DIR_ALIASES 或 offer 目录里有资产）
+QUERY_ALIASES = {
+    "дозатор для жидкого мыла сенсорный": "дозатор для жидкого мыла",
+    "сенсорный дозатор для жидкого мыла": "дозатор для жидкого мыла",
+}
+
 
 def latest(pattern: str) -> Path | None:
     files = sorted(DATA.glob(pattern))
@@ -49,6 +56,7 @@ def sync() -> None:
     with P.conn() as c:
         P._migrate(c)
         for query, cand in candidates.items():
+            asset_q = QUERY_ALIASES.get(query, query)  # 变体 query 共享主 query 的 spec/套图
             top = cand["topProducts"][0]
             row = c.execute("SELECT id,state FROM products"
                             " WHERE query=? AND ozon_id=?",
@@ -66,16 +74,16 @@ def sync() -> None:
                     "offer_id": sup["url"].split("/offer/")[-1].split(".")[0],
                     "image_url": sup["imageUrl"],
                 }
-            if query in specs:
-                spec = json.load(open(specs[query], encoding="utf-8"))
-                metrics["spec_path"] = str(specs[query].relative_to(ROOT))
+            if asset_q in specs:
+                spec = json.load(open(specs[asset_q], encoding="utf-8"))
+                metrics["spec_path"] = str(specs[asset_q].relative_to(ROOT))
                 metrics["need_confirm"] = bool(spec.get("need_confirm"))
                 metrics["spec_validation"] = spec["_meta"].get("validation")
                 metrics["ozon_title"] = spec.get("ozon_title", "")
                 metrics["description_ru"] = spec.get("description_ru", "")
             # 生图资产目录（存在即视为 imaging 完成）
             offer_id = metrics.get("sourcing", {}).get("offer_id", "")
-            want = {GEN_DIR_ALIASES.get(query, ""), offer_id}
+            want = {GEN_DIR_ALIASES.get(asset_q, ""), offer_id}
             gen_dir = next((d for d in (DATA / "gen").iterdir()
                             if d.is_dir() and d.name in want), None)
             if gen_dir:
