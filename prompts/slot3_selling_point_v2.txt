@@ -1,0 +1,9 @@
+# slot3 核心卖点图 v2｜适用：参数强的品类（小电器/工具）｜size 928x1232｜I2I 传商品参考图
+# v2 变更（2026-11-09）：文字双轨制——大标题/数字徽章不再由 AI 渲染（西里尔字母级错误+数字错），
+#   顶部 25% 与底部 18% 预留干净留白，生成后由 text_overlay.py 贴标题+画徽章。
+# 失败模式：预留区出现文字/杂物（加严 reserved 措辞重试）、背景抢主体
+# 占位符：无（文案全部由 PIL 叠加，本模板纯画面）
+Using the reference product photo, keep the exact same product unchanged. Place it centered on a clean light gradient studio background (soft beige-to-white), product occupying about 50% of the frame in the vertical center, soft floor shadow, premium minimal product photography, high contrast.
+The top 25% of the image is a reserved empty area: only smooth even gradient background, absolutely no objects, no text, no logos.
+The bottom 18% of the image is also a reserved empty area: same smooth gradient, no objects, no text, no strong shadows.
+No other text anywhere, no logos, no watermarks, no price tags.

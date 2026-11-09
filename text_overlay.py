@@ -83,6 +83,52 @@ def overlay_title(src: str | Path, title: str, out: str | Path,
             "font_size": font.size, "font": font.path or str(FONT)}
 
 
+def _fit_single(draw, text, max_w, start):
+    """单行自适应缩字号，返回 font；放不下返回 None。"""
+    for size in range(start, 20, -2):
+        font = _font(size)
+        if draw.textlength(text, font=font) <= max_w:
+            return font
+    return None
+
+
+def overlay_badge(src: str | Path, text: str, out: str | Path,
+                  color: tuple = (47, 111, 237)) -> dict:
+    """slot3 数字徽章：底部 18% 区域内画圆角胶囊 + 白粗字。"""
+    img = Image.open(src).convert("RGB")
+    w, h = img.size
+    draw = ImageDraw.Draw(img)
+    font = _fit_single(draw, text, w * 0.7, int(h * 0.05))
+    if font is None:
+        raise ValueError(f"徽章文字过长: {text!r}")
+    tw = draw.textlength(text, font=font)
+    pad_x, pad_y = font.size * 0.9, font.size * 0.45
+    bw, bh = tw + 2 * pad_x, font.size + 2 * pad_y
+    x, y = (w - bw) / 2, h * 0.845 - bh / 2     # 底部 18% 预留区垂直居中
+    draw.rounded_rectangle([x, y, x + bw, y + bh], radius=bh / 2, fill=color)
+    draw.text((w / 2, y + bh / 2), text, font=font, fill=(255, 255, 255), anchor="mm")
+    out = Path(out)
+    out.parent.mkdir(parents=True, exist_ok=True)
+    img.save(out, quality=95)
+    return {"out": str(out), "badge": text, "font_size": font.size}
+
+
+def overlay_caption(src: str | Path, text: str, out: str | Path,
+                    color: tuple = COLOR) -> dict:
+    """slot8 底部固定格式说明带（如 Подходит для: A / B / C），单行居中。"""
+    img = Image.open(src).convert("RGB")
+    w, h = img.size
+    draw = ImageDraw.Draw(img)
+    font = _fit_single(draw, text, w * (1 - 2 * MARGIN_RATIO), int(h * 0.045))
+    if font is None:
+        raise ValueError(f"说明带过長: {text!r}")
+    draw.text((w / 2, h * 0.91), text, font=font, fill=color, anchor="mm")
+    out = Path(out)
+    out.parent.mkdir(parents=True, exist_ok=True)
+    img.save(out, quality=95)
+    return {"out": str(out), "caption": text, "font_size": font.size}
+
+
 def _selftest() -> None:
     img = Image.new("RGB", (928, 1232), (210, 195, 180))  # 模拟场景底
     src = Path("/tmp/text_overlay_selftest_src.png")
@@ -95,7 +141,11 @@ def _selftest() -> None:
     before = Image.open(src).crop((0, 0, 928, int(1232 * AREA_RATIO)))
     after = Image.open(rec["out"]).crop((0, 0, 928, int(1232 * AREA_RATIO)))
     assert list(before.getdata()) != list(after.getdata())
-    print("selftest ok:", rec)
+    # 徽章 + 说明带
+    rec_b = overlay_badge(src, "300 мл", "/tmp/text_overlay_badge.png")
+    rec_c = overlay_caption(src, "Подходит для: Кухня / Ванная / Офис",
+                            "/tmp/text_overlay_caption.png")
+    print("selftest ok:", rec, rec_b, rec_c)
 
 
 if __name__ == "__main__":

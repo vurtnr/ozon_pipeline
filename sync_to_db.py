@@ -80,7 +80,8 @@ def sync() -> None:
                             if d.is_dir() and d.name in want), None)
             if gen_dir:
                 metrics["assets_dir"] = str(gen_dir.relative_to(ROOT))
-                metrics["images"] = sorted(p.name for p in gen_dir.glob("*.png"))
+                metrics["images"] = sorted(
+                    p.name for p in gen_dir.glob("slot[0-9].png"))
 
             if not row:
                 cur = c.execute(

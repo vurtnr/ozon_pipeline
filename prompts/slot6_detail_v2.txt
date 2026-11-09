@@ -1,0 +1,8 @@
+# slot6 细节/材质特写 v2｜适用：材质工艺是卖点的品类｜size 928x1232｜I2I 传商品参考图
+# v2 变更（2026-11-09）：文字双轨制——v1 让 AI 渲染底部小标签，实测西里尔混拉丁字母
+#   （сенсорная→сенехopная），改为底部 12% 留白 + text_overlay.py 贴字。
+# 失败模式：特写偏离商品（加严 same product 重试）、底部留白区出现文字
+# 占位符：{{DETAIL}}=特写部位(英文,如 "the brushed metal ring and liquid window")
+Using the reference product photo, keep the exact same product materials and colors. Extreme close-up macro shot of {{DETAIL}}, showing texture and build quality, soft directional lighting, shallow depth of field, premium product photography.
+The bottom 12% of the image is a reserved empty area: smooth even out-of-focus background only, absolutely no objects, no text, no logos.
+No text anywhere, no watermarks.

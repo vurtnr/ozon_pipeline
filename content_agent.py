@@ -62,8 +62,10 @@ SYSTEM_PROMPT = """你是顶级 Ozon 电商运营。根据商品信息和目标�
     {"slot": "slot1", "scene": "...", "copy_title": "...", "copy_icons": ["...","...","..."]},
     {"slot": "slot3", "copy_headline": "...", "copy_badge": "..."},
     {"slot": "slot4", "action_en": "英文动作描述", "copy_line": "..."},
+    {"slot": "slot5", "scene": "第二个使用场景(从场景列表选,与slot1不同)", "copy_line": "≤6词"},
     {"slot": "slot6", "detail_en": "英文特写部位", "copy_word": "..."},
-    {"slot": "slot7", "measurements": "..."}
+    {"slot": "slot7", "measurements": "..."},
+    {"slot": "slot8", "scenarios": ["3-4个适用场景名词,如 Кухня/Ванная/Офис"]}
   ],
   "need_confirm": false
 }"""
@@ -126,6 +128,7 @@ def validate(spec: dict, sources: list[str]) -> list[str]:
     for s in spec.get("slots", []):
         texts += [v for k, v in s.items() if k.startswith("copy") and isinstance(v, str)]
         texts += [x for x in s.get("copy_icons", []) if isinstance(x, str)]
+        texts += [x for x in s.get("scenarios", []) if isinstance(x, str)]
         if isinstance(s.get("measurements"), str):
             texts.append(s["measurements"])
     for t in texts:
