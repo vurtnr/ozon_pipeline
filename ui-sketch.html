@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ozon Pipeline · 操作界面设计草图 v1</title>
+<style>
+  :root {
+    --bg: #0f1115; --card: #1a1d24; --card2: #22262f; --border: #2e3440;
+    --text: #e6e8ec; --dim: #9aa3b2; --accent: #4f8cff;
+    --green: #34c759; --yellow: #ffb340; --red: #ff5f57; --purple: #b48cff;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: var(--bg); color: var(--text); font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif; line-height: 1.7; padding: 40px 20px; }
+  .container { max-width: 1080px; margin: 0 auto; }
+  h1 { font-size: 26px; margin-bottom: 6px; }
+  h2 { font-size: 19px; margin: 40px 0 14px; padding-left: 12px; border-left: 4px solid var(--accent); }
+  .subtitle { color: var(--dim); font-size: 14px; margin-bottom: 26px; }
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px 24px; margin-bottom: 16px; }
+  .tag { display: inline-block; padding: 1px 8px; border-radius: 4px; font-size: 12px; font-weight: 600; margin-right: 6px; vertical-align: 2px; }
+  .t-ok { background: rgba(52,199,89,.15); color: var(--green); }
+  .t-warn { background: rgba(255,179,64,.15); color: var(--yellow); }
+  .t-bad { background: rgba(255,95,87,.15); color: var(--red); }
+  .t-info { background: rgba(79,140,255,.15); color: var(--accent); }
+  .t-manual { background: rgba(180,140,255,.15); color: var(--purple); }
+  code { background: var(--card2); padding: 1px 6px; border-radius: 4px; font-size: 12.5px; color: #7ecfff; font-family: "SF Mono", Menlo, monospace; }
+  .note { background: rgba(255,179,64,.08); border: 1px solid rgba(255,179,64,.3); border-radius: 8px; padding: 12px 16px; margin: 12px 0; font-size: 14px; }
+  .dim { color: var(--dim); font-size: 13px; }
+
+  /* ---- 状态机条 ---- */
+  .sm { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin: 14px 0; font-size: 13px; }
+  .sm .st { background: var(--card2); border: 1px solid var(--border); border-radius: 8px; padding: 6px 12px; white-space: nowrap; }
+  .sm .st.auto { color: var(--dim); }
+  .sm .st.human { border: 2px solid var(--purple); color: var(--purple); font-weight: 700; background: rgba(180,140,255,.08); }
+  .sm .arr { color: var(--dim); }
+
+  /* ---- 审核台线框 ---- */
+  .app { border: 1px solid var(--border); border-radius: 14px; overflow: hidden; background: #14161c; }
+  .app-topbar { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; padding: 10px 16px; background: var(--card2); border-bottom: 1px solid var(--border); font-size: 13px; }
+  .app-topbar .logo { font-weight: 700; margin-right: 10px; }
+  .metric { background: var(--card); border: 1px solid var(--border); border-radius: 6px; padding: 3px 10px; color: var(--dim); }
+  .metric b { color: var(--text); }
+  .switch { margin-left: auto; display: flex; align-items: center; gap: 6px; font-size: 12.5px; color: var(--dim); }
+  .switch .pill { border: 1px solid var(--border); border-radius: 999px; padding: 2px 4px; display: flex; gap: 2px; }
+  .switch .pill span { padding: 2px 10px; border-radius: 999px; cursor: default; }
+  .switch .pill .on { background: var(--accent); color: #fff; font-weight: 600; }
+  .app-tabs { display: flex; gap: 2px; padding: 8px 16px 0; border-bottom: 1px solid var(--border); font-size: 13.5px; }
+  .app-tabs .tab { padding: 7px 14px; border-radius: 8px 8px 0 0; color: var(--dim); border: 1px solid transparent; border-bottom: none; }
+  .app-tabs .tab.on { background: var(--card); border-color: var(--border); color: var(--text); font-weight: 600; }
+  .app-tabs .tab .n { background: var(--red); color: #fff; border-radius: 999px; font-size: 11px; padding: 0 6px; margin-left: 4px; }
+  .app-tabs .tab .n.p { background: var(--purple); }
+
+  .app-body { display: grid; grid-template-columns: 200px 1fr; min-height: 480px; }
+  .queue { border-right: 1px solid var(--border); padding: 10px; font-size: 12.5px; }
+  .queue h4 { font-size: 12px; color: var(--dim); font-weight: 600; margin: 4px 4px 8px; text-transform: uppercase; letter-spacing: .5px; }
+  .qitem { border: 1px solid var(--border); border-radius: 8px; padding: 8px 10px; margin-bottom: 8px; background: var(--card); }
+  .qitem.on { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
+  .qitem .t { font-weight: 600; font-size: 12.5px; }
+  .qitem .m { color: var(--dim); font-size: 11.5px; }
+
+  .detail { padding: 16px; }
+  .detail-head { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; margin-bottom: 12px; }
+  .detail-head .title { font-size: 17px; font-weight: 700; }
+  .detail-grid { display: grid; grid-template-columns: 1.15fr .85fr; gap: 16px; }
+  .slots { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+  .slot { aspect-ratio: 3/4; border: 1px dashed var(--border); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--dim); font-size: 11px; background: var(--card); overflow: hidden; position: relative; text-align: center; padding: 4px; }
+  .slot img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .slot .lb { position: relative; z-index: 1; background: rgba(0,0,0,.55); border-radius: 4px; padding: 1px 6px; }
+  .slot.has { border-style: solid; }
+  .slot .badge { position: absolute; top: 4px; left: 4px; z-index: 2; background: var(--accent); color: #fff; font-size: 10px; border-radius: 4px; padding: 0 5px; font-weight: 700; }
+
+  .kv { font-size: 12.5px; }
+  .kv .row { display: flex; justify-content: space-between; gap: 10px; padding: 5px 0; border-bottom: 1px dashed var(--border); }
+  .kv .row span:first-child { color: var(--dim); white-space: nowrap; }
+  .kv .row span:last-child { text-align: right; }
+  .kv .pos { color: var(--green); font-weight: 600; }
+  .kv .neg { color: var(--red); font-weight: 600; }
+
+  .actions { display: flex; gap: 10px; margin-top: 16px; }
+  .btn { flex: 1; border: none; border-radius: 10px; padding: 13px 10px; font-size: 14.5px; font-weight: 700; cursor: default; text-align: center; }
+  .btn small { display: block; font-size: 11px; font-weight: 400; opacity: .85; margin-top: 2px; }
+  .btn.ok { background: var(--green); color: #06210f; }
+  .btn.re { background: var(--yellow); color: #2a1c00; }
+  .btn.kill { background: var(--red); color: #2b0705; }
+  .reason { margin-top: 10px; border: 1px dashed var(--border); border-radius: 8px; padding: 8px 12px; color: var(--dim); font-size: 12px; }
+
+  /* ---- 流水线看板 ---- */
+  .board { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; margin: 14px 0; }
+  .col { background: var(--card2); border: 1px solid var(--border); border-radius: 10px; padding: 8px; min-height: 150px; }
+  .col h5 { font-size: 12px; color: var(--dim); font-weight: 600; margin: 2px 2px 8px; display: flex; justify-content: space-between; gap: 4px; }
+  .col h5 .cnt { color: var(--text); font-weight: 700; }
+  .col.human { border: 2px solid var(--purple); background: rgba(180,140,255,.05); }
+  .col.human h5 { color: var(--purple); }
+  .col .gate { font-size: 10.5px; color: var(--dim); margin: -4px 2px 8px; display: block; }
+  .mini { background: var(--card); border: 1px solid var(--border); border-radius: 6px; padding: 5px 8px; font-size: 11.5px; margin-bottom: 6px; line-height: 1.4; }
+  .mini .v { color: var(--dim); font-size: 10.5px; display: block; }
+  .mini.dead { opacity: .45; }
+  .mini.dead .t { text-decoration: line-through; }
+  .mini .v .neg { color: var(--red); }
+
+  /* ---- 单品 trace 时间线 ---- */
+  .trace { margin: 10px 0 0 8px; padding-left: 20px; border-left: 2px solid var(--border); font-size: 13px; }
+  .trace .ev { position: relative; margin-bottom: 12px; }
+  .trace .ev::before { content: ""; position: absolute; left: -26px; top: 5px; width: 10px; height: 10px; border-radius: 50%; background: var(--accent); }
+  .trace .ev.human::before { background: var(--purple); }
+  .trace .t { color: var(--dim); font-size: 11.5px; }
+
+  .flowline { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; font-size: 13px; margin: 10px 0; }
+  .flowline .box { background: var(--card2); border: 1px solid var(--border); border-radius: 8px; padding: 6px 12px; }
+  .flowline .box.hl { border-color: var(--purple); color: var(--purple); font-weight: 600; }
+
+  @media (max-width: 860px) {
+    .app-body { grid-template-columns: 1fr; }
+    .queue { border-right: none; border-bottom: 1px solid var(--border); display: flex; gap: 8px; overflow-x: auto; }
+    .queue h4 { display: none; }
+    .qitem { min-width: 150px; }
+    .detail-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>操作界面设计草图 · Ozon 自动化流水线</h1>
+  <div class="subtitle">依据 pipeline.html §9 + pipeline.py schema + ROADMAP 任务 6 · 2026-11-09 · 现状：图审台未实现（V1 任务 6），本图为其设计稿</div>
+
+  <!-- ============ 核心答案 ============ -->
+  <div class="card">
+    <b>一句话：整个软件是无人值守的批处理系统，人机界面只有一个 —— 本地「审核台」。</b><br>
+    <span class="dim">选品→找货→算账→生图→上架 全部自动（CLI + SQLite 状态机）；人只在两道闸门出现：上架前<strong>图审</strong>、爆款后<strong>视频审</strong>。审核台同时是 eval 标签采集器——每次点击落库，形成 golden set。</span>
+    <div class="sm">
+      <span class="st auto">discovered</span><span class="arr">→</span>
+      <span class="st auto">scored</span><span class="arr">→</span>
+      <span class="st auto">sourced</span><span class="arr">→</span>
+      <span class="st auto">checked</span><span class="arr">→</span>
+      <span class="st auto">profitable</span><span class="arr">→</span>
+      <span class="st auto">imaging</span><span class="arr">→</span>
+      <span class="st human">👤图审（本界面）</span><span class="arr">→</span>
+      <span class="st auto">listed</span><span class="arr">→</span>
+      <span class="st auto">syncing</span><span class="arr">→</span>
+      <span class="st auto">winning</span><span class="arr">→</span>
+      <span class="st auto">videoing</span><span class="arr">→</span>
+      <span class="st human">👤视频审（本界面·第二队列）</span><span class="arr">→</span>
+      <span class="st auto">done</span>
+    </div>
+    <div class="dim">灰色 = 自动环节（无界面，异常时 Telegram/邮件通知）· 紫框 = 人工环节（都在同一个审核台里）</div>
+    <div class="note" style="margin-top:12px"><b>选品在哪操作？——没有界面。</b>人工唯一动作是编辑 <code>seeds.txt</code>（俄语种子词）并跑 <code>select_products.py</code>；之后 Nexscope 六维漏斗（月搜≥5000 · 增长率≥-5% · 竞争≤3000 · 均价 300–5000₽ · 退货率≤20%）机械过滤。选错的品由下游闸门（unit_econ 判负、图审毙品）杀死，毙品死因反哺阈值——人选品环节不逐个挑品，是方法论评审的定稿决策。</div>
+  </div>
+
+  <!-- ============ 审核台线框 ============ -->
+  <h2>审核台 v1 线框（本地 Web，唯一人工界面）</h2>
+  <div class="app">
+    <!-- 顶栏：保险丝状态 -->
+    <div class="app-topbar">
+      <span class="logo">🛂 审核台</span>
+      <span class="metric">今日上架 <b>17 / 100</b> 卡</span>
+      <span class="metric">今日成本 <b>$4.82</b></span>
+      <span class="metric">过审率 <b>91%</b> <span class="dim">(30d)</span></span>
+      <span class="metric">队列 <b>6</b> 待审</span>
+      <span class="switch">review_mode
+        <span class="pill"><span class="on">full 全检</span><span>sample 20%</span></span>
+        <span class="dim">· 过审率稳定 95%+ 后才切</span>
+      </span>
+    </div>
+    <!-- 三个队列 = 三个"隐藏人工点" -->
+    <div class="app-tabs">
+      <span class="tab">📊 流水线</span>
+      <span class="tab on">🖼 图审（上架前）<span class="n">4</span></span>
+      <span class="tab">🗂 类目首验<span class="n p">1</span></span>
+      <span class="tab">🎬 视频审（winning 后）<span class="n">1</span></span>
+    </div>
+    <div class="app-body">
+      <!-- 左：待审队列 -->
+      <div class="queue">
+        <h4>待审队列 · imaging → 【待审】</h4>
+        <div class="qitem on">
+          <div class="t">Дозатор для жидкого мыла</div>
+          <div class="m">皂液器 · 家居<br>slot1_main_infographic_v2</div>
+        </div>
+        <div class="qitem">
+          <div class="t">Органайзер для раковины</div>
+          <div class="m">水槽收纳 · 家居<br>slot1_main_infographic_v2</div>
+        </div>
+        <div class="qitem">
+          <div class="t">Сушилка для посуды</div>
+          <div class="m">碗碟架 · 厨房<br>⚠ need_confirm（数字溯源未过）</div>
+        </div>
+        <div class="qitem">
+          <div class="t">Держатель для фена</div>
+          <div class="m">吹风机架 · 家居<br>重生成 ×2</div>
+        </div>
+      </div>
+      <!-- 右：当前卡详情 -->
+      <div class="detail">
+        <div class="detail-head">
+          <span class="title">Дозатор для жидкого мыла</span>
+          <span class="tag t-info">imaging → 待审</span>
+          <span class="tag t-ok">利润为正</span>
+          <span class="dim">#42 · query: дозатор для жидкого мыла</span>
+        </div>
+        <div class="detail-grid">
+          <!-- 左：套图 -->
+          <div>
+            <div class="slots">
+              <div class="slot has"><span class="badge">1</span><img src="data/gen/soap/slot1_v2_final.png" alt="slot1"><span class="lb">封面信息图 v2</span></div>
+              <div class="slot"><span class="badge">2</span>白底单品<br>(待生成)</div>
+              <div class="slot"><span class="badge">3</span>核心卖点</div>
+              <div class="slot"><span class="badge">4</span>使用演示</div>
+              <div class="slot"><span class="badge">5</span>场景延伸</div>
+              <div class="slot"><span class="badge">6</span>细节材质</div>
+              <div class="slot"><span class="badge">7</span>规格尺寸</div>
+              <div class="slot"><span class="badge">8</span>适用场景条</div>
+            </div>
+            <div class="dim" style="margin-top:8px">点击单张可放大 + 单独打回该 slot 重生（$0.03/张），不必整卡重来</div>
+          </div>
+          <!-- 右：决策所需的全部上下文 -->
+          <div class="kv">
+            <div class="row"><span>类目路径</span><span>Дом и сад / … / Дозаторы</span></div>
+            <div class="row"><span>选品分（六维漏斗）</span><span class="pos">78 / 100</span></div>
+            <div class="row"><span>趋势</span><span>6 周平稳 ✓ 无促销脉冲</span></div>
+            <div class="row"><span>单位经济</span><span class="pos">+21%（含 9% 推广准备金）</span></div>
+            <div class="row"><span>1688 货源</span><span>¥23 · 月销 2.1万 · 库存足</span></div>
+            <div class="row"><span>Ozon 参考价</span><span>350₽（竞品 5928375077）</span></div>
+            <div class="row"><span>prompt 版本</span><span>slot1_v2 · content_v1</span></div>
+            <div class="row"><span>机械校验</span><span class="pos">禁忌词 ✓ 长度 ✓ 数字溯源 ✓</span></div>
+          </div>
+        </div>
+        <!-- 三个动作 = reviews 表的三种 decision -->
+        <div class="actions">
+          <div class="btn ok">✅ 通过<small>→ 进上架队列（listed）</small></div>
+          <div class="btn re">🔁 打回重生<small>换 seed 重出图 · $0.03/张</small></div>
+          <div class="btn kill">❌ 毙品<small>→ dead · 死因反哺阈值</small></div>
+        </div>
+        <div class="reason">毙品/打回时弹出：死因选择（图片质量 / 侵权风险 / 文案错误 / 利润不足 / 其他）——必填，写入 reviews 表</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 流水线视图 ============ -->
+  <h2>流水线视图：选品 → 审图全过程（审核台「📊 流水线」tab，只读）</h2>
+  <div class="card">
+    <span class="dim">图审队列只是终点。这个 tab 回答的是<b>"这批卡是怎么一路流到我面前的"</b>：每列一道闸，卡片从左向右流动，被杀的品留在原列变灰。对应 DoD 第 2 条——每张卡有完整 trace。</span>
+    <div class="board">
+      <div class="col"><h5>① 选品 <span class="cnt">23</span></h5><span class="gate">六维漏斗 · scored</span>
+        <div class="mini"><b>皂液器</b><span class="v">78分 · 月搜1.2万</span></div>
+        <div class="mini"><b>水槽收纳</b><span class="v">74分 · 月搜8千</span></div>
+        <div class="mini dead"><b>垃圾桶</b><span class="v">竞争 5200 超限 ✗</span></div>
+      </div>
+      <div class="col"><h5>② 找货 <span class="cnt">19</span></h5><span class="gate">1688 图搜 · sourced</span>
+        <div class="mini"><b>皂液器</b><span class="v">¥23 · 月销2.1万</span></div>
+        <div class="mini"><b>水槽收纳</b><span class="v">¥11 · 库存足</span></div>
+        <div class="mini dead"><b>小夜灯A</b><span class="v">图搜无货 ✗</span></div>
+      </div>
+      <div class="col"><h5>③ 趋势 <span class="cnt">16</span></h5><span class="gate">防促销脉冲 · checked</span>
+        <div class="mini"><b>皂液器</b><span class="v">6周平稳 ✓</span></div>
+        <div class="mini dead"><b>车载支架B</b><span class="v">大促脉冲后断崖 ✗</span></div>
+      </div>
+      <div class="col"><h5>④ 算账 <span class="cnt">11</span></h5><span class="gate">含推广准备金 · profitable</span>
+        <div class="mini"><b>皂液器</b><span class="v">+21% ✓</span></div>
+        <div class="mini dead"><b>碗碟架C</b><span class="v"><span class="neg">-4%</span> 判负 ✗</span></div>
+      </div>
+      <div class="col"><h5>⑤ 内容 <span class="cnt">9</span></h5><span class="gate">机械校验 · spec</span>
+        <div class="mini"><b>皂液器</b><span class="v">溯源✓ 禁忌词✓</span></div>
+        <div class="mini dead"><b>吹风机架</b><span class="v">数字无出处 → need_confirm</span></div>
+      </div>
+      <div class="col"><h5>⑥ 生图 <span class="cnt">7</span></h5><span class="gate">$0.03×8 · imaging</span>
+        <div class="mini"><b>皂液器</b><span class="v">8 slot 齐 · slot1_v2</span></div>
+        <div class="mini dead"><b>小夜灯D</b><span class="v">商品形变 重试×2 ✗</span></div>
+      </div>
+      <div class="col human"><h5>👤 待审 <span class="cnt">4</span></h5><span class="gate">唯一人工闸</span>
+        <div class="mini"><b>皂液器</b><span class="v">→ 图审队列</span></div>
+        <div class="mini"><b>水槽收纳</b><span class="v">→ 图审队列</span></div>
+      </div>
+    </div>
+    <div class="dim">点击任意卡片 → 右侧展开该品的完整 trace（下图）。变灰划线 = 在该闸被杀，悬停显示死因（写自 events 表）。</div>
+  </div>
+
+  <!-- ============ 单品 trace ============ -->
+  <h2>单品 trace：一张卡的"为什么在我面前"</h2>
+  <div class="card">
+    <div class="detail-head"><span class="title" style="font-size:15px">#42 Дозатор для жидкого мыла</span><span class="dim">数据全部来自 events / metrics_json / reviews 三表，界面只读不编辑</span></div>
+    <div class="trace">
+      <div class="ev"><b>discovered → scored</b> · 入选理由：种子词 <code>дозатор для жидкого мыла</code> 扩展，六维 78 分（月搜 12,400 · 增长 +3% · 竞争 1,850 · 均价 890₽ · 退货 6%）<div class="t">11-09 02:00 · select_products.py · 阈值版本 thresholds_v1</div></div>
+      <div class="ev"><b>→ sourced</b> · 1688 图搜命中：¥23 · 月销 2.1万 · 库存 8,400 · <code>offer/2222687746023</code><div class="t">11-09 02:03 · sourcing_agent.py</div></div>
+      <div class="ev"><b>→ checked</b> · 6 周趋势平稳，无促销脉冲<div class="t">11-09 02:04 · trend_check.py（未实现，示意）</div></div>
+      <div class="ev"><b>→ profitable</b> · 350₽ 售价 − 成本/佣金/物流 − 9% 推广准备金 = <b>+21%</b><div class="t">11-09 02:04 · unit_econ.py（未实现，示意）</div></div>
+      <div class="ev"><b>→ imaging</b> · content spec <code>content_v1</code>（机械校验全过）→ 8 slot 生图 <code>slot1_main_infographic_v2</code> + text_overlay 贴字<div class="t">11-09 02:11 · content_agent + image_worker · 成本 $0.25</div></div>
+      <div class="ev human"><b>→ 【待审】</b> · 进图审队列，等待人工<div class="t">11-09 02:12 · 你在这里 👈</div></div>
+    </div>
+  </div>
+
+  <!-- ============ 点击之后 ============ -->
+  <h2>每次点击 = 一条 eval 标签（审核台即 eval 采集器）</h2>
+  <div class="card">
+    <div class="flowline">
+      <span class="box hl">👤 点击 通过/打回/毙品</span><span class="arr">→</span>
+      <span class="box">INSERT reviews(product_id, kind=<code>image</code>, asset_path, decision, prompt_version, decided_at)</span><span class="arr">→</span>
+      <span class="box">golden set 累积</span><span class="arr">→</span>
+      <span class="box">prompt 迭代对照 + 阈值重校准（500 词样本后）</span>
+    </div>
+    <div class="note">设计要点（来自 ROADMAP 缺口③）：<b>没有 eval 闭环，prompt 迭代就是盲飞</b>。所以审核台不是"顺手做个界面"，而是系统闭环的核心部件——它的每次点击都在给 LLM 输出打分。</div>
+    <div class="dim">
+      另两个人工点的形态：<b>类目首验队列</b>（新类目属性映射前 3 张卡扫一眼，过后该类目转全自动）；
+      <b>视频审</b>（winning 品才生成视频，过=挂卡 / 不过=保持无视频在架，独立于主链路不阻塞）。
+      凭证过期、429、费用熔断等异常不进审核台，走 Telegram/邮件通知。
+    </div>
+  </div>
+
+  <!-- ============ 状态 ============ -->
+  <h2>实现状态</h2>
+  <div class="card">
+    <span class="tag t-ok">已验证</span>状态机 <code>pipeline.db</code>（products / events / <b>reviews 表已建</b>，含非法流转守卫）· 生图 worker · 文字双轨制 text_overlay<br>
+    <span class="tag t-warn">未实现</span>本审核台 UI（V1 任务 6，含流水线 tab）· trend_check / unit_econ（任务 3–4）· listing_worker（任务 7）· 保险丝（V2）· review_mode 开关（V2）
+  </div>
+</div>
+</body>
+</html>
