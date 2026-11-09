@@ -1,14 +1,38 @@
 [
   {
+    "query": "дозатор для жидкого мыла",
+    "queryCn": "皂液器",
+    "ozonId": "5971122633",
+    "imageUrl": "https://ir.ozone.ru/s3/multimedia-1-w/wc300/20127100712.jpg"
+  },
+  {
     "query": "органайзер для кухни",
-    "queryCn": "调料收纳盒",
-    "ozonId": "3279860572",
-    "imageUrl": "https://ir.ozone.ru/s3/multimedia-1-d/wc300/8950670257.jpg"
+    "queryCn": "厨房收纳箱",
+    "ozonId": 1603307972,
+    "imageUrl": "https://ir.ozone.ru/s3/multimedia-1-c/wc300/7349802600.jpg"
+  },
+  {
+    "query": "дозатор для жидкого мыла сенсорный",
+    "queryCn": "液态肥皂传感器计量器",
+    "ozonId": "5971122633",
+    "imageUrl": "https://ir.ozone.ru/s3/multimedia-1-w/wc300/20127100712.jpg"
   },
   {
     "query": "светильник ночник",
-    "queryCn": "小夜灯",
+    "queryCn": "灯具",
     "ozonId": "2245970358",
     "imageUrl": "https://ir.ozone.ru/s3/multimedia-1-c/wc300/12791063352.jpg"
+  },
+  {
+    "query": "сенсорный дозатор для жидкого мыла",
+    "queryCn": "液体肥皂传感器计量器",
+    "ozonId": "5971122633",
+    "imageUrl": "https://ir.ozone.ru/s3/multimedia-1-w/wc300/20127100712.jpg"
+  },
+  {
+    "query": "органайзер для кухни на мойку",
+    "queryCn": "厨房水槽收纳架",
+    "ozonId": "5864891831",
+    "imageUrl": "https://ir.ozone.ru/s3/multimedia-1-7/wc300/15434173411.jpg"
   }
 ]

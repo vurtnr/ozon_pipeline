@@ -1,68 +1,174 @@
 [
   {
-    "query": "органайзер для кухни",
-    "ozonId": "3279860572",
-    "ozonImage": "https://ir.ozone.ru/s3/multimedia-1-d/wc300/8950670257.jpg",
+    "query": "дозатор для жидкого мыла",
+    "ozonId": "5971122633",
+    "ozonImage": "https://ir.ozone.ru/s3/multimedia-1-w/wc300/20127100712.jpg",
     "ok": true,
-    "mode": "text",
+    "mode": "vl+image",
+    "status": "auto",
     "suppliers": [
       {
-        "title": "厨房香料收纳盒桂皮八角花椒干辣椒分装调料罐五谷杂粮茶叶储物盒",
-        "price": 1.05,
-        "soldCount": 10000,
-        "yxIndex": 4.59,
-        "similarity": 0.980089375,
-        "supplier": "义乌市羌苑日用百货有限公司",
+        "title": "新款M15自动感应皂液器泡沫洗手机电动感应皂液器智能感应洗手机",
+        "price": 45.0,
+        "soldCount": 2000,
+        "yxIndex": 3.8,
+        "similarity": 0.9438375000000001,
+        "supplier": "东莞市合旺达科技有限公司",
         "quantityBegin": 1,
-        "url": "https://detail.1688.com/offer/893309920922.html?&object_id=893309920922",
-        "imageUrl": "https://cbu01.alicdn.com/img/ibank/O1CN01zfRpkV1GIqfzSGBk6_!!2218377120600-0-cib.jpg"
+        "url": "https://detail.1688.com/offer/826122418905.html?&object_id=826122418905",
+        "imageUrl": "https://cbu01.alicdn.com/img/ibank/O1CN01Hd1Gnl1JVcW0HMZVD_!!2211188501034-0-cib.jpg"
       },
       {
-        "title": "香料收纳盒玻璃瓶辣椒调料密封花椒佐料大料厨房八角分装盒",
-        "price": 0.7,
-        "soldCount": 10000,
-        "yxIndex": 4.18,
-        "similarity": 0.9313093750000001,
-        "supplier": "金华市金东区鸿深塑料制品厂（个体工商户）",
+        "title": "爆款现货p11智能数显皂液器自动洗手液机跨境洗手机感应皂液器",
+        "price": 48.0,
+        "soldCount": 1000,
+        "yxIndex": 4.6,
+        "similarity": 0.9886987500000001,
+        "supplier": "东莞市新拓玛斯科技有限公司",
         "quantityBegin": 1,
-        "url": "https://detail.1688.com/offer/901179110476.html?&object_id=901179110476",
-        "imageUrl": "https://cbu01.alicdn.com/img/ibank/O1CN01vN64UM1s5yxGtJZ2H_!!2217620135716-0-cib.jpg"
+        "url": "https://detail.1688.com/offer/796514721475.html?&object_id=796514721475",
+        "imageUrl": "https://cbu01.alicdn.com/img/ibank/O1CN01RpT2CS1X8AxoTxYeH_!!2217926082878-0-cib.jpg"
       },
       {
-        "title": "简约透明调味瓶调料收纳盒 厨房用品调料盒 调料罐套装创意罐盐",
-        "price": 5.7,
-        "soldCount": 4000,
-        "yxIndex": 4.0,
-        "similarity": 0.833749375,
-        "supplier": "平阳县怀瑾工艺品厂(个体工商户)",
+        "title": "自动感应洗手机免接触充电皂液器感应式智能大容量酒店电动皂液器",
+        "price": 28.0,
+        "soldCount": 1000,
+        "yxIndex": 3.54,
+        "similarity": 0.8904431250000001,
+        "supplier": "义乌市凯拓百货有限公司",
+        "quantityBegin": 5,
+        "url": "https://detail.1688.com/offer/1048710671701.html?&object_id=1048710671701",
+        "imageUrl": "https://cbu01.alicdn.com/img/ibank/O1CN01ABjpkE23fDI4A7MX3_!!2219422777282-0-cib.jpg"
+      },
+      {
+        "title": "二代MUID洗手鸭洗手感应器智能自动感应泡沫皂液器红外线感应式",
+        "price": 62.0,
+        "soldCount": 900,
+        "yxIndex": 4.58,
+        "similarity": 0.977768125,
+        "supplier": "义乌市明音舍科技有限公司",
         "quantityBegin": 2,
-        "url": "https://detail.1688.com/offer/807578740882.html?&object_id=807578740882",
-        "imageUrl": "https://cbu01.alicdn.com/img/ibank/O1CN017vnkM11emChojbdfe_!!3236253913-0-cib.jpg"
+        "url": "https://detail.1688.com/offer/759335485490.html?&object_id=759335485490",
+        "imageUrl": "https://cbu01.alicdn.com/img/ibank/O1CN01eHYnrs1cXtEJvid8f_!!2206133611-0-cib.jpg"
       },
       {
-        "title": "调料收纳盒厨房家用食品级调味料香料辣椒花椒密封储物罐组合套装",
-        "price": 14.67,
-        "soldCount": 3000,
-        "yxIndex": 4.63,
-        "similarity": 1.0,
-        "supplier": "温州市优勤家居科技有限公司",
+        "title": "洗手鸭洗手感应器智能自动感应泡沫皂液器感应式泡泡洗手机皂液器",
+        "price": 39.8,
+        "soldCount": 300,
+        "yxIndex": 3.8,
+        "similarity": 0.998046875,
+        "supplier": "温州兴娇电子科技有限公司",
         "quantityBegin": 1,
-        "url": "https://detail.1688.com/offer/963757638854.html?&object_id=963757638854",
-        "imageUrl": "https://cbu01.alicdn.com/img/ibank/O1CN01p7NVtk1DwkNPOLu41_!!2210843980281-0-cib.jpg"
-      },
-      {
-        "title": "调料收纳盒厨房家用多功能分格盘袋装多格一体调味品食品罐置物架",
-        "price": 3.0,
-        "soldCount": 3000,
-        "yxIndex": 4.43,
-        "similarity": 0.99024,
-        "supplier": "义乌市芜轶电子商务商行（个体工商户）",
-        "quantityBegin": 2,
-        "url": "https://detail.1688.com/offer/996126866954.html?&object_id=996126866954",
-        "imageUrl": "https://cbu01.alicdn.com/img/ibank/O1CN01yfNWLj1QzZqwqBEQn_!!2219947372047-0-cib.jpg"
+        "url": "https://detail.1688.com/offer/1083692567818.html?&object_id=1083692567818",
+        "imageUrl": "https://cbu01.alicdn.com/img/ibank/O1CN01fF4vXs8QWjJ3thOC_!!2222750494952-0-cib.jpg"
       }
     ],
-    "raw_count": 10
+    "raw_count": 10,
+    "vl_keyword": "感应皂液器 USB充电 智能洗手液机",
+    "vl_description": "1) 商品中文名称：感应式自动皂液器（洗手液/洗洁精分配器）  \n2) 核心功能：  \n   - 人体感应自动出液（免接触）  \n   - 4档出液量可调（适配不同清洁需求）  \n   - USB充电 + 大容量380mL储液仓  \n\n3) 使用场景：  \n   - 家庭厨房（洗碗、果蔬清洁）  \n   - 卫生间洗手台（日常洗手消毒）  \n   - 公共场所（餐厅、办公室、医院等需无接触卫生场景）  \n\n4) 1688采购关键词：  \n感应皂液器 USB充电 智能洗手液机"
+  },
+  {
+    "query": "органайзер для кухни",
+    "ozonId": 1603307972,
+    "ozonImage": "https://ir.ozone.ru/s3/multimedia-1-c/wc300/7349802600.jpg",
+    "ok": true,
+    "mode": "vl+image",
+    "status": "auto",
+    "suppliers": [
+      {
+        "title": "桌下收纳挂篮桌面宿舍好物衣柜分层架柜下挂篮床头下铺悬挂置物架",
+        "price": 23.0,
+        "soldCount": 5000,
+        "yxIndex": 4.42,
+        "similarity": 0.998828125,
+        "supplier": "曹县简枅家居有限公司",
+        "quantityBegin": 1,
+        "url": "https://detail.1688.com/offer/928413813759.html?&object_id=928413813759",
+        "imageUrl": "https://cbu01.alicdn.com/img/ibank/O1CN01BwkK7U1DEJvwmsf2t_!!2218047570184-0-cib.jpg"
+      },
+      {
+        "title": "卫浴镜下悬挂收纳挂篮洗漱用品收纳筐护肤品彩妆悬挂收纳神器",
+        "price": 4.5,
+        "soldCount": 2000,
+        "yxIndex": 4.29,
+        "similarity": 0.925904375,
+        "supplier": "义乌市携街电子商务商行(个体工商户)",
+        "quantityBegin": 2,
+        "url": "https://detail.1688.com/offer/1093256969921.html?&object_id=1093256969921",
+        "imageUrl": "https://cbu01.alicdn.com/img/ibank/O1CN010pLjmlAP7AK2R3rs_!!2222901610069-0-cib.jpg"
+      },
+      {
+        "title": "悬挂式收纳盒化妆品置物架卫生间浴室柜护肤品口红整理挂篮镜柜下",
+        "price": 5.5,
+        "soldCount": 900,
+        "yxIndex": 3.45,
+        "similarity": 0.9502056250000002,
+        "supplier": "义乌市鑫匣日用品有限公司",
+        "quantityBegin": 2,
+        "url": "https://detail.1688.com/offer/1082573603650.html?&object_id=1082573603650",
+        "imageUrl": "https://cbu01.alicdn.com/img/ibank/O1CN01r9gPdvYC9EG1chua_!!2222837475661-0-cib.jpg"
+      },
+      {
+        "title": "卫生间镜柜下收纳盒悬挂式化妆品置物架浴室柜护肤品口红整理挂篮",
+        "price": 5.5,
+        "soldCount": 500,
+        "yxIndex": 3.35,
+        "similarity": 0.9403987500000001,
+        "supplier": "义乌市鑫匣日用品有限公司",
+        "quantityBegin": 2,
+        "url": "https://detail.1688.com/offer/1083452446981.html?&object_id=1083452446981",
+        "imageUrl": "https://cbu01.alicdn.com/img/ibank/O1CN01t6MVtAiAQHH1chua_!!2222837475661-0-cib.jpg"
+      },
+      {
+        "title": "多层悬挂收纳挂篮家用衣柜隔板下悬挂储物筐杂物分类收纳神器",
+        "price": 4.5,
+        "soldCount": 400,
+        "yxIndex": 4.58,
+        "similarity": 0.9866775000000001,
+        "supplier": "义乌市汭引电子商务商行(个体工商户)",
+        "quantityBegin": 2,
+        "url": "https://detail.1688.com/offer/1093269817085.html?&object_id=1093269817085",
+        "imageUrl": "https://cbu01.alicdn.com/img/ibank/O1CN01bQv8O9exU1G2R3rs_!!2222917526919-0-cib.jpg"
+      }
+    ],
+    "raw_count": 10,
+    "vl_keyword": "下柜悬挂篮",
+    "vl_description": "1) 商品中文名称：  \n厨房下柜悬挂式收纳篮（或：橱柜下挂式置物架/吊篮）\n\n2) 核心功能（3个以内）：  \n• 悬挂式安装，节省台面与柜内空间  \n• 可拉伸扩展，适配不同宽度柜底  \n• 分层收纳碗碟、调料罐等小件厨具\n\n3) 使用场景：  \n适用于厨房水槽下方、吊柜底部、储物柜门内侧等垂直闲置空间，用于收纳碗盘、杯具、调味瓶、清洁工具等日常高频使用物品。\n\n4) 1688采购关键词（精准描述本体+功能）：  \n下柜悬挂篮、可伸缩吊篮、橱柜下挂置物架"
+  },
+  {
+    "query": "дозатор для жидкого мыла сенсорный",
+    "ozonId": "5971122633",
+    "ozonImage": "https://ir.ozone.ru/s3/multimedia-1-w/wc300/20127100712.jpg",
+    "ok": true,
+    "mode": "vl+image",
+    "status": "auto",
+    "suppliers": [
+      {
+        "title": "304不锈钢皂液器P29卫生间壁挂式自动感应洗洁精机智能洗手机跨境",
+        "price": 34.0,
+        "soldCount": 2000,
+        "yxIndex": 4.34,
+        "similarity": 0.9087773,
+        "supplier": "东莞市玛斯客科技有限公司",
+        "quantityBegin": 1,
+        "url": "https://detail.1688.com/offer/961705928557.html?&object_id=961705928557",
+        "imageUrl": "https://cbu01.alicdn.com/img/ibank/O1CN01ypA0tz1kc1po2PkDp_!!2220358644703-0-cib.jpg"
+      },
+      {
+        "title": "智能触控皂液器P18数显洗手机浴室厨房壁挂洗手液分配器工厂现货",
+        "price": 34.0,
+        "soldCount": 300,
+        "yxIndex": 4.11,
+        "similarity": 0.90893993,
+        "supplier": "东莞市玛斯客科技有限公司",
+        "quantityBegin": 1,
+        "url": "https://detail.1688.com/offer/1051828612856.html?&object_id=1051828612856",
+        "imageUrl": "https://cbu01.alicdn.com/img/ibank/O1CN01ypA0tz1kc1po2PkDp_!!2220358644703-0-cib.jpg"
+      }
+    ],
+    "raw_count": 10,
+    "vl_keyword": "感应皂液器 USB充电 智能洗手液机",
+    "vl_description": "1) 商品中文名称：感应式自动皂液器（洗手液/洗洁精分配器）  \n2) 核心功能：  \n   - 人体感应自动出液（免接触）  \n   - 4档出液量可调（适配不同清洁需求）  \n   - USB充电 + 大容量380mL储液仓  \n\n3) 使用场景：  \n   - 家庭厨房（洗碗、果蔬清洁）  \n   - 卫生间洗手台（日常洗手消毒）  \n   - 公共场所（餐厅、办公室、医院等需无接触卫生场景）  \n\n4) 1688采购关键词：  \n感应皂液器 USB充电 智能洗手液机"
   },
   {
     "query": "светильник ночник",
@@ -72,61 +178,200 @@
     "mode": "text",
     "suppliers": [
       {
-        "title": "智能语音USB小夜灯床边灯声控灯声音控制家用宿舍起夜实惠实用",
-        "price": 2.52,
-        "soldCount": 30000,
-        "yxIndex": 4.68,
-        "similarity": 0.9984375000000001,
-        "supplier": "深圳市宝安区科炫达电子商行",
+        "title": "批发卡通动物企鹅闹钟 LCD宿舍床头电子钟礼品儿童睡眠闹钟带夜光",
+        "price": 88.0,
+        "soldCount": 800,
+        "yxIndex": 4.09,
+        "similarity": 0.9335156250000001,
+        "supplier": "福州锦顺电子有限公司",
         "quantityBegin": 1,
-        "url": "https://detail.1688.com/offer/756927831429.html?&object_id=756927831429",
-        "imageUrl": "https://cbu01.alicdn.com/img/ibank/O1CN0187lsT71NeYdPnu6kL_!!2215771921595-0-cib.jpg"
+        "url": "https://detail.1688.com/offer/615801822390.html?&object_id=615801822390",
+        "imageUrl": "https://cbu01.alicdn.com/img/ibank/13254384410_1549252910.jpg"
       },
       {
-        "title": "旋转星空投影圣诞节礼品小夜灯星星led灯月亮星星小夜灯usb",
-        "price": 9.5,
-        "soldCount": 30000,
-        "yxIndex": 4.71,
-        "similarity": 0.978428125,
-        "supplier": "义乌市腾浪工艺品有限公司",
-        "quantityBegin": 48,
-        "url": "https://detail.1688.com/offer/605916718523.html?&object_id=605916718523",
-        "imageUrl": "https://cbu01.alicdn.com/img/ibank/O1CN01w7YRfq1ZjOQCjEaQS_!!933353230-0-cib.jpg"
+        "title": "跨境新款LED震动闹钟  镜像钟带USB充电 多功能电子镜面数字时钟",
+        "price": 49.5,
+        "soldCount": 600,
+        "yxIndex": 4.31,
+        "similarity": 0.9123437500000001,
+        "supplier": "东莞市泰申智能家居有限公司",
+        "quantityBegin": 2,
+        "url": "https://detail.1688.com/offer/665909568720.html?&object_id=665909568720",
+        "imageUrl": "https://cbu01.alicdn.com/img/ibank/O1CN01kofvxK1NBFDRfuSDM_!!937501531-0-cib.jpg"
       },
       {
-        "title": "ins冰山小夜灯网红创意LDE圣诞树氛围灯生日伴手礼发光小夜灯批发",
-        "price": 1.5,
-        "soldCount": 10000,
-        "yxIndex": 4.42,
-        "similarity": 0.9821175,
-        "supplier": "东阳市翼彩工艺品有限公司",
+        "title": "卡通猫迷你闹钟2023新款儿童睡眠唤醒钟创意数字电子钟带小夜灯",
+        "price": 88.0,
+        "soldCount": 500,
+        "yxIndex": 4.28,
+        "similarity": 0.9622656250000001,
+        "supplier": "福州锦顺电子有限公司",
         "quantityBegin": 1,
-        "url": "https://detail.1688.com/offer/850620957410.html?&object_id=850620957410",
-        "imageUrl": "https://cbu01.alicdn.com/img/ibank/O1CN01aFso8U1IEO1Hauc9O_!!2216559210861-0-cib.jpg"
+        "url": "https://detail.1688.com/offer/616635491806.html?&object_id=616635491806",
+        "imageUrl": "https://cbu01.alicdn.com/img/ibank/O1CN01yNQsib20EEfAjmNyL_!!2207282526817-0-cib.jpg"
       },
       {
-        "title": "LED充电感应小夜灯USB rechargeable人来即亮磁吸轻奢氛围灯",
-        "price": 3.7,
-        "soldCount": 10000,
-        "yxIndex": 4.22,
-        "similarity": 0.9494575000000001,
-        "supplier": "中山市龙共照明有限公司",
+        "title": "新款夜光起床神器大屏幕智能天气电子钟卧室静音透明小型定时闹钟",
+        "price": 7.9,
+        "soldCount": 400,
+        "yxIndex": 4.3,
+        "similarity": 0.919296875,
+        "supplier": "东莞市尧球电子科技有限公司",
         "quantityBegin": 1,
-        "url": "https://detail.1688.com/offer/876059396476.html?&object_id=876059396476",
-        "imageUrl": "https://cbu01.alicdn.com/img/ibank/O1CN01C0Dscw1V8yA3ZvTor_!!2211112792609-0-cib.jpg"
+        "url": "https://detail.1688.com/offer/774161811693.html?&object_id=774161811693",
+        "imageUrl": "https://cbu01.alicdn.com/img/ibank/O1CN016JAtTR1HlWznfh1eM_!!2217596130798-0-cib.jpg"
       },
       {
-        "title": "治愈系卡皮巴拉小夜灯婴儿喂奶月子专用夜间卧室睡眠宿舍床上实用",
-        "price": 2.9,
-        "soldCount": 10000,
-        "yxIndex": 4.06,
-        "similarity": 0.940906875,
-        "supplier": "深圳市龙华区机灵猫玩具厂（个体工商户）",
+        "title": "闹钟学生用静音床头简约创意电子钟儿童多功能小时钟宿舍闹铃夜光",
+        "price": 9.36,
+        "soldCount": 300,
+        "yxIndex": 4.5,
+        "similarity": 0.9466406250000001,
+        "supplier": "武汉方鑫日用品有限公司",
         "quantityBegin": 1,
-        "url": "https://detail.1688.com/offer/891499744192.html?&object_id=891499744192",
-        "imageUrl": "https://cbu01.alicdn.com/img/ibank/O1CN01IPPy2k1IPpwwVNTi9_!!3827120886-0-cib.jpg"
+        "url": "https://detail.1688.com/offer/1057125870493.html?&object_id=1057125870493",
+        "imageUrl": "https://cbu01.alicdn.com/img/ibank/O1CN018i4heG1Imjrbejyf8_!!2222442260936-0-cib.jpg"
       }
     ],
-    "raw_count": 10
+    "raw_count": 10,
+    "fallback_from": "vl+image",
+    "vl_keyword": "夜光闹钟 电子钟 睡眠灯",
+    "vl_description": "1) 商品中文名称：欧司朗（OSRAM）智能夜光闹钟  \n2) 核心功能：  \n   - 柔光夜灯模式（暖光照明，不刺眼）  \n   - 电子数字显示时间（22:55示例）  \n   - 低功耗长续航（广告称“电池续航超30天”）  \n3) 使用场景：  \n   - 卧室床头夜间查看时间/起夜照明  \n   - 婴儿房、老人房等需柔和光源的夜间环境  \n   - 作为静音型床头计时器（无传统闹铃，强调“安静”）  \n4) 1688采购关键词：  \n   **夜光闹钟 电子钟 睡眠灯**  \n   （注：结合俄文广告语“часы с будильником ночник”即“带闹钟的夜灯钟”，核心是“闹钟+夜灯”二合一；1688常用词偏好“夜光闹钟”“电子钟”“睡眠灯”等组合，精准覆盖本体与功能）"
+  },
+  {
+    "query": "сенсорный дозатор для жидкого мыла",
+    "ozonId": "5971122633",
+    "ozonImage": "https://ir.ozone.ru/s3/multimedia-1-w/wc300/20127100712.jpg",
+    "ok": true,
+    "mode": "vl+image",
+    "status": "auto",
+    "suppliers": [
+      {
+        "title": "跨境爆款感应皂液器自动感应泡沫机智能自动皂液洗手机挂壁洗手液",
+        "price": 22.8,
+        "soldCount": 4000,
+        "yxIndex": 4.38,
+        "similarity": 0.9984375000000001,
+        "supplier": "温州乐米电子科技有限公司",
+        "quantityBegin": 1,
+        "url": "https://detail.1688.com/offer/1072440181082.html?&object_id=1072440181082",
+        "imageUrl": "https://cbu01.alicdn.com/img/ibank/O1CN01A3SzYSkKZ2L1chua_!!2218720283678-0-cib.jpg"
+      },
+      {
+        "title": "USB充电智能红外感应皂液器泡沫机洗手机自动感应洗手液机皂液器",
+        "price": 25.0,
+        "soldCount": 4000,
+        "yxIndex": 4.19,
+        "similarity": 0.9329493750000001,
+        "supplier": "深圳市乐众创新技术有限公司",
+        "quantityBegin": 2,
+        "url": "https://detail.1688.com/offer/996648712708.html?&object_id=996648712708",
+        "imageUrl": "https://cbu01.alicdn.com/img/ibank/O1CN01gUGREr2LS4z0XQoz2_!!3339019690-0-cib.jpg"
+      },
+      {
+        "title": "新款M15自动感应皂液器泡沫洗手机电动感应皂液器智能感应洗手机",
+        "price": 45.0,
+        "soldCount": 2000,
+        "yxIndex": 3.8,
+        "similarity": 0.9525975000000001,
+        "supplier": "东莞市合旺达科技有限公司",
+        "quantityBegin": 1,
+        "url": "https://detail.1688.com/offer/826122418905.html?&object_id=826122418905",
+        "imageUrl": "https://cbu01.alicdn.com/img/ibank/O1CN01Hd1Gnl1JVcW0HMZVD_!!2211188501034-0-cib.jpg"
+      },
+      {
+        "title": "爆款现货p11智能数显皂液器自动洗手液机跨境洗手机感应皂液器",
+        "price": 48.0,
+        "soldCount": 1000,
+        "yxIndex": 4.6,
+        "similarity": 0.9825587500000001,
+        "supplier": "东莞市新拓玛斯科技有限公司",
+        "quantityBegin": 1,
+        "url": "https://detail.1688.com/offer/796514721475.html?&object_id=796514721475",
+        "imageUrl": "https://cbu01.alicdn.com/img/ibank/O1CN01RpT2CS1X8AxoTxYeH_!!2217926082878-0-cib.jpg"
+      },
+      {
+        "title": "自动感应洗手机免接触充电皂液器感应式智能大容量酒店电动皂液器",
+        "price": 28.0,
+        "soldCount": 1000,
+        "yxIndex": 3.54,
+        "similarity": 0.912363125,
+        "supplier": "义乌市凯拓百货有限公司",
+        "quantityBegin": 5,
+        "url": "https://detail.1688.com/offer/1048710671701.html?&object_id=1048710671701",
+        "imageUrl": "https://cbu01.alicdn.com/img/ibank/O1CN01ABjpkE23fDI4A7MX3_!!2219422777282-0-cib.jpg"
+      }
+    ],
+    "raw_count": 10,
+    "vl_keyword": "感应皂液器 USB充电 智能洗手液机",
+    "vl_description": "1) 商品中文名称：感应式自动皂液器（洗手液/洗洁精分配器）  \n2) 核心功能：  \n   - 人体感应自动出液（免接触）  \n   - 4档出液量可调（适配不同清洁需求）  \n   - USB充电 + 大容量380mL储液仓  \n\n3) 使用场景：  \n   - 家庭厨房（洗碗、果蔬清洁）  \n   - 卫生间洗手台（日常洗手消毒）  \n   - 公共场所（餐厅、办公室、医院等需无接触卫生场景）  \n\n4) 1688采购关键词：  \n感应皂液器 USB充电 智能洗手液机"
+  },
+  {
+    "query": "органайзер для кухни на мойку",
+    "ozonId": "5864891831",
+    "ozonImage": "https://ir.ozone.ru/s3/multimedia-1-7/wc300/15434173411.jpg",
+    "ok": true,
+    "mode": "vl+image",
+    "status": "auto",
+    "suppliers": [
+      {
+        "title": "水槽抹布沥水架落地台面水龙头水池海绵钢丝球用品收纳厨房置物架",
+        "price": 13.2,
+        "soldCount": 3000,
+        "yxIndex": 3.8,
+        "similarity": 0.9359375000000001,
+        "supplier": "温州市中研科技有限公司",
+        "quantityBegin": 1,
+        "url": "https://detail.1688.com/offer/773387563644.html?&object_id=773387563644",
+        "imageUrl": "https://cbu01.alicdn.com/img/ibank/O1CN01vtC9E21iMnE94mJJu_!!2200767824399-0-cib.jpg"
+      },
+      {
+        "title": "水槽沥水架置物架厨房水槽三角沥水架洗碗池置物架海绵抹布收纳架",
+        "price": 2.6,
+        "soldCount": 2000,
+        "yxIndex": 3.63,
+        "similarity": 0.9070781250000001,
+        "supplier": "潮州市潮安区彩塘镇精颖不锈钢制品厂（个体工商户）",
+        "quantityBegin": 1,
+        "url": "https://detail.1688.com/offer/1067528138635.html?&object_id=1067528138635",
+        "imageUrl": "https://cbu01.alicdn.com/img/ibank/O1CN01TLvk7B1IJsv695RnU_!!2220276770873-0-cib.jpg"
+      },
+      {
+        "title": "可伸缩置物架多功能水槽不锈钢碗盘架果蔬沥水网架厨房用品收纳架",
+        "price": 16.0,
+        "soldCount": 1000,
+        "yxIndex": 4.19,
+        "similarity": 0.9031875,
+        "supplier": "潮州市好帮玛不锈钢有限公司",
+        "quantityBegin": 1,
+        "url": "https://detail.1688.com/offer/1014947550264.html?&object_id=1014947550264",
+        "imageUrl": "https://cbu01.alicdn.com/img/ibank/O1CN01hNvfRn1bd6CV6u7kQ_!!2215550153487-0-cib.jpg"
+      },
+      {
+        "title": "新款加厚塑料水槽沥水架厨房水池沥水洗碗置物架拐角三角收纳架",
+        "price": 0.9,
+        "soldCount": 600,
+        "yxIndex": 3.8,
+        "similarity": 0.8621406250000001,
+        "supplier": "金华市赐财日用百货有限公司",
+        "quantityBegin": 1,
+        "url": "https://detail.1688.com/offer/1069916527285.html?&object_id=1069916527285",
+        "imageUrl": "https://cbu01.alicdn.com/img/ibank/O1CN01xUOyLR1mX6pc6c9RC_!!2219038874963-0-cib.jpg"
+      },
+      {
+        "title": "厨房水槽置物架水池抹布架沥水架洗碗池台面洗洁精多功能收纳架",
+        "price": 12.0,
+        "soldCount": 400,
+        "yxIndex": 4.1,
+        "similarity": 0.8541562500000001,
+        "supplier": "潮州市梵益五金有限公司",
+        "quantityBegin": 1,
+        "url": "https://detail.1688.com/offer/865013017010.html?&object_id=865013017010",
+        "imageUrl": "https://cbu01.alicdn.com/img/ibank/O1CN01xPWng41PgVfGZLDh9_!!2217633641870-0-cib.jpg"
+      }
+    ],
+    "raw_count": 10,
+    "vl_keyword": "水槽沥水架 3合1 置物架",
+    "vl_description": "1) 商品中文名称：厨房水槽沥水置物架（3合1多功能洗碗池收纳架）  \n\n2) 核心功能：  \n- 沥水收纳（放置海绵、刷子等清洁工具）  \n- 置物分层（上层放皂液瓶/海绵，下层挂抹布）  \n- 适配水槽（可卡在水槽边缘，节省台面空间）  \n\n3) 使用场景：家庭厨房水槽边，用于日常洗碗后快速沥干并收纳清洁用品，保持台面整洁干燥。  \n\n4) 1688采购关键词：水槽沥水架 3合1 置物架"
   }
 ]
