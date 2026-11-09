@@ -25,6 +25,7 @@ DATA = ROOT / "data"
 
 # 供应商筛选（序数判断，阈值随样本校准）
 MIN_SALES = 30          # 1688 sold_count 下限
+MIN_SIMILARITY = 0.80   # 图搜相似度下限；实测好货源≥0.90、错位货源≤0.73（2026-11-08 样本），500 样本后重校准
 TOP_KEEP = 5            # 每张图保留的货源数
 
 
@@ -63,7 +64,8 @@ def pick_suppliers(products: list[dict]) -> list[dict]:
         except (TypeError, ValueError):
             return default
     good = [p for p in products
-            if num(p.get("sold_count") or p.get("sales")) >= MIN_SALES]
+            if num(p.get("sold_count") or p.get("sales")) >= MIN_SALES
+            and num(p.get("similarity_score")) >= MIN_SIMILARITY]
     good.sort(key=lambda p: num(p.get("sold_count") or p.get("sales")), reverse=True)
     return [{
         "title": p.get("title"),
