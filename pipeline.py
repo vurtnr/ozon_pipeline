@@ -68,10 +68,14 @@ CREATE TABLE IF NOT EXISTS reviews (
     kind TEXT NOT NULL,               -- image | video | category_mapping
     asset_path TEXT NOT NULL,
     decision TEXT,                    -- approve | regenerate | kill
+    reason TEXT,                      -- 死因枚举（打回/毙品必填）
     decided_at TEXT,
     created_at TEXT NOT NULL
 );
 """
+
+# 审核死因枚举（打回/毙品必填，可统计，反哺阈值）
+KILL_REASONS = ["图片质量", "商品形变", "文案错误", "侵权风险", "利润不足", "其他"]
 
 
 def conn() -> sqlite3.Connection:
@@ -79,6 +83,12 @@ def conn() -> sqlite3.Connection:
     c = sqlite3.connect(DB)
     c.row_factory = sqlite3.Row
     return c
+
+def _migrate(c: sqlite3.Connection) -> None:
+    """已有库的增量列迁移（新库走 SCHEMA 全量）"""
+    cols = {r["name"] for r in c.execute("PRAGMA table_info(reviews)")}
+    if cols and "reason" not in cols:
+        c.execute("ALTER TABLE reviews ADD COLUMN reason TEXT")
 
 
 def now() -> str:
@@ -88,6 +98,7 @@ def now() -> str:
 def cmd_init() -> None:
     with conn() as c:
         c.executescript(SCHEMA)
+        _migrate(c)
     print(f"已建库: {DB}")
 
 
@@ -142,17 +153,22 @@ def cmd_list(state: str | None = None) -> None:
         print(f"{r['id']:>4} [{r['state']:<14}] {r['query']:<40} {r['ozon_id'] or '-':<12}{dead}")
 
 
-def record_review(pid: int, kind: str, asset: str, decision: str) -> None:
+def record_review(pid: int, kind: str, asset: str, decision: str,
+                  reason: str = "") -> None:
     """审核台调用：存 eval 标签。decision: approve|regenerate|kill"""
+    if decision in ("regenerate", "kill") and not (
+            reason in KILL_REASONS or reason.startswith("其他")):
+        raise ValueError(f"{decision} 必须给死因: {KILL_REASONS}")
     with conn() as c:
+        _migrate(c)
         c.execute("INSERT INTO reviews(product_id,kind,asset_path,decision,"
-                  "decided_at,created_at) VALUES(?,?,?,?,?,?)",
-                  (pid, kind, asset, decision, now(), now()))
+                  "reason,decided_at,created_at) VALUES(?,?,?,?,?,?,?)",
+                  (pid, kind, asset, decision, reason, now(), now()))
     nxt = {"approve": "approved", "regenerate": "imaging", "kill": "dead"}[decision]
     if decision == "kill":
-        cmd_kill(pid, "审核毙品")
+        cmd_kill(pid, reason or "审核毙品")
     else:
-        cmd_advance(pid, nxt, f"审核{decision}")
+        cmd_advance(pid, nxt, f"审核{decision}" + (f"（{reason}）" if reason else ""))
 
 
 if __name__ == "__main__":

@@ -57,6 +57,7 @@ SYSTEM_PROMPT = """你是顶级 Ozon 电商运营。根据商品信息和目标�
 {
   "category_path_ru": "...", "style_note": "一句话风格判断",
   "ozon_title": "俄语商品标题(≤200字符,核心词前置)",
+  "description_ru": "俄语详情介绍(2-4个短句+3-5条卖点短横线列表,≤1000字符,不含价格/联系方式,与标题不重复)",
   "slots": [
     {"slot": "slot1", "scene": "...", "copy_title": "...", "copy_icons": ["...","...","..."]},
     {"slot": "slot3", "copy_headline": "...", "copy_badge": "..."},
@@ -108,6 +109,20 @@ def validate(spec: dict, sources: list[str]) -> list[str]:
     必须能在 sources 里找到，否则视为编造参数（过审/侵权风险）。"""
     problems = []
     texts = [spec.get("ozon_title", "")]
+    desc = spec.get("description_ru", "")
+    if not desc:
+        problems.append("缺少 description_ru（俄语详情介绍）")
+    elif len(desc) > 1000:
+        problems.append(f"详情介绍过长({len(desc)}字符>1000)")
+    low = desc.lower()
+    for w in BANNED:
+        if w in low:
+            problems.append(f"禁忌词 '{w}' in description_ru")
+    # 详情介绍里的数字同样要溯源（标题/卖点的长度词数规则不适用于长文案）
+    src_text0 = " ".join(sources)
+    for num in re.findall(r"\d+(?:[.,]\d+)?", desc):
+        if num not in src_text0:
+            problems.append(f"数字无出处(疑似编造): {num} in description_ru")
     for s in spec.get("slots", []):
         texts += [v for k, v in s.items() if k.startswith("copy") and isinstance(v, str)]
         texts += [x for x in s.get("copy_icons", []) if isinstance(x, str)]
