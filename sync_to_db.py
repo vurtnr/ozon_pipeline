@@ -59,7 +59,7 @@ def sync() -> None:
             asset_q = QUERY_ALIASES.get(query, query)  # 变体 query 共享主 query 的 spec/套图
             top = cand["topProducts"][0]
             row = c.execute("SELECT id,state FROM products"
-                            " WHERE query=? AND ozon_id=?",
+                            " WHERE query=? AND ozon_id=? AND state != 'dead'",
                             (query, top["ozonId"])).fetchone()
             metrics = {
                 "selection": {k: cand[k] for k in
@@ -91,6 +91,48 @@ def sync() -> None:
                 metrics["images"] = sorted(
                     p.name for p in gen_dir.glob("slot[0-9].png"))
 
+            if not row:
+                # 去重闸（[user-decided] 2026-11-10，防 id=1/3/5、id=2/7 两类重复）：
+                # ① 同 ozon 商品的活跃行已存在（query 变体）→ 不重复建仓
+                dup = c.execute("SELECT id,state FROM products"
+                                " WHERE ozon_id=? AND state != 'dead'",
+                                (top["ozonId"],)).fetchone()
+                if dup:
+                    P._event(c, dup["id"], None, dup["state"],
+                             f"sync 去重: 跳过 query 变体 {query!r}")
+                    continue
+                # 已毙痕迹：同 pair 或同 ozon 品被毙过 → 禁止新建（不复活），
+                # 但同 query 的活跃行仍可刷新
+                blocked = c.execute("SELECT 1 FROM products"
+                                    " WHERE (query=? AND ozon_id=?) OR ozon_id=?",
+                                    (query, top["ozonId"],
+                                     top["ozonId"])).fetchone()
+                # ② 同 query 换 top1：同一 1688 货源 → 原位更新 ozon_id
+                #    （新 pair 被已毙行占位则只刷新 metrics）；换品 → 保留原行
+                same_q = c.execute(
+                    "SELECT id,state,metrics_json FROM products"
+                    " WHERE query=? AND state != 'dead'", (query,)).fetchone()
+                if same_q:
+                    old = json.loads(same_q["metrics_json"] or "{}")
+                    new_offer = metrics.get("sourcing", {}).get("offer_id")
+                    if new_offer and new_offer == old.get("sourcing", {}).get("offer_id"):
+                        if blocked:
+                            P._event(c, same_q["id"], None, same_q["state"],
+                                     f"sync 复用: top1 {top['ozonId']} 已变更且被已毙行占位，"
+                                     "同货源仅刷新原行 metrics")
+                        else:
+                            c.execute("UPDATE products SET ozon_id=?, updated_at=?"
+                                      " WHERE id=?",
+                                      (top["ozonId"], P.now(), same_q["id"]))
+                            P._event(c, same_q["id"], None, same_q["state"],
+                                     f"ozon top1 更换 → {top['ozonId']}（同货源，原位更新）")
+                        row = same_q
+                    else:
+                        P._event(c, same_q["id"], None, same_q["state"],
+                                 f"sync 去重: query top1 换品 {top['ozonId']}，保留原行")
+                        continue
+                elif blocked:
+                    continue  # 毙过不复活
             if not row:
                 cur = c.execute(
                     "INSERT INTO products(query,ozon_id,state,metrics_json,"
