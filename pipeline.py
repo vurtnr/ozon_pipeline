@@ -72,6 +72,30 @@ CREATE TABLE IF NOT EXISTS reviews (
     decided_at TEXT,
     created_at TEXT NOT NULL
 );
+CREATE TABLE IF NOT EXISTS keywords (
+    query TEXT PRIMARY KEY,           -- 俄语关键词
+    query_cn TEXT,                    -- 中文（API 自带）
+    category_seed TEXT,               -- 来源类目（categories-leaf 叶名）
+    search_volume INTEGER,
+    growth30d REAL,
+    competing_products INTEGER,
+    avg_price REAL,
+    return_rate REAL,
+    top_products TEXT DEFAULT '[]',   -- JSON: [{ozonId,sku,title,imageUrl}] top3
+    consumed_at TEXT,                 -- 非空=已消费（一个词只上一次架）
+    fetched_at TEXT NOT NULL
+);
+CREATE TABLE IF NOT EXISTS credit_log (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    endpoint TEXT NOT NULL,
+    credits INTEGER NOT NULL,         -- 估算值（Nexscope 不回传扣费明细）
+    detail TEXT,
+    created_at TEXT NOT NULL
+);
+CREATE TABLE IF NOT EXISTS harvested_seeds (
+    seed TEXT PRIMARY KEY,            -- 已 harvest 的类目种子（轮换游标）
+    harvested_at TEXT NOT NULL
+);
 """
 
 # 审核死因枚举（打回/毙品必填，可统计，反哺阈值）
@@ -85,10 +109,26 @@ def conn() -> sqlite3.Connection:
     return c
 
 def _migrate(c: sqlite3.Connection) -> None:
-    """已有库的增量列迁移（新库走 SCHEMA 全量）"""
+    """已有库的增量迁移（新库走 SCHEMA 全量）"""
     cols = {r["name"] for r in c.execute("PRAGMA table_info(reviews)")}
     if cols and "reason" not in cols:
         c.execute("ALTER TABLE reviews ADD COLUMN reason TEXT")
+    # keywords / credit_log 后加表，老库补建
+    kcols = {r["name"] for r in c.execute("PRAGMA table_info(keywords)")}
+    if kcols and "query_cn" not in kcols:
+        c.execute("ALTER TABLE keywords ADD COLUMN query_cn TEXT")
+    c.executescript(
+        "CREATE TABLE IF NOT EXISTS keywords ("
+        "query TEXT PRIMARY KEY, query_cn TEXT, category_seed TEXT, search_volume INTEGER,"
+        "growth30d REAL, competing_products INTEGER, avg_price REAL,"
+        "return_rate REAL, top_products TEXT DEFAULT '[]', consumed_at TEXT,"
+        "fetched_at TEXT NOT NULL);"
+        "CREATE TABLE IF NOT EXISTS credit_log ("
+        "id INTEGER PRIMARY KEY AUTOINCREMENT, endpoint TEXT NOT NULL,"
+        "credits INTEGER NOT NULL, detail TEXT, created_at TEXT NOT NULL);"
+        "CREATE TABLE IF NOT EXISTS harvested_seeds ("
+        "seed TEXT PRIMARY KEY, harvested_at TEXT NOT NULL);"
+    )
 
 
 def now() -> str:

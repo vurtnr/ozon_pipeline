@@ -121,7 +121,7 @@ def search_text(query_cn: str) -> dict:
         "imageUrl": p.get("image_url"),
     } for p in products if float(p.get("sold_count") or 0) >= MIN_SALES]
     kept.sort(key=lambda p: float(p.get("soldCount") or 0), reverse=True)
-    return {"ok": True, "mode": "text", "suppliers": kept[:TOP_KEEP],
+    return {"ok": bool(kept), "mode": "text", "suppliers": kept[:TOP_KEEP],
             "raw_count": len(products)}
 
 
@@ -158,6 +158,7 @@ def vl_describe(image: str, tmp: Path) -> dict:
                 if not kw and i + 1 < len(lines):  # 同行空则取下一行
                     kw = lines[i + 1].split("、")[0].split(",")[0].strip()
                 kw = kw.strip("* ")  # 去 markdown 加粗
+                kw = kw.split("（")[0].split("(")[0].strip()  # 去括号注释（LLM 解释污染）
                 break
         return {"ok": True, "description": text, "keyword": kw}
     except Exception as e:

@@ -29,6 +29,10 @@ QUERY_ALIASES = {
 }
 
 
+def _offer_id(url: str) -> str:
+    return url.split("/offer/")[-1].split(".")[0].split("?")[0]
+
+
 def latest(pattern: str) -> Path | None:
     files = sorted(DATA.glob(pattern))
     return files[-1] if files else None
@@ -71,7 +75,7 @@ def sync() -> None:
                 sup = sourced[query]["suppliers"][0]
                 metrics["sourcing"] = {
                     "price_cny": sup["price"], "sold_count": sup["soldCount"],
-                    "offer_id": sup["url"].split("/offer/")[-1].split(".")[0],
+                    "offer_id": _offer_id(sup["url"]),
                     "image_url": sup["imageUrl"],
                 }
             if asset_q in specs:
@@ -81,11 +85,22 @@ def sync() -> None:
                 metrics["spec_validation"] = spec["_meta"].get("validation")
                 metrics["ozon_title"] = spec.get("ozon_title", "")
                 metrics["description_ru"] = spec.get("description_ru", "")
-            # 生图资产目录（存在即视为 imaging 完成）
-            offer_id = metrics.get("sourcing", {}).get("offer_id", "")
-            want = {GEN_DIR_ALIASES.get(asset_q, ""), offer_id}
+            # 生图资产目录（存在即视为 imaging 完成）。sourcing 重跑 top1 会飘，
+            # 用全部供应商的 offer_id 匹配资产目录，并让 sourcing 记录对齐有资产的供应商
+            offer_ids = {_offer_id(s["url"])
+                         for s in sourced.get(query, {}).get("suppliers", [])}
+            want = {GEN_DIR_ALIASES.get(asset_q, "")} | offer_ids
             gen_dir = next((d for d in (DATA / "gen").iterdir()
                             if d.is_dir() and d.name in want), None)
+            if gen_dir and "sourcing" in metrics \
+                    and metrics["sourcing"]["offer_id"] != gen_dir.name \
+                    and gen_dir.name in offer_ids:
+                sup = next(s for s in sourced[query]["suppliers"]
+                           if _offer_id(s["url"]) == gen_dir.name)
+                metrics["sourcing"] = {
+                    "price_cny": sup["price"], "sold_count": sup["soldCount"],
+                    "offer_id": gen_dir.name, "image_url": sup["imageUrl"],
+                }
             if gen_dir:
                 metrics["assets_dir"] = str(gen_dir.relative_to(ROOT))
                 metrics["images"] = sorted(
