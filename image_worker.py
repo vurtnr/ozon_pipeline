@@ -87,6 +87,39 @@ def call_api(prompt: str, source_image: str, out_path: Path,
     return {"usage": result.get("usage")}
 
 
+def _vl_has_text(image: str) -> bool:
+    """VL 检测图中是否带文字/标识（供应商营销图常带中文，直通 slot2 会流向 Ozon）。
+    异常时按有文字处理（回退 AI 生成，保守方向）。"""
+    try:
+        if image.startswith(("http://", "https://")):
+            req = urllib.request.Request(image,
+                                         headers={"User-Agent": "Mozilla/5.0"})
+            raw = urllib.request.urlopen(req, timeout=60).read()
+        else:
+            raw = Path(image).read_bytes()
+        b64 = base64.b64encode(raw).decode()
+        body = json.dumps({
+            "model": "qwen3-vl-plus",
+            "messages": [{"role": "user", "content": [
+                {"type": "image_url",
+                 "image_url": {"url": f"data:image/jpeg;base64,{b64}"}},
+                {"type": "text", "text": "图中是否含有任何文字、字母或数字标识"
+                                          "（包括包装/标签/水印上的）？只回答：有 或 无"},
+            ]}],
+        }).encode()
+        req = urllib.request.Request(
+            BAILIAN_BASE_URL + "/chat/completions", data=body, method="POST",
+            headers={"Authorization": f"Bearer {BAILIAN_API_KEY}",
+                     "Content-Type": "application/json"})
+        with urllib.request.urlopen(req, timeout=60) as resp:
+            text = json.load(resp)["choices"][0]["message"]["content"].strip()
+        return text.startswith("有")
+    except Exception as exc:
+        print(f"[warn] slot2 文字检测异常（按有文字回退 AI 生成）: {exc}",
+              file=sys.stderr)
+        return True
+
+
 def _supplier_white_bg(source_image: str, out_path: Path) -> None:
     """slot2：供应商原图居中贴上 928x1232 白底画布（不 AI 生成，零形变零成本）。"""
     if source_image.startswith(("http://", "https://")):
@@ -146,6 +179,11 @@ def generate_slots(spec_path: str, source_image: str, out_dir: Path,
     def run(slot: str, template: str, mapping: dict, overlays: list) -> None:
         prompt = render((ROOT / f"prompts/{template}.txt").read_text("utf-8"),
                         mapping)
+        # 防文字继承：供应商图里的中文营销字/水印不许带进成品（Ozon 俄语市场）
+        prompt += ("\nRemove any text, letters, numbers or logos visible in the "
+                   "reference photo (packaging, labels, props, watermarks); never "
+                   "carry them into the generated image. Only render text "
+                   "explicitly requested in the instructions above.")
         style = STYLE_REFS.get(slot)
         if style:
             prompt += ("\nThe second reference image is a layout/style reference "
@@ -174,19 +212,23 @@ def generate_slots(spec_path: str, source_image: str, out_dir: Path,
                             "error": str(exc)[:200]})
             print(f"[fail] {slot}: {exc}", file=sys.stderr)
 
-    # slot2 白底：不 AI 生成，直接用供应商原图（[user-decided] 2026-11-10，
-    # 省 $0.03/张且零形变）
+    # slot2 白底：优先供应商原图（零成本零形变）；原图带文字则回退 AI 生成
+    # （[user-decided] 2026-11-10 白底不 AI 生成 + 同日补中文闸）
     if not only or "slot2" in only:
-        try:
-            final2 = out_dir / "slot2.png"
-            _supplier_white_bg(source_image, final2)
-            records.append({"slot": "slot2", "ok": True,
-                            "template": "supplier_original", "out": str(final2),
-                            "cost_usd": 0})
-            print("[ok] slot2 (供应商原图)", file=sys.stderr)
-        except Exception as exc:
-            records.append({"slot": "slot2", "ok": False, "error": str(exc)[:200]})
-            print(f"[fail] slot2: {exc}", file=sys.stderr)
+        if _vl_has_text(source_image):
+            print("[slot2] 供应商原图含文字，回退 AI 白底生成", file=sys.stderr)
+            run("slot2", "slot2_white_bg_v1", {}, [])
+        else:
+            try:
+                final2 = out_dir / "slot2.png"
+                _supplier_white_bg(source_image, final2)
+                records.append({"slot": "slot2", "ok": True,
+                                "template": "supplier_original", "out": str(final2),
+                                "cost_usd": 0})
+                print("[ok] slot2 (供应商原图)", file=sys.stderr)
+            except Exception as exc:
+                records.append({"slot": "slot2", "ok": False, "error": str(exc)[:200]})
+                print(f"[fail] slot2: {exc}", file=sys.stderr)
     # 其余 slot 按 spec 编排
     for name in ("slot1", "slot3", "slot4", "slot5", "slot6", "slot8"):
         if only and name not in only:

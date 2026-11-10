@@ -51,13 +51,22 @@ def run_skill(args: list[str], timeout: int = 60) -> dict:
 
 
 def localize(image: str, tmp: Path) -> str:
-    """URL 图片先下载到本地（1688 网关对境外 URL 的抓取能力未知，本地化最稳）"""
+    """URL 图片先下载到本地（1688 网关对境外 URL 的抓取能力未知，本地化最稳）。
+    ir.ozone.ru 主域会被间歇性断连（SSL EOF），自动回退 ir-20 分片镜像。"""
     if not image.startswith(("http://", "https://")):
         return image
     dest = tmp / f"img_{abs(hash(image))}.jpg"
-    req = urllib.request.Request(image, headers={"User-Agent": "Mozilla/5.0"})
-    with urllib.request.urlopen(req, timeout=30) as r, open(dest, "wb") as f:
-        f.write(r.read())
+    for url in (image, image.replace("ir.ozone.ru", "ir-20.ozone.ru")):
+        try:
+            req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
+            with urllib.request.urlopen(req, timeout=30) as r, open(dest, "wb") as f:
+                f.write(r.read())
+            return str(dest)
+        except Exception as exc:
+            if url == image and "ir.ozone.ru" in image:
+                print(f"  [warn] 主域下载失败，试分片镜像: {exc}", file=sys.stderr)
+                continue
+            raise
     return str(dest)
 
 
@@ -98,8 +107,57 @@ def search_one(image: str, tmp: Path) -> dict:
             "raw_count": len(products)}
 
 
-def search_text(query_cn: str) -> dict:
-    """文字搜：中文关键词直接找货（图搜降级路径）"""
+def vl_same_product(ozon_image: str, cand_url: str, tmp: Path) -> bool:
+    """同一性闸：qwen-vl 对拍 Ozon 原图 vs 1688 候选图。
+    文字搜的 similarity 是文本匹配分，无法判断物品同一性（冰箱垫 vs 冰箱除味盒），
+    视觉闸必须补到文字路径上。异常时按不通过处理（宁可判无货源进人工）。"""
+    import base64
+    try:
+        def b64(src: str) -> str:
+            return base64.b64encode(Path(localize(src, tmp)).read_bytes()).decode()
+        body = json.dumps({
+            "model": "qwen3-vl-plus",
+            "messages": [{"role": "user", "content": [
+                {"type": "image_url",
+                 "image_url": {"url": f"data:image/jpeg;base64,{b64(ozon_image)}"}},
+                {"type": "image_url",
+                 "image_url": {"url": f"data:image/jpeg;base64,{b64(cand_url)}"}},
+                {"type": "text", "text": "第一张是 Ozon 在售商品图，第二张是 1688 供应商图。"
+                                          "判断是否为同一种商品（功能+形态一致即为是，"
+                                          "颜色/配件/角度差异忽略）。只回答一个字：是 或 否"},
+            ]}],
+        }).encode()
+        req = urllib.request.Request(
+            BAILIAN_BASE_URL + "/chat/completions", data=body, method="POST",
+            headers={"Authorization": f"Bearer {BAILIAN_API_KEY}",
+                     "Content-Type": "application/json"})
+        with urllib.request.urlopen(req, timeout=60) as resp:
+            text = json.load(resp)["choices"][0]["message"]["content"].strip()
+        return text.startswith("是")
+    except Exception as exc:
+        print(f"  [warn] 同一性闸异常（按不通过）: {exc}", file=sys.stderr)
+        return False
+
+
+def identity_gate(ozon_image: str, suppliers: list, tmp: Path,
+                  max_checks: int = 8) -> list:
+    """按销量序逐一对拍，保留通过同一性闸的供应商（最多查 max_checks 个）。"""
+    kept = []
+    for s in suppliers[:max_checks]:
+        if not s.get("imageUrl"):
+            continue
+        ok = vl_same_product(ozon_image, s["imageUrl"], tmp)
+        print(f"  同一性闸: {'✓' if ok else '✗'} {str(s.get('title'))[:28]}",
+              file=sys.stderr)
+        if ok:
+            kept.append(s)
+    return kept
+
+
+def search_text(query_cn: str, ozon_image: str | None = None,
+                tmp: Path | None = None) -> dict:
+    """文字搜：中文关键词直接找货（图搜降级路径）。
+    ozon_image 提供时过同一性闸（视觉对拍），否则只按销量闸（旧行为）。"""
     result = run_skill(["text_search", "-q", query_cn, "-l", "10"])
     if not result.get("success"):
         return {"ok": False, "error": result.get("markdown", "unknown")}
@@ -121,6 +179,9 @@ def search_text(query_cn: str) -> dict:
         "imageUrl": p.get("image_url"),
     } for p in products if float(p.get("sold_count") or 0) >= MIN_SALES]
     kept.sort(key=lambda p: float(p.get("soldCount") or 0), reverse=True)
+    kept = kept[:TOP_KEEP * 2]  # 同一性闸会淘汰一部分，多留候选
+    if ozon_image and tmp:
+        kept = identity_gate(ozon_image, kept, tmp)
     return {"ok": bool(kept), "mode": "text", "suppliers": kept[:TOP_KEEP],
             "raw_count": len(products)}
 
@@ -174,7 +235,7 @@ def search_with_fallback(image: str, tmp: Path, query_cn: str | None) -> dict:
         r["error"] = "图搜无合格货源且缺 queryCn，无法文字搜降级"
         return r
     print(f"  图搜 sim 不过闸，降级文字搜: {query_cn}", file=sys.stderr)
-    tr = search_text(query_cn)
+    tr = search_text(query_cn, ozon_image=image, tmp=tmp)
     if tr.get("ok"):
         tr["fallback_from"] = "image"  # 标记降级来源
         return tr
@@ -220,7 +281,7 @@ def search_vl(image: str, tmp: Path) -> dict:
     else:
         # 降级文字搜
         print(f"  混合图搜 sim={top_sim:.3f}<0.80，降级文字搜: {kw}", file=sys.stderr)
-        tr = search_text(kw)
+        tr = search_text(kw, ozon_image=image, tmp=tmp)
         if tr.get("ok"):
             tr["fallback_from"] = "vl+image"
             tr["vl_keyword"] = kw
