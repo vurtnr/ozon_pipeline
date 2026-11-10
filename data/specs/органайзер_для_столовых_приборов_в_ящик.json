@@ -36,16 +36,17 @@
       "copy_word": "Чёткие перегородки"
     },
     {
-      "slot": "slot7",
-      "measurements": "28×16×4,5 см"
-    },
-    {
       "slot": "slot8",
       "scenarios": [
         "Кухня",
         "Столовая",
         "Квартира"
       ]
+    },
+    {
+      "slot": "slot7",
+      "measurements": "60x25x30",
+      "source": "manual"
     }
   ],
   "need_confirm": true,

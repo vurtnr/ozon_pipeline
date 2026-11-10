@@ -115,6 +115,24 @@ button.kill{background:var(--red);color:#2b0705}
 .desc{background:var(--card2);border-radius:8px;padding:10px 14px;font-size:12.5px;white-space:pre-wrap;margin:8px 0;max-height:140px;overflow:auto}
 .warnbox{background:rgba(255,179,64,.08);border:1px solid rgba(255,179,64,.3);border-radius:8px;padding:10px 14px;margin:10px 0;font-size:13px}
 .warnbox ul{max-height:110px;overflow:auto}
+.okbox{background:rgba(52,199,89,.08);border:1px solid rgba(52,199,89,.3);
+border-radius:8px;padding:10px 14px;margin:10px 0;font-size:13px}
+
+/* ---- slot7 人工尺寸输入（模态框，与 zoom 同遮罩语言） ---- */
+.slot .cta{color:var(--accent);font-weight:600;font-size:11.5px;margin-top:6px;
+border:1px solid var(--accent);border-radius:6px;padding:3px 10px;position:relative;z-index:1}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.7);display:none;align-items:center;justify-content:center;z-index:100}
+.modal.on{display:flex}
+.modal .box{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px 22px;width:360px}
+.modal h4{font-size:14px;margin-bottom:6px}
+.modal .hint{color:var(--dim);font-size:11.5px;margin-bottom:12px;line-height:1.5}
+.modal .dims{display:flex;gap:8px;margin-bottom:10px}
+.modal .dims>div{flex:1}
+.modal label{display:block;font-size:11px;color:var(--dim);margin-bottom:3px}
+.modal input{width:100%;background:var(--card2);color:var(--text);border:1px solid var(--border);border-radius:6px;padding:7px 9px;font-size:13px}
+.modal .go{background:var(--accent);color:#fff;border:none;border-radius:8px;padding:9px 14px;font-size:13px;font-weight:700;cursor:pointer;width:100%;margin-top:10px}
+.modal .go:disabled{opacity:.5;cursor:wait}
+.modal .err{color:var(--red);font-size:12px;margin-top:8px;display:none}
 
 /* ---- 单图放大 ---- */
 .zoom{position:fixed;inset:0;background:rgba(0,0,0,.85);display:none;align-items:center;justify-content:center;z-index:99;cursor:zoom-out}
@@ -195,9 +213,41 @@ def page(title: str, tab: str, body: str) -> bytes:
 <title>{ESC(title)} · 审核台</title><style>{CSS}</style></head><body><div class="wrap">
 <div class="app">{bar}<div class="tabs">{nav}</div>{body}</div>
 </div><div class="zoom" id="zoom" onclick="this.classList.remove('on')"><img id="zoomimg"></div>
+<div class="modal" id="slot7modal" onclick="closeSlot7(event)"><div class="box">
+<h4>⑦ 规格尺寸图 · 人工输入</h4>
+<div class="hint">填供应商详情页或实物实测的<b>真实</b>数字，单位 см（容量 мл）。
+至少填一项，不确定的留空。填入即视为人工确认出处（最高信任级，免检溯源闸），直接用于生图。</div>
+<div class="dims">
+<div><label>长 (см)</label><input id="s7l" type="number" step="0.1" min="0"></div>
+<div><label>宽 (см)</label><input id="s7w" type="number" step="0.1" min="0"></div>
+<div><label>高 (см)</label><input id="s7h" type="number" step="0.1" min="0"></div>
+</div>
+<label>容量/其他（可选，如 300 мл；纯数字默认 мл）</label>
+<input id="s7o" type="text" placeholder="如 300 мл">
+<button class="go" id="s7go" onclick="genSlot7()">生成尺寸图（约 1 分钟 · $0.03）</button>
+<div class="err" id="s7err"></div>
+</div></div>
 <script>
 function zoom(src){{const z=document.getElementById('zoom');
 document.getElementById('zoomimg').src=src;z.classList.add('on')}}
+let s7pid=null;
+function openSlot7(pid){{s7pid=pid;document.getElementById('slot7modal').classList.add('on')}}
+function closeSlot7(e){{if(e.target.id==='slot7modal')e.target.classList.remove('on')}}
+async function genSlot7(){{
+const go=document.getElementById('s7go'),err=document.getElementById('s7err');
+err.style.display='none';
+const fd=new URLSearchParams({{pid:s7pid,ajax:'1',
+len:document.getElementById('s7l').value,width:document.getElementById('s7w').value,
+height:document.getElementById('s7h').value,other:document.getElementById('s7o').value}});
+go.disabled=true;go.textContent='生成中…约 1 分钟，请勿关闭';
+try{{
+const r=await fetch('/slot7',{{method:'POST',body:fd}});
+const j=await r.json();
+if(j.ok){{location.href='/review?pid='+s7pid+'&ok=1';return}}
+err.textContent='⚠️ '+(j.error||'生成失败');err.style.display='block';
+}}catch(e){{err.textContent='⚠️ 网络错误: '+e;err.style.display='block'}}
+go.disabled=false;go.textContent='生成尺寸图（约 1 分钟 · $0.03）';
+}}
 function askReason(btn,decision){{
 document.getElementById('decision').value=decision;
 document.getElementById('reasonfor').textContent=btn==='re'?'打回重生':'毙品';
@@ -281,24 +331,32 @@ def _slots(m, pid: int | None = None) -> str:
             # slot7 人工输入尺寸：拿不到真实尺寸时的兜底通道（最高信任级）
             cells.append(
                 f'<div class="slot"><span class="badge">7</span>{ESC(name)}<br>'
-                f'<form method="post" action="/slot7" '
-                f'onsubmit="this.querySelector(\'button\').disabled=true">'
-                f'<input type="hidden" name="pid" value="{pid}">'
-                f'<input name="measurements" required style="width:92%;font-size:11px" '
-                f'placeholder="如 36–60×25×17.2 cm">'
-                f'<button style="font-size:11px;margin-top:4px">生成尺寸图</button>'
-                f'</form></div>')
+                f'<span class="cta" onclick="openSlot7({pid})">＋ 输入真实尺寸</span></div>')
         else:
             cells.append(f'<div class="slot"><span class="badge">{i}</span>'
                          f'{ESC(name)}<br>(待生成)</div>')
     return f'<div class="slots">{"".join(cells)}</div>'
 
 
+def _compose_measurements(form: dict) -> str:
+    """结构化字段 → 俄语尺寸串（规则由构造保证：标签固定俄语、单位 см/мл）。"""
+    parts = []
+    for k, ru in (("len", "Длина"), ("width", "Ширина"), ("height", "Высота")):
+        v = form.get(k, [""])[0].strip()
+        if v:
+            parts.append(f"{ru} {v} см")
+    other = form.get("other", [""])[0].strip()
+    if other:
+        # 纯数字按容量处理（输入框提示已注明），否则原文（需自带单位）
+        parts.append(f"{other} мл" if re.fullmatch(r"[\d.,]+", other) else other)
+    return " · ".join(parts)
+
+
 def gen_slot7(pid: int, measurements: str) -> str | None:
     """人工输入尺寸 → 写 spec（source=manual 最高信任级）→ 重生 slot7 → 更新 DB。
     返回 None=成功，否则错误信息。生图 30-60s，请求会阻塞（本机工具可接受）。"""
     if not re.search(r"\d", measurements):
-        return "尺寸必须包含数字"
+        return "至少填写一项有效尺寸（数字必填）"
     with P.conn() as c:
         row = c.execute("SELECT metrics_json FROM products WHERE id=?",
                         (pid,)).fetchone()
@@ -496,7 +554,9 @@ class Handler(BaseHTTPRequestHandler):
             return self._send(board())
         if u.path == "/review":
             pid = int(qs["pid"][0]) if "pid" in qs else None
-            return self._send(review(pid))
+            flash = ('<div class="okbox">✅ 尺寸图已生成并入队列，'
+                     '请重点核对数字与实物一致</div>' if qs.get("ok") else "")
+            return self._send(review(pid, flash))
         if u.path.startswith("/product/"):
             return self._send(trace(int(u.path.split("/")[-1])))
         if u.path.startswith("/media/"):
@@ -511,13 +571,18 @@ class Handler(BaseHTTPRequestHandler):
         form = urllib.parse.parse_qs(
             self.rfile.read(int(self.headers["Content-Length"])).decode())
         if self.path == "/slot7":
-            err = gen_slot7(int(form["pid"][0]),
-                            form.get("measurements", [""])[0].strip())
+            pid = int(form["pid"][0])
+            measurements = (form.get("measurements", [""])[0].strip()
+                            or _compose_measurements(form))
+            err = gen_slot7(pid, measurements)
+            if form.get("ajax", [""])[0]:  # 模态框 fetch：JSON 应答，页面不跳转
+                payload = {"ok": not err, **({"error": err} if err else {})}
+                return self._send(json.dumps(payload, ensure_ascii=False).encode(),
+                                  "application/json; charset=utf-8")
             if err:
-                pid = int(form["pid"][0])
                 return self._send(
                     review(pid, f'<div class="warnbox">⚠️ {ESC(err)}</div>'))
-            return self._redirect(f"/review?pid={form['pid'][0]}")
+            return self._redirect(f"/review?pid={pid}")
         if self.path != "/action":
             return self._send(b"404", code=404)
         pid = int(form["pid"][0])
