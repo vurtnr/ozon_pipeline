@@ -261,11 +261,12 @@ def generate_slots(spec_path: str, source_image: str, out_dir: Path,
             run(name, SLOT_TEMPLATES[name],
                 {"SCENARIO_ICONS": ", ".join(scen)},
                 [(overlay_caption, "Подходит для: " + " / ".join(scen))])
-    # slot7 尺寸图：数字溯源闸——拿不到真实尺寸就跳过
+    # slot7 尺寸图：数字溯源闸——信任级：manual（人工输入）> OCR（商家自填）
     s7 = _slot_spec(spec, "slot7")
     if only and "slot7" not in only:
         pass
-    elif s7 and _measurements_traceable(s7.get("measurements", ""), sources):
+    elif s7 and (s7.get("source") == "manual"
+                 or _measurements_traceable(s7.get("measurements", ""), sources)):
         # shortcut: 暂用 v1（AI 渲染标注数字，图审必须重点核对），
         # 首个有真实尺寸的品出现时升级 v2 双轨（PIL 贴标注）
         run("slot7", "slot7_size_v1", {"MEASUREMENTS": s7["measurements"]}, [])

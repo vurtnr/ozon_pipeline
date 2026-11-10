@@ -64,6 +64,32 @@ def _mock_vl_dims(monkeypatch):
     monkeypatch.setattr(dimensions, "extract_dimensions", lambda img: "")
 
 
+def test_slot7_manual_source_bypasses_trace_gate(tmp_path, monkeypatch, _mock_vl_dims):
+    """人工输入的尺寸（source=manual）直接过闸，无需数字溯源。"""
+    spec = {"_meta": {"title1688": "", "query": ""},
+            "slots": [{"slot": "slot7", "measurements": "36×25×17 cm",
+                       "source": "manual"}]}
+    p = tmp_path / "spec.json"
+    json.dump(spec, open(p, "w", encoding="utf-8"))
+    def fake_api(prompt, src, out_path, style_ref=None):
+        out_path.parent.mkdir(parents=True, exist_ok=True)
+        out_path.write_bytes(b"png")
+        return {"usage": None}
+    monkeypatch.setattr(IW, "call_api", fake_api)
+    recs = IW.generate_slots(str(p), "x.jpg", tmp_path / "gen", only={"slot7"})
+    assert recs[0]["ok"] and recs[0]["slot"] == "slot7"
+
+
+def test_slot7_without_source_still_gated(tmp_path, monkeypatch, _mock_vl_dims):
+    """无 source 且数字无出处 → 仍拦截（闸默认行为不变）。"""
+    spec = {"_meta": {"title1688": "无数字标题", "query": ""},
+            "slots": [{"slot": "slot7", "measurements": "36×25 cm"}]}
+    p = tmp_path / "spec.json"
+    json.dump(spec, open(p, "w", encoding="utf-8"))
+    recs = IW.generate_slots(str(p), "x.jpg", tmp_path / "gen", only={"slot7"})
+    assert not recs[0]["ok"] and recs[0].get("skipped")
+
+
 def test_slot2_supplier_image_with_text_falls_back_to_ai(tmp_path, monkeypatch, _mock_vl_dims):
     """供应商原图含文字 → slot2 回退 AI 白底生成。"""
     monkeypatch.setattr(IW, "_vl_has_text", lambda img: True)

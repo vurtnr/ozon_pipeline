@@ -35,10 +35,6 @@
       "copy_word": "Сопло из стали"
     },
     {
-      "slot": "slot7",
-      "measurements": "350 мл / 18×9×12 см"
-    },
-    {
       "slot": "slot8",
       "scenarios": [
         "Ванная",
@@ -46,6 +42,11 @@
         "Гостиница",
         "Офис"
       ]
+    },
+    {
+      "slot": "slot7",
+      "measurements": "12 × 8 × 19 см, 350 мл",
+      "source": "manual"
     }
   ],
   "need_confirm": true,

@@ -15,6 +15,8 @@
 """
 import html
 import json
+import re
+import subprocess
 import sys
 import urllib.parse
 from datetime import date
@@ -262,7 +264,7 @@ def _spec(pid_metrics) -> dict:
         return {}
 
 
-def _slots(m) -> str:
+def _slots(m, pid: int | None = None) -> str:
     d = m.get("assets_dir")
     have = set(m.get("images", []))
     cells = []
@@ -275,10 +277,56 @@ def _slots(m) -> str:
                 f'<div class="slot has" onclick="zoom(\'{src}\')">'
                 f'<span class="badge">{i}</span><img src="{src}" loading="lazy">'
                 f'<span class="lb">{ESC(name)}</span></div>')
+        elif i == 7 and pid and d:
+            # slot7 人工输入尺寸：拿不到真实尺寸时的兜底通道（最高信任级）
+            cells.append(
+                f'<div class="slot"><span class="badge">7</span>{ESC(name)}<br>'
+                f'<form method="post" action="/slot7" '
+                f'onsubmit="this.querySelector(\'button\').disabled=true">'
+                f'<input type="hidden" name="pid" value="{pid}">'
+                f'<input name="measurements" required style="width:92%;font-size:11px" '
+                f'placeholder="如 36–60×25×17.2 cm">'
+                f'<button style="font-size:11px;margin-top:4px">生成尺寸图</button>'
+                f'</form></div>')
         else:
             cells.append(f'<div class="slot"><span class="badge">{i}</span>'
                          f'{ESC(name)}<br>(待生成)</div>')
     return f'<div class="slots">{"".join(cells)}</div>'
+
+
+def gen_slot7(pid: int, measurements: str) -> str | None:
+    """人工输入尺寸 → 写 spec（source=manual 最高信任级）→ 重生 slot7 → 更新 DB。
+    返回 None=成功，否则错误信息。生图 30-60s，请求会阻塞（本机工具可接受）。"""
+    if not re.search(r"\d", measurements):
+        return "尺寸必须包含数字"
+    with P.conn() as c:
+        row = c.execute("SELECT metrics_json FROM products WHERE id=?",
+                        (pid,)).fetchone()
+    if not row:
+        return "产品不存在"
+    m = load(row)
+    sp, assets = m.get("spec_path"), m.get("assets_dir")
+    img = m.get("sourcing", {}).get("image_url")
+    if not (sp and assets and img):
+        return "缺 spec/资产目录/货源图，无法生成"
+    spec_file = ROOT / sp
+    spec = json.loads(spec_file.read_text(encoding="utf-8"))
+    spec["slots"] = [s for s in spec.get("slots", []) if s.get("slot") != "slot7"]
+    spec["slots"].append({"slot": "slot7", "measurements": measurements,
+                          "source": "manual"})
+    spec_file.write_text(json.dumps(spec, ensure_ascii=False, indent=2),
+                         encoding="utf-8")
+    r = subprocess.run([sys.executable, "image_worker.py", "--spec", sp,
+                        "--image", img, "--out-dir", assets, "--only", "slot7"],
+                       capture_output=True, text=True, cwd=ROOT)
+    if not (ROOT / assets / "slot7.png").is_file():
+        return f"生成失败: {(r.stderr or '')[-200:]}"
+    m["images"] = sorted(p.name for p in (ROOT / assets).glob("slot[0-9].png"))
+    with P.conn() as c:
+        c.execute("UPDATE products SET metrics_json=?, updated_at=? WHERE id=?",
+                  (json.dumps(m, ensure_ascii=False), P.now(), pid))
+        P._event(c, pid, None, "slot7", f"人工输入尺寸生成: {measurements}")
+    return None
 
 
 def review(pid: int | None, flash: str = "") -> bytes:
@@ -383,7 +431,7 @@ def review(pid: int | None, flash: str = "") -> bytes:
   {warn}
   <div class="detail-grid">
     <div>
-      {_slots(m)}
+      {_slots(m, cur["id"])}
       <div class="dim" style="margin-top:8px">点击单张可放大；单独重生某 slot 重跑 image_worker 即可（$0.03/张），不必整卡重来</div>
     </div>
     <div class="kv">{kv}</div>
@@ -460,10 +508,18 @@ class Handler(BaseHTTPRequestHandler):
         return self._send(b"404", code=404)
 
     def do_POST(self):
-        if self.path != "/action":
-            return self._send(b"404", code=404)
         form = urllib.parse.parse_qs(
             self.rfile.read(int(self.headers["Content-Length"])).decode())
+        if self.path == "/slot7":
+            err = gen_slot7(int(form["pid"][0]),
+                            form.get("measurements", [""])[0].strip())
+            if err:
+                pid = int(form["pid"][0])
+                return self._send(
+                    review(pid, f'<div class="warnbox">⚠️ {ESC(err)}</div>'))
+            return self._redirect(f"/review?pid={form['pid'][0]}")
+        if self.path != "/action":
+            return self._send(b"404", code=404)
         pid = int(form["pid"][0])
         decision = form["decision"][0]
         reason = form.get("reason", [""])[0]
