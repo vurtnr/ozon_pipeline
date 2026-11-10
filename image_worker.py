@@ -44,11 +44,16 @@ SLOT_TEMPLATES = {  # slot2 白底改用供应商原图（见下）；slot7 条�
     "slot8": "slot8_scenarios_v1",
 }
 
-# 信息图类 slot 的风格参考图（[user-decided] 2026-11-10，参考 ozon-image 模版）：
-# 与产品图一起传给 I2I。9 张模版中 8 张是 38x50 缩略图不可用，仅此张 750x1000 可用；
-# 用户补全分辨率后按 slot 细分（如 slot7 尺寸标注风格）
-STYLE_REFS = {"slot1": "infographic_cards_v1.webp",
-              "slot3": "infographic_cards_v1.webp"}
+# 各 slot 的版式风格参考图（[user-decided] 2026-11-10，参考 ozon-image 模版）：
+# 与产品图一起传给 I2I，迁移构图/排版，产品本体始终以第一张图为准。
+# 模版来自同一条 Ozon 竞品卡（深色高级风），跨类目实测可迁移（见 commit 历史探针图）
+STYLE_REFS = {"slot1": "main_headline_v1.webp",      # 大标题+图标卖点列
+              "slot3": "selling_point_v1.webp",     # pill 副标+勾选卖点列
+              "slot4": "usage_grid_v1.webp",        # 2x2 使用照片网格
+              "slot5": "usage_grid_v1.webp",        # 场景延伸，同使用网格版式
+              "slot6": "detail_strips_v1.webp",     # 横照片条+说明条
+              "slot7": "size_arrows_v1.webp",       # 产品阵列+尺寸箭头
+              "slot8": "scenarios_circle_v1.webp"}  # 环形变体+底条
 
 
 def _as_image(src: str) -> str:
