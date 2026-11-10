@@ -113,6 +113,100 @@ def overlay_badge(src: str | Path, text: str, out: str | Path,
     return {"out": str(out), "badge": text, "font_size": font.size}
 
 
+def _uniform_fit(draw, texts, max_w, start):
+    """多条文本统一字号：从 start 往下缩，直到全部放得进 max_w。"""
+    for size in range(start, 14, -2):
+        font = _font(size)
+        if all(draw.textlength(t, font=font) <= max_w for t in texts):
+            return font
+    return None
+
+
+CHIP_BG = (20, 20, 20, 155)    # 半透明深底芯片（Ozon 信息图常见样式）
+CHIP_FG = (255, 255, 255)
+
+
+def _draw_chip(draw, cx, cy, text, font):
+    """以 (cx,cy) 为中心画半透明圆角芯片+白粗字，返回芯片高。"""
+    tw = draw.textlength(text, font=font)
+    pad_x, pad_y = font.size * 0.8, font.size * 0.42
+    bw, bh = tw + 2 * pad_x, font.size + 2 * pad_y
+    draw.rounded_rectangle([cx - bw / 2, cy - bh / 2, cx + bw / 2, cy + bh / 2],
+                           radius=bh / 2, fill=CHIP_BG)
+    draw.text((cx, cy - font.size * 0.06), text, font=font,
+              fill=CHIP_FG, anchor="mm")
+    return bh
+
+
+def _composite(img: Image.Image, draw_fn) -> Image.Image:
+    layer = Image.new("RGBA", img.size, (0, 0, 0, 0))
+    draw_fn(ImageDraw.Draw(layer))
+    return Image.alpha_composite(img.convert("RGBA"), layer).convert("RGB")
+
+
+def overlay_chips(src: str | Path, texts: list, out: str | Path) -> dict:
+    """slot1 利益点芯片列：左中带（与 slot1 v3 模板预留区对齐）竖排半透明芯片。"""
+    img = Image.open(src).convert("RGB")
+    w, h = img.size
+    probe = ImageDraw.Draw(img)
+    font = _uniform_fit(probe, texts, w * 0.28, int(h * 0.038))
+    if font is None:
+        raise ValueError(f"芯片文字放不进左中带: {texts!r}")
+    pad_y, gap = font.size * 0.42, h * 0.022
+    chip_h = font.size + 2 * pad_y
+    y = h * 0.42
+
+    def fn(d):
+        nonlocal y
+        for t in texts:
+            _draw_chip(d, w * 0.25, y + chip_h / 2, t, font)
+            y += chip_h + gap
+    out = Path(out)
+    out.parent.mkdir(parents=True, exist_ok=True)
+    _composite(img, fn).save(out, quality=95)
+    return {"out": str(out), "chips": texts, "font_size": font.size}
+
+
+def overlay_chips_bottom(src: str | Path, texts: list, out: str | Path) -> dict:
+    """slot3 论据芯片行：底部 30% 预留区内 n 枚芯片水平均分（与 slot3 v3 对齐）。"""
+    img = Image.open(src).convert("RGB")
+    w, h = img.size
+    n = len(texts)
+    probe = ImageDraw.Draw(img)
+    font = _uniform_fit(probe, texts, w * 0.88 / n, int(h * 0.036))
+    if font is None:
+        raise ValueError(f"论据芯片放不进底部行: {texts!r}")
+
+    def fn(d):
+        for i, t in enumerate(texts):
+            _draw_chip(d, w * (i + 0.5) / n, h * 0.85, t, font)
+    out = Path(out)
+    out.parent.mkdir(parents=True, exist_ok=True)
+    _composite(img, fn).save(out, quality=95)
+    return {"out": str(out), "chips": texts, "font_size": font.size}
+
+
+def overlay_icon_labels(src: str | Path, labels: list, out: str | Path,
+                        color: tuple = COLOR) -> dict:
+    """slot8 场景格标签：每列中心正下方贴俄语标签（与 slot8 v3 的 3 列网格对齐）。"""
+    img = Image.open(src).convert("RGB")
+    w, h = img.size
+    n = len(labels)
+    probe = ImageDraw.Draw(img)
+    font = _uniform_fit(probe, labels, w * 0.88 / n, int(h * 0.04))
+    if font is None:
+        raise ValueError(f"场景标签放不下: {labels!r}")
+
+    def fn(d):
+        for i, t in enumerate(labels):
+            d.text((w * (i + 0.5) / n, h * 0.80), t, font=font,
+                   fill=color, anchor="mm")
+    out = Path(out)
+    out.parent.mkdir(parents=True, exist_ok=True)
+    _composite(img, fn).save(out, quality=95)
+    return {"out": str(out), "labels": labels, "font_size": font.size}
+
+
 def overlay_caption(src: str | Path, text: str, out: str | Path,
                     color: tuple = COLOR) -> dict:
     """slot8 底部固定格式说明带（如 Подходит для: A / B / C），单行居中。"""
@@ -145,7 +239,14 @@ def _selftest() -> None:
     rec_b = overlay_badge(src, "300 мл", "/tmp/text_overlay_badge.png")
     rec_c = overlay_caption(src, "Подходит для: Кухня / Ванная / Офис",
                             "/tmp/text_overlay_caption.png")
-    print("selftest ok:", rec, rec_b, rec_c)
+    # 芯片（竖列+底行）+ 场景标签
+    rec_ch = overlay_chips(src, ["350 мл", "USB-зарядка", "Без сверления"],
+                           "/tmp/text_overlay_chips.png")
+    rec_cb = overlay_chips_bottom(src, ["350 мл", "USB", "3 режима"],
+                                  "/tmp/text_overlay_chips_bottom.png")
+    rec_il = overlay_icon_labels(src, ["Кухня", "Ванная", "Офис"],
+                                 "/tmp/text_overlay_labels.png")
+    print("selftest ok:", rec, rec_b, rec_c, rec_ch, rec_cb, rec_il)
 
 
 if __name__ == "__main__":

@@ -71,7 +71,7 @@ def test_slot7_manual_source_bypasses_trace_gate(tmp_path, monkeypatch, _mock_vl
                        "source": "manual"}]}
     p = tmp_path / "spec.json"
     json.dump(spec, open(p, "w", encoding="utf-8"))
-    def fake_api(prompt, src, out_path, style_ref=None):
+    def fake_api(prompt, src, out_path, style_ref=None, negative_prompt=None):
         out_path.parent.mkdir(parents=True, exist_ok=True)
         out_path.write_bytes(b"png")
         return {"usage": None}
@@ -93,7 +93,7 @@ def test_slot7_without_source_still_gated(tmp_path, monkeypatch, _mock_vl_dims):
 def test_slot2_supplier_image_with_text_falls_back_to_ai(tmp_path, monkeypatch, _mock_vl_dims):
     """供应商原图含文字 → slot2 回退 AI 白底生成。"""
     monkeypatch.setattr(IW, "_vl_has_text", lambda img: True)
-    def fake_api(prompt, src, out_path, style_ref=None):
+    def fake_api(prompt, src, out_path, style_ref=None, negative_prompt=None):
         out_path.parent.mkdir(parents=True, exist_ok=True)
         out_path.write_bytes(b"png")
         return {"usage": None}

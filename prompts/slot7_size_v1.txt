@@ -1,6 +1,0 @@
-# slot7 规格/尺寸标注图｜适用：有尺寸/容量/档位参数的品类｜size 928x1232｜I2I
-# 失败模式：标注线错位、数字错（数字必须人工核对）
-# 占位符：{{MEASUREMENTS}}=尺寸标注(俄语+数字,如 "Высота 20 см · Объём 300 мл")
-Using the reference product photo, keep the exact same product unchanged, front-facing view, centered on a pure white background, occupying 65% of the frame.
-Add thin minimal annotation lines with small Russian labels indicating: {{MEASUREMENTS}} — dark gray thin lines and text, blueprint style, precise and clean.
-No other text, no logos, no watermarks.

@@ -1,0 +1,7 @@
+# slot5 场景延伸图 v3｜Ozon 漏斗：第二使用场景｜size 928x1232｜I2I 传商品参考图
+# 失败模式：与 slot1 场景雷同（换 {{SCENE}} 重试）、商品形变（加严 pixel-identical）
+# 占位符：{{SCENE}}=第二场景(英文,必须与 slot1 不同)
+The product in reference image 1 must stay pixel-identical: same shape, color, proportions, materials; remove any text or logos from its surface.
+Place it in a photorealistic {{SCENE}}, a different mood from a typical cover shot: candid lifestyle angle, warm natural lighting, shallow depth of field, product fully visible occupying about 55% of the frame, 8% empty margin on all edges.
+Style: vivid commercial lifestyle photo, high contrast, advertising quality — not a minimalist stock photo.
+Absolutely no text, letters, numbers, icons or logos anywhere in the image.

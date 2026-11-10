@@ -47,25 +47,25 @@ STYLE_GUIDE = {
 }
 
 SYSTEM_PROMPT = """你是顶级 Ozon 电商运营。根据商品信息和目标类目，产出商品图的"内容规格"JSON。
-严格规则：
-1. 所有俄语文案必须母语级地道、2-5 个词、数字优先；禁止机翻长句。
-2. 标题(COPY_TITLE) 2-5 词；图标卖点(ICONS) 3-4 条各 2-5 词；其余文案 ≤6 词。
+设计原则（Ozon 热卖逻辑，不可违反）：
+1. 套图是销售漏斗：每张图一个信息点；每个卖点必须有事实/数字背书，禁止"质量好"式空话。
+2. 所有俄语文案必须母语级地道；芯片/论据每条 1-3 个词（如 "350 мл"、"Без сверления"），数字优先但只能写来源里真实存在的数字。
 3. 禁用词（出现过审即失败）：хит/лучший/новинка/скидка/цена/акция/купить/бесплатно/%。
 4. 只能从我给的场景列表里选场景，不得发明。
-5. 卖点必须来自商品真实信息，禁止编造参数；信息不足时写通用体验点（如"Быстрая установка"），并在 need_confirm 标记 true。
+5. 卖点必须来自商品真实信息（供应商标题/竞品标题）；信息不足时写通用体验点（如"Быстрая установка"），并在 need_confirm 标记 true。
 输出严格 JSON（不要任何额外文字）：
 {
   "category_path_ru": "...", "style_note": "一句话风格判断",
   "ozon_title": "俄语商品标题(≤200字符,核心词前置)",
   "description_ru": "俄语详情介绍(2-4个短句+3-5条卖点短横线列表,≤1000字符,不含价格/联系方式,与标题不重复)",
   "slots": [
-    {"slot": "slot1", "scene": "...", "copy_title": "...", "copy_icons": ["...","...","..."]},
-    {"slot": "slot3", "copy_headline": "...", "copy_badge": "..."},
+    {"slot": "slot1", "scene": "...", "copy_title": "封面大标题(2-5词,主打一个利益点)", "copy_icons": ["3条利益点芯片,各1-3词"]},
+    {"slot": "slot3", "scene_hint": "棚拍底色描述(英文)", "copy_headline": "卖点大标题(3-6词)", "args": ["3条论据芯片,各1-3词,数字优先"]},
     {"slot": "slot4", "action_en": "英文动作描述", "copy_line": "..."},
     {"slot": "slot5", "scene": "第二个使用场景(从场景列表选,与slot1不同)", "copy_line": "≤6词"},
-    {"slot": "slot6", "detail_en": "英文特写部位", "copy_word": "..."},
+    {"slot": "slot6", "detail_en": "英文特写部位", "copy_word": "材质关键词(1-3词)"},
     {"slot": "slot7", "measurements": "..."},
-    {"slot": "slot8", "scenarios": ["3-4个适用场景名词,如 Кухня/Ванная/Офис"]}
+    {"slot": "slot8", "scenarios": ["恰好3个俄语场景短名词,如 Кухня"], "scenarios_en": ["恰好3个对应的英文场景画面描述,同序"]}
   ],
   "need_confirm": false
 }"""
@@ -78,12 +78,14 @@ def lookup_category(category_id: str) -> dict | None:
     return None
 
 
-def llm_spec(query: str, title1688: str, cat: dict) -> dict:
+def llm_spec(query: str, title1688: str, cat: dict,
+             competitor_title: str = "") -> dict:
     top = cat["pathRu"].split("/")[0]
     guide = STYLE_GUIDE.get(top, STYLE_GUIDE["_default"])
     user = json.dumps({
         "ozon_keyword": query,
         "supplier_title_cn": title1688,
+        "competitor_ozon_title": competitor_title,
         "category_path_ru": cat["pathRu"],
         "allowed_scenes": guide["scenes"],
         "copy_style": guide["copy_style"],
@@ -128,6 +130,7 @@ def validate(spec: dict, sources: list[str]) -> list[str]:
     for s in spec.get("slots", []):
         texts += [v for k, v in s.items() if k.startswith("copy") and isinstance(v, str)]
         texts += [x for x in s.get("copy_icons", []) if isinstance(x, str)]
+        texts += [x for x in s.get("args", []) if isinstance(x, str)]
         texts += [x for x in s.get("scenarios", []) if isinstance(x, str)]
         if isinstance(s.get("measurements"), str):
             texts.append(s["measurements"])
@@ -147,6 +150,13 @@ def validate(spec: dict, sources: list[str]) -> list[str]:
     slots = {s.get("slot") for s in spec.get("slots", [])}
     if "slot1" not in slots:
         problems.append("缺少 slot1 封面主图规格")
+    s8 = next((s for s in spec.get("slots", []) if s.get("slot") == "slot8"), None)
+    if s8 and not (len(s8.get("scenarios", [])) == 3
+                   and len(s8.get("scenarios_en", [])) == 3):
+        problems.append("slot8 需要恰好 3 个场景（scenarios 与 scenarios_en 同序等长）")
+    s3 = next((s for s in spec.get("slots", []) if s.get("slot") == "slot3"), None)
+    if s3 and len(s3.get("args", [])) != 3:
+        problems.append("slot3 需要恰好 3 条论据（args）")
     return problems
 
 
@@ -155,13 +165,15 @@ def main() -> None:
     get = lambda k: args[args.index(k) + 1]
     query, title1688, cid = get("--query"), get("--title1688"), get("--category-id")
     out = Path(get("--out")) if "--out" in args else None
+    competitor = (args[args.index("--competitor-title") + 1]
+                  if "--competitor-title" in args else "")
 
     cat = lookup_category(cid)
     if not cat:
         sys.exit(f"categoryId {cid} 不在官方类目树里")
     print(f"类目: {cat['pathRu']}", file=sys.stderr)
 
-    spec = llm_spec(query, title1688, cat)
+    spec = llm_spec(query, title1688, cat, competitor)
     spec["_meta"] = {"query": query, "categoryId": cid,
                      "title1688": title1688, "llm": "qwen-plus"}
     problems = validate(spec, sources=[title1688, cat["pathRu"], query])

@@ -28,7 +28,8 @@ from PIL import Image
 
 sys.path.insert(0, str(Path(__file__).parent))
 from config import BAILIAN_API_KEY, BAILIAN_BASE_URL
-from text_overlay import overlay_badge, overlay_caption, overlay_title
+from text_overlay import (overlay_caption, overlay_chips, overlay_chips_bottom,
+                          overlay_icon_labels, overlay_title)
 
 ROOT = Path(__file__).parent
 GEN = ROOT / "data/gen"
@@ -36,24 +37,25 @@ SIZE = "928x1232"  # 3:4，Ozon 官方推荐比例
 PRICE_PER_IMAGE = 0.033  # USD（$0.03 + 参考图 $0.003）
 
 SLOT_TEMPLATES = {  # slot2 白底改用供应商原图（见下）；slot7 条件生成，不在此表
-    "slot1": "slot1_main_infographic_v2",
-    "slot3": "slot3_selling_point_v2",
-    "slot4": "slot4_usage_v1",
-    "slot5": "slot5_scene_v1",
-    "slot6": "slot6_detail_v2",
-    "slot8": "slot8_scenarios_v1",
+    "slot1": "slot1_cover_hook_v3",
+    "slot3": "slot3_arguments_v3",
+    "slot4": "slot4_usage_v3",
+    "slot5": "slot5_scene_v3",
+    "slot6": "slot6_detail_v3",
+    "slot8": "slot8_scenarios_v3",
 }
 
 # 各 slot 的版式风格参考图（[user-decided] 2026-11-10，参考 ozon-image 模版）：
 # 与产品图一起传给 I2I，迁移构图/排版，产品本体始终以第一张图为准。
 # 模版来自同一条 Ozon 竞品卡（深色高级风），跨类目实测可迁移（见 commit 历史探针图）
-STYLE_REFS = {"slot1": "main_headline_v1.webp",      # 大标题+图标卖点列
-              "slot3": "selling_point_v1.webp",     # pill 副标+勾选卖点列
-              "slot4": "usage_grid_v1.webp",        # 2x2 使用照片网格
+# v3 起仅纯照片 slot 用模版；slot1/3/8 版式由 PIL 网格接管，模版会引入 AI 文字冲突
+STYLE_REFS = {"slot4": "usage_grid_v1.webp",        # 2x2 使用照片网格
               "slot5": "usage_grid_v1.webp",        # 场景延伸，同使用网格版式
-              "slot6": "detail_strips_v1.webp",     # 横照片条+说明条
-              "slot7": "size_arrows_v1.webp",       # 产品阵列+尺寸箭头
-              "slot8": "scenarios_circle_v1.webp"}  # 环形变体+底条
+              "slot6": "detail_strips_v1.webp"}     # 横照片条+说明条
+
+# 官方 negative_prompt 参数：放反复出现的失败模式（docs/research/ozon-image-set-hot-logic.md §3）
+NEG_BASE = "text, letters, words, numbers, watermark, logo, deformed product, extra objects"
+NEG_SLOT7 = "watermark, logo, deformed product, garbled text, extra objects"
 
 
 def _as_image(src: str) -> str:
@@ -65,8 +67,12 @@ def _as_image(src: str) -> str:
 
 
 def call_api(prompt: str, source_image: str, out_path: Path,
-             style_ref: str | None = None) -> dict:
-    payload: dict = {"model": "qwen-image-3.0", "prompt": prompt, "size": SIZE}
+             style_ref: str | None = None,
+             negative_prompt: str = NEG_BASE) -> dict:
+    payload: dict = {"model": "qwen-image-3.0", "prompt": prompt, "size": SIZE,
+                     "negative_prompt": negative_prompt,
+                     # 精确构图（留白区/网格）不能被智能改写填坑，官方建议关
+                     "prompt_extend": False}
     if style_ref:
         payload["image"] = [_as_image(source_image),
                             _as_image(str(ROOT / "prompts/style_ref" / style_ref))]
@@ -193,7 +199,9 @@ def generate_slots(spec_path: str, source_image: str, out_dir: Path,
         raw = out_dir / f"{slot}_raw.png"
         final = out_dir / f"{slot}.png"
         try:
-            rec = call_api(prompt, source_image, raw, style_ref=style)
+            rec = call_api(prompt, source_image, raw, style_ref=style,
+                           negative_prompt=(NEG_SLOT7 if slot == "slot7"
+                                            else NEG_BASE))
             applied = []
             if overlays:
                 src = raw
@@ -240,12 +248,15 @@ def generate_slots(spec_path: str, source_image: str, out_dir: Path,
             continue
         if name == "slot1":
             run(name, SLOT_TEMPLATES[name],
-                {"SCENE": s["scene"], "COPY_ICONS": "; ".join(s["copy_icons"])},
-                [(overlay_title, s["copy_title"])])
+                {"SCENE": s["scene"]},
+                [(overlay_title, s["copy_title"]),
+                 (overlay_chips, s["copy_icons"])])
         elif name == "slot3":
-            run(name, SLOT_TEMPLATES[name], {},
+            run(name, SLOT_TEMPLATES[name],
+                {"SCENE_HINT": s.get("scene_hint") or
+                 "a clean light studio backdrop with a subtle warm gradient"},
                 [(overlay_title, s["copy_headline"]),
-                 (overlay_badge, s["copy_badge"])])
+                 (overlay_chips_bottom, s["args"])])
         elif name == "slot4":
             run(name, SLOT_TEMPLATES[name],
                 {"ACTION": s["action_en"], "COPY_LINE": s.get("copy_line", "")}, [])
@@ -257,10 +268,9 @@ def generate_slots(spec_path: str, source_image: str, out_dir: Path,
                 {"DETAIL": s["detail_en"]},
                 [(overlay_caption, s["copy_word"])] if s.get("copy_word") else [])
         elif name == "slot8":
-            scen = s["scenarios"]
             run(name, SLOT_TEMPLATES[name],
-                {"SCENARIO_ICONS": ", ".join(scen)},
-                [(overlay_caption, "Подходит для: " + " / ".join(scen))])
+                {"SCENARIO_SCENES": ", ".join(s["scenarios_en"])},
+                [(overlay_icon_labels, s["scenarios"])])
     # slot7 尺寸图：数字溯源闸——信任级：manual（人工输入）> OCR（商家自填）
     s7 = _slot_spec(spec, "slot7")
     if only and "slot7" not in only:
@@ -269,7 +279,7 @@ def generate_slots(spec_path: str, source_image: str, out_dir: Path,
                  or _measurements_traceable(s7.get("measurements", ""), sources)):
         # shortcut: 暂用 v1（AI 渲染标注数字，图审必须重点核对），
         # 首个有真实尺寸的品出现时升级 v2 双轨（PIL 贴标注）
-        run("slot7", "slot7_size_v1", {"MEASUREMENTS": s7["measurements"]}, [])
+        run("slot7", "slot7_size_v3", {"MEASUREMENTS": s7["measurements"]}, [])
     else:
         reason = ("spec 无 slot7" if not s7 else
                   f"尺寸数字无出处，跳过: {s7.get('measurements', '')!r}")

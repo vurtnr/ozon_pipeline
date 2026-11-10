@@ -1,0 +1,14 @@
+# slot1 封面钩子图 v3｜Ozon 漏斗 #1：争取点击｜size 928x1232｜I2I 传商品参考图
+# 设计依据 docs/research/ozon-image-set-hot-logic.md：
+#   文字全走 PIL（qwen 官方只保证中英文渲染）；AI 只画产品+场景；
+#   左下角必须留空（Ozon 平台折扣角标区）；先不变量后变更（官方 enhancer 规则）。
+# 失败模式：留白区出现杂物/文字（重试）、商品形变（加严 pixel-identical）
+# 占位符：{{SCENE}}=场景(英文,如 modern bathroom with marble countertop)
+The product in reference image 1 must stay pixel-identical: same shape, color, proportions, materials, buttons and finish. Do not redraw, restyle or reinterpret it; remove any text, labels, stickers or logos from its surface.
+Place the product in a photorealistic {{SCENE}}, standing on a clean surface at the right side of the frame, occupying about 55-60% of the frame height, fully visible and uncropped, lit by warm directional daylight against a softly blurred background with real depth (not a flat gradient).
+Composition rules (they will be checked):
+- The top 25% of the frame is a calm, evenly-lit empty background area (soft wall or bokeh), reserved for a headline: no objects, no shadows, no text there.
+- The left-middle band (about x 8% to 42%, y 35% to 75%) is uncluttered, gently contrasted background, reserved for text chips: no props, no patterns there.
+- The bottom 15% of the frame — especially the bottom-left corner — stays completely empty and evenly toned (platform badges will be placed there): no objects, no text, no strong shadows.
+Style: bold high-contrast e-commerce hero photo, crisp product edges, vivid but believable colors, commercial advertising quality — not a minimalist stock photo.
+Absolutely no text, letters, numbers, icons or logos anywhere in the image.

@@ -1,0 +1,7 @@
+# slot4 使用演示图 v3｜Ozon 漏斗 #2：使用剧本+尺度感｜size 928x1232｜I2I 传商品参考图
+# 失败模式：手部畸形（AI 通病——翻车则把 {{ACTION}} 改成无手的悬浮使用状态重试）
+# 占位符：{{ACTION}}=动作描述(英文,如 a hand holding a cup under the dispenser nozzle)
+The product in reference image 1 must stay pixel-identical: same shape, color, proportions, materials; remove any text or logos from its surface.
+Show the product in real use: {{ACTION}}. Photorealistic, warm lived-in home environment, natural skin tones if a hand appears, shallow depth of field, the product clearly readable and occupying about half the frame — the photo must instantly explain how the product is used and how big it is.
+Style: candid commercial lifestyle photography, vivid, high contrast, advertising quality.
+Absolutely no text, letters, numbers, arrows, icons or logos anywhere in the image.

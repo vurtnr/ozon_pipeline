@@ -1,7 +1,0 @@
-# slot1 封面主图（信息图风格）｜适用：全类目｜size 928x1232｜I2I 传商品参考图
-# 失败模式：俄文乱码（若发生→文案改 PIL 贴字）、商品形变（加严 keep 措辞重试）、图标过多拥挤（≤4 个）
-# 占位符：{{COPY_TITLE}}=俄语标题(2-5词) {{COPY_ICONS}}=3-4个图标卖点(各2-5词,竖排) {{SCENE}}=场景(如 bathroom/kitchen)
-Using the reference product photo, keep the exact same product (identical shape, color, structure, labels removed). Place it in a photorealistic {{SCENE}} environment with warm natural lighting and shallow depth of field (soft blurred background). The product occupies about 60% of the frame on the right side, fully visible, not cropped, with about 8% empty margin on all edges.
-At the top of the image, render this Russian headline in large bold clean sans-serif letters, dark charcoal color, maximum two lines: "{{COPY_TITLE}}"
-On the lower-left area, render a vertical list of 3 small minimal line icons, each with a short Russian label next to it (same style, single accent color): {{COPY_ICONS}}
-Overall style: premium e-commerce infographic photo, realistic, calm warm tones, no price tags, no discount words, no logos, no watermarks.

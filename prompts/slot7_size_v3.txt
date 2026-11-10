@@ -1,0 +1,9 @@
+# slot7 规格/尺寸标注图 v3｜size 928x1232｜I2I 传商品参考图
+# 数字溯源闸在 image_worker（manual > OCR > 拦截）；shortcut: AI 渲染标注数字不可靠，
+#   图审必须核对（v2 PIL 贴标注待做，见 ROADMAP）
+# 失败模式：标注线错位、数字渲染错
+# 占位符：{{MEASUREMENTS}}=尺寸标注(俄语+数字,如 "Высота 20 см · Объём 300 мл")
+The product in reference image 1 must stay pixel-identical: same shape, color, proportions; remove any text or logos from its surface.
+Show it front-facing, centered on a clean pure-white studio background, occupying 65% of the frame height, even soft lighting, sharp product edges.
+Add thin precise blueprint-style annotation lines pointing to the relevant edges, with these exact Russian labels in small dark-gray technical font: {{MEASUREMENTS}}
+Render exactly these labels and nothing else: no other text, no logos, no watermarks, no decorative elements.

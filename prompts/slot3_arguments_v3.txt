@@ -1,0 +1,12 @@
+# slot3 核心卖点图 v3｜Ozon 漏斗 #3：3 个数字化论据｜size 928x1232｜I2I 传商品参考图
+# v3 变更（2026-11-10 重构）：废掉"AI 图标+徽章"混合轨——实测 AI 图标无标签=废图。
+#   论据芯片（3 条带事实的短句）全部由 text_overlay 贴，AI 只出一张有张力的产品英雄照。
+# 失败模式：留白区出现杂物/文字（重试）、商品形变（加严 pixel-identical）
+# 占位符：{{SCENE_HINT}}=底色描述(英文,如 a clean light studio backdrop with subtle warm gradient)
+The product in reference image 1 must stay pixel-identical: same shape, color, proportions, materials. Do not redraw or restyle it; remove any text, labels or logos from its surface.
+Show the product as a confident hero shot on {{SCENE_HINT}}, slightly low camera angle, crisp studio key light with a soft rim light for depth, product occupying about 55% of the frame height in the vertical center, fully visible, sharp focus.
+Composition rules (they will be checked):
+- The top 22% is a clean, evenly-toned empty area reserved for a headline: no objects, no text.
+- The bottom 30% is a smooth, evenly-toned area (clean surface fading into soft shadow) reserved for a row of text chips: no props, no patterns, no text.
+Style: bold commercial product photography, high contrast, premium advertising look — not a flat stock photo.
+Absolutely no text, letters, numbers, icons, checkmarks, badges or logos anywhere in the image.

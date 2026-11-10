@@ -1,0 +1,14 @@
+# slot8 适用场景图 v3｜Ozon 漏斗 #8：覆盖场景｜size 928x1232｜I2I 传商品参考图
+# v3 变更（2026-11-10 重构）：废掉单行说明带（实测 4 个长词排不下直接失败）；
+#   改为 AI 画 3 列无字场景格（固定网格），PIL 在每列正下方贴俄语标签。
+# 失败模式：格子带文字/图标（加严 empty of text 重试）、列数不对（重试）
+# 占位符：{{SCENARIO_SCENES}}=3 个场景画面描述(英文,逗号分隔,与标签同序)
+The product in reference image 1 must stay pixel-identical: same shape, color, proportions; remove any text or logos from its surface.
+Compose a clean e-commerce infographic on a light warm seamless background:
+- Top 30%: the product itself, centered, crisp studio light, soft shadow.
+- Middle band (about y 35% to 75%): exactly three equal rounded-rectangle photo tiles in a strict horizontal grid with even gaps. Each tile is a vivid photorealistic mini-scene of the product in use, in this exact left-to-right order: {{SCENARIO_SCENES}}.
+- Below each tile, keep a small strip of plain empty background free for a text label.
+- Bottom 12%: smooth evenly-toned empty background, no objects.
+Tiles must be pure photography — empty of any text, letters, numbers, icons or logos.
+Style: bold clean e-commerce infographic, high contrast, consistent lighting and color grading across the three tiles.
+Absolutely no text anywhere else in the image.
