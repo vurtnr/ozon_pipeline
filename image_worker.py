@@ -45,26 +45,26 @@ SLOT_TEMPLATES = {  # slot2 白底改用供应商原图（见下）；slot7 条�
     "slot8": "slot8_scenarios_v3",
 }
 
-# 各 slot 的版式风格参考图（[user-decided] 2026-11-10，参考 ozon-image 模版）：
-# 与产品图一起传给 I2I，迁移构图/排版，产品本体始终以第一张图为准。
-# 模版来自同一条 Ozon 竞品卡（深色高级风），跨类目实测可迁移（见 commit 历史探针图）
-# v3 起仅纯照片 slot 用模版；slot1/3/8 版式由 PIL 网格接管，模版会引入 AI 文字冲突
-STYLE_REFS = {"slot4": "usage_grid_v1.webp",        # 2x2 使用照片网格
-              "slot5": "usage_grid_v1.webp",        # 场景延伸，同使用网格版式
-              "slot6": "detail_strips_v1.webp"}     # 横照片条+说明条
+# 风格参考图机制已停用（2026-11-10）：模版图自带文字/拼贴版式，I2I 会连文字
+# 一起迁移（slot4 连续 4 次失败的根因）；v3 提示词已自带精确版式，不再需要模版。
+# 机制代码保留，找到无文字的干净模版后可逐 slot 恢复。
+STYLE_REFS: dict = {}
 
 # 官方 negative_prompt 参数：放反复出现的失败模式（docs/research/ozon-image-set-hot-logic.md §3）
-NEG_BASE = "text, letters, words, numbers, watermark, logo, deformed product, extra objects"
+NEG_BASE = ("text, letters, words, numbers, watermark, logo, deformed product, "
+            "extra objects, cardboard box, packaging, book, magazine, newspaper, signage")
 NEG_SLOT7 = "watermark, logo, deformed product, garbled text, extra objects"
 
 # 设计师人格（[user-provided] 2026-11-10 系统提示词）：前置到每个 slot prompt
 DESIGNER_PREAMBLE = (
-    "You are a senior Russian e-commerce image designer who deeply understands "
-    "Ozon buyers' habits and the visual language of best-selling product cards "
-    "on the Ozon marketplace. You work in 3:4 vertical format, you infer the "
-    "product's selling direction from the brief, and you design around the "
-    "product as the hero. You never alter the product itself: its shape, color, "
-    "structure, materials and quantity stay exactly as in the reference photo.\n")
+    "You are a senior product photographer for Russian e-commerce, and you "
+    "deeply understand Russian marketplace buyers' habits. You work in 3:4 "
+    "vertical format and communicate only through photorealistic photography, "
+    "composition and empty space — every word is added later by a separate "
+    "typesetting tool, so you never render any text, letters, numbers, brand "
+    "names, logos or trademarks. You never alter the product itself: its shape, "
+    "color, structure, materials and quantity stay exactly as in the reference "
+    "photo.\n")
 
 # 确定性闸门：VL 检测到 AI 偷画文字时重试一次（加强措辞），仍带字则判失败
 STRICT_NO_TEXT = (
@@ -169,9 +169,11 @@ def render(template: str, mapping: dict) -> str:
     return DESIGNER_PREAMBLE + body
 
 
-# 成品文字检测问法：产品本体丝印/刻字不算违规（防误杀带 logo 的产品）
-_GEN_TEXT_Q = ("图中是否有后期叠加的文字、标题、标语、数字或水印"
-               "（产品本体上的丝印/刻字/按钮标识不算）？只回答：有 或 无")
+# 成品文字检测问法：场景内任何载体（含包装盒/纸张/背景道具）上的可读文字都算
+# 违规（2026-11-10 slot4 道具盒乱码+OZON 侵权 logo 事故），仅产品本体丝印豁免
+_GEN_TEXT_Q = ("图中任何地方——包括包装盒、纸张、标签、背景物体上——是否有"
+               "可读的文字、字母、数字、品牌标识或水印（仅产品本体上的丝印/"
+               "刻字/按钮标识不算）？只回答：有 或 无")
 
 
 def _slot_spec(spec: dict, name: str) -> dict | None:

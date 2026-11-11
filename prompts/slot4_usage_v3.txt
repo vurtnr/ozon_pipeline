@@ -3,5 +3,7 @@
 # 占位符：{{ACTION}}=动作描述(英文,如 a hand holding a cup under the dispenser nozzle)
 The product in reference image 1 must stay pixel-identical: same shape, color, proportions, materials; remove any text or logos from its surface.
 Show the product in real use: {{ACTION}}. Photorealistic, warm lived-in home environment, natural skin tones if a hand appears, shallow depth of field, the product clearly readable and occupying about half the frame — the photo must instantly explain how the product is used and how big it is.
+The scene must contain no packaging, boxes, books, papers, labels or signage of any kind.
+The output is one single candid photograph — not a poster, not a collage, not an infographic, not a split-screen layout.
 Style: candid commercial lifestyle photography, vivid, high contrast, advertising quality.
 Absolutely no text, letters, numbers, arrows, icons or logos anywhere in the image.

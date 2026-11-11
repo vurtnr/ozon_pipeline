@@ -3,5 +3,7 @@
 # 占位符：{{SCENE}}=第二场景(英文,必须与 slot1 不同)
 The product in reference image 1 must stay pixel-identical: same shape, color, proportions, materials; remove any text or logos from its surface.
 Place it in a photorealistic {{SCENE}}, a different mood from a typical cover shot: candid lifestyle angle, warm natural lighting, shallow depth of field, product fully visible occupying about 55% of the frame, 8% empty margin on all edges.
+The scene must contain no packaging, boxes, books, papers, labels or signage of any kind.
+The output is one single candid photograph — not a poster, not a collage, not an infographic, not a split-screen layout.
 Style: vivid commercial lifestyle photo, high contrast, advertising quality — not a minimalist stock photo.
 Absolutely no text, letters, numbers, icons or logos anywhere in the image.

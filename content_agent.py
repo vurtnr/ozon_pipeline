@@ -61,7 +61,7 @@ SYSTEM_PROMPT = """你是一位俄罗斯本土电商设计师，深谙 Ozon 平�
   "slots": [
     {"slot": "slot1", "scene": "...", "copy_title": "封面大标题(2-5词,主打一个利益点)", "copy_icons": ["3条利益点芯片,各1-3词"]},
     {"slot": "slot3", "scene_hint": "棚拍底色描述(英文)", "copy_headline": "卖点大标题(3-6词)", "args": ["3条论据芯片,各1-3词,数字优先"]},
-    {"slot": "slot4", "action_en": "英文动作描述", "copy_line": "..."},
+    {"slot": "slot4", "action_en": "英文动作描述——必须是产品在使用场景中的样子（如在抽屉里/台面上），不要演示机构、不要开箱场景", "copy_line": "..."},
     {"slot": "slot5", "scene": "第二个使用场景(从场景列表选,与slot1不同)", "copy_line": "≤6词"},
     {"slot": "slot6", "detail_en": "英文特写部位", "copy_word": "材质关键词(1-3词)"},
     {"slot": "slot7", "measurements": "..."},
