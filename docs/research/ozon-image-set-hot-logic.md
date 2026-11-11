@@ -58,4 +58,9 @@
 3. **8 slot 重映射到漏斗职能**：slot3 从"标题+徽章"改"3 个数字化论据格"；slot8 从"长说明带"改"3 场景图标+各自标签"（顺带根治单行贴字溢出）。
 4. **反平庸 = 反"库存图美学"**：删掉所有"premium minimal/calm warm tones"式空泛风格词，改为：高对比、一个视觉焦点、信息图密度、利益点先行。文案侧 content_agent 必须拿到更多事实（竞品标题/OCR 尺寸/供应商参数）才写得出带证明的卖点。
 5. **封面左下留空**（平台角标区）写进 slot1 模板——当前模板恰好把图标列放在那。
-6. call_api 增加 negative_prompt；prompt_extend/seed 支持待验证（OpenAI 兼容端点是否透传）。
+6. call_api 增加 negative_prompt；OpenAI 兼容端点已确认支持 `negative_prompt`/`seed`/`prompt_extend`（百炼扩展字段，顶层平铺）[direct: https://docs.bailian.console.aliyun.com/zh/model-studio/qwen-image-generation-and-editing-api-reference]。
+
+## 5. 2026-11-10 乱码事故补充 [direct: 实测]
+
+- **提示词里写"reserved for a headline/text chips"等于邀请模型画字**——预留区只描述为"empty background"，用途只写进代码注释。
+- negative_prompt 即使生效也不是充分条件（模型仍会偷画字）→ image_worker 增加 VL 成品检测闸：除 slot7 外成品带叠加文字→加强措辞重试一次→仍带字判失败，不交付乱码图。

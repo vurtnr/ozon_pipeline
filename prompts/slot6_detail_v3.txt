@@ -3,6 +3,6 @@
 # 失败模式：特写偏离商品（加严 identical materials 重试）、底部留白区出现杂物
 # 占位符：{{DETAIL}}=特写部位(英文,如 the brushed metal ring and liquid window)
 The product in reference image 1 must keep identical materials, colors and construction. Shoot an extreme close-up macro of {{DETAIL}}, revealing texture, seams and build quality, with directional studio lighting, crisp focus on the detail and soft focus falloff around it.
-The bottom 12% of the frame is a smooth out-of-focus empty band reserved for a caption: no objects, no text.
+The bottom 12% of the frame is a smooth, out-of-focus, completely empty band of background: no objects.
 Style: premium macro product photography, high contrast, rich texture.
 Absolutely no text, letters, numbers or logos anywhere in the image.

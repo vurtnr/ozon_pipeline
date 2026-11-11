@@ -57,6 +57,21 @@ STYLE_REFS = {"slot4": "usage_grid_v1.webp",        # 2x2 使用照片网格
 NEG_BASE = "text, letters, words, numbers, watermark, logo, deformed product, extra objects"
 NEG_SLOT7 = "watermark, logo, deformed product, garbled text, extra objects"
 
+# 设计师人格（[user-provided] 2026-11-10 系统提示词）：前置到每个 slot prompt
+DESIGNER_PREAMBLE = (
+    "You are a senior Russian e-commerce image designer who deeply understands "
+    "Ozon buyers' habits and the visual language of best-selling product cards "
+    "on the Ozon marketplace. You work in 3:4 vertical format, you infer the "
+    "product's selling direction from the brief, and you design around the "
+    "product as the hero. You never alter the product itself: its shape, color, "
+    "structure, materials and quantity stay exactly as in the reference photo.\n")
+
+# 确定性闸门：VL 检测到 AI 偷画文字时重试一次（加强措辞），仍带字则判失败
+STRICT_NO_TEXT = (
+    "\nSTRICT REQUIREMENT: the output image must contain ZERO text — no letters, "
+    "no words, no numbers, no characters of any alphabet, no typographic "
+    "decorations, no signage. Pure photography and empty background only.")
+
 
 def _as_image(src: str) -> str:
     if src.startswith(("http://", "https://")):
@@ -93,7 +108,8 @@ def call_api(prompt: str, source_image: str, out_path: Path,
     return {"usage": result.get("usage")}
 
 
-def _vl_has_text(image: str) -> bool:
+def _vl_has_text(image: str, question: str = "图中是否含有任何文字、字母或数字标识"
+                 "（包括包装/标签/水印上的）？只回答：有 或 无") -> bool:
     """VL 检测图中是否带文字/标识（供应商营销图常带中文，直通 slot2 会流向 Ozon）。
     异常时按有文字处理（回退 AI 生成，保守方向）。"""
     try:
@@ -109,8 +125,7 @@ def _vl_has_text(image: str) -> bool:
             "messages": [{"role": "user", "content": [
                 {"type": "image_url",
                  "image_url": {"url": f"data:image/jpeg;base64,{b64}"}},
-                {"type": "text", "text": "图中是否含有任何文字、字母或数字标识"
-                                          "（包括包装/标签/水印上的）？只回答：有 或 无"},
+                {"type": "text", "text": question},
             ]}],
         }).encode()
         req = urllib.request.Request(
@@ -151,7 +166,12 @@ def render(template: str, mapping: dict) -> str:
     leftover = re.findall(r"\{\{(\w+)\}\}", body)
     if leftover:
         raise ValueError(f"模板占位符未填充: {leftover}")
-    return body
+    return DESIGNER_PREAMBLE + body
+
+
+# 成品文字检测问法：产品本体丝印/刻字不算违规（防误杀带 logo 的产品）
+_GEN_TEXT_Q = ("图中是否有后期叠加的文字、标题、标语、数字或水印"
+               "（产品本体上的丝印/刻字/按钮标识不算）？只回答：有 或 无")
 
 
 def _slot_spec(spec: dict, name: str) -> dict | None:
@@ -199,9 +219,19 @@ def generate_slots(spec_path: str, source_image: str, out_dir: Path,
         raw = out_dir / f"{slot}_raw.png"
         final = out_dir / f"{slot}.png"
         try:
+            neg = NEG_SLOT7 if slot == "slot7" else NEG_BASE
             rec = call_api(prompt, source_image, raw, style_ref=style,
-                           negative_prompt=(NEG_SLOT7 if slot == "slot7"
-                                            else NEG_BASE))
+                           negative_prompt=neg)
+            # 确定性闸门（2026-11-10 乱码事故）：slot7 以外的成品必须无叠加文字，
+            # AI 偷画文字→加强措辞重试一次→仍带字判失败（不交付乱码图）
+            if slot != "slot7" and _vl_has_text(str(raw), _GEN_TEXT_Q):
+                print(f"[retry] {slot}: 检测到 AI 偷画文字，加强措辞重试",
+                      file=sys.stderr)
+                rec = call_api(prompt + STRICT_NO_TEXT, source_image, raw,
+                               style_ref=style, negative_prompt=neg)
+                if _vl_has_text(str(raw), _GEN_TEXT_Q):
+                    raise RuntimeError("AI 两次渲染文字，本 slot 放弃"
+                                       "（可人工 --only 重试）")
             applied = []
             if overlays:
                 src = raw

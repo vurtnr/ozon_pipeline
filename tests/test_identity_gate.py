@@ -92,7 +92,8 @@ def test_slot7_without_source_still_gated(tmp_path, monkeypatch, _mock_vl_dims):
 
 def test_slot2_supplier_image_with_text_falls_back_to_ai(tmp_path, monkeypatch, _mock_vl_dims):
     """供应商原图含文字 → slot2 回退 AI 白底生成。"""
-    monkeypatch.setattr(IW, "_vl_has_text", lambda img: True)
+    # True 仅限供应商图检测（默认问法）；成品文字闸（传 _GEN_TEXT_Q）返回 False
+    monkeypatch.setattr(IW, "_vl_has_text", lambda img, q=None: q is None)
     def fake_api(prompt, src, out_path, style_ref=None, negative_prompt=None):
         out_path.parent.mkdir(parents=True, exist_ok=True)
         out_path.write_bytes(b"png")
@@ -109,7 +110,7 @@ def test_slot2_clean_supplier_image_used_directly(tmp_path, monkeypatch, _mock_v
     from PIL import Image
     src = tmp_path / "clean.jpg"
     Image.new("RGB", (800, 800), "white").save(src)
-    monkeypatch.setattr(IW, "_vl_has_text", lambda img: False)
+    monkeypatch.setattr(IW, "_vl_has_text", lambda img, q=None: False)
     monkeypatch.setattr(IW, "call_api",
                         lambda *a, **k: pytest.fail("不应调 AI 生图"))
     recs = IW.generate_slots(_minimal_spec(tmp_path), str(src),

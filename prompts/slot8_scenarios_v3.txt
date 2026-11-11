@@ -7,7 +7,7 @@ The product in reference image 1 must stay pixel-identical: same shape, color, p
 Compose a clean e-commerce infographic on a light warm seamless background:
 - Top 30%: the product itself, centered, crisp studio light, soft shadow.
 - Middle band (about y 35% to 75%): exactly three equal rounded-rectangle photo tiles in a strict horizontal grid with even gaps. Each tile is a vivid photorealistic mini-scene of the product in use, in this exact left-to-right order: {{SCENARIO_SCENES}}.
-- Below each tile, keep a small strip of plain empty background free for a text label.
+- Below each tile, keep a small strip of plain, evenly-toned empty background.
 - Bottom 12%: smooth evenly-toned empty background, no objects.
 Tiles must be pure photography — empty of any text, letters, numbers, icons or logos.
 Style: bold clean e-commerce infographic, high contrast, consistent lighting and color grading across the three tiles.

@@ -6,7 +6,7 @@
 The product in reference image 1 must stay pixel-identical: same shape, color, proportions, materials. Do not redraw or restyle it; remove any text, labels or logos from its surface.
 Show the product as a confident hero shot on {{SCENE_HINT}}, slightly low camera angle, crisp studio key light with a soft rim light for depth, product occupying about 55% of the frame height in the vertical center, fully visible, sharp focus.
 Composition rules (they will be checked):
-- The top 22% is a clean, evenly-toned empty area reserved for a headline: no objects, no text.
-- The bottom 30% is a smooth, evenly-toned area (clean surface fading into soft shadow) reserved for a row of text chips: no props, no patterns, no text.
+- The top 22% is a clean, evenly-toned, completely empty area of background: no objects, no patterns.
+- The bottom 30% is a smooth, evenly-toned empty area (clean surface fading into soft shadow): no props, no patterns.
 Style: bold commercial product photography, high contrast, premium advertising look — not a flat stock photo.
 Absolutely no text, letters, numbers, icons, checkmarks, badges or logos anywhere in the image.
