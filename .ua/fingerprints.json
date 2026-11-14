@@ -1,0 +1,3147 @@
+{
+  "version": "1.0.0",
+  "gitCommitHash": "3eebdabe217002255a18df0a3767c9d5a8d2ea12",
+  "generatedAt": "2026-11-12T12:47:56.798Z",
+  "files": {
+    ".DS_Store": {
+      "filePath": ".DS_Store",
+      "contentHash": "fbebdfbbf0a3411b896d39c3f79b5d981832426bc2ca6b3a2addadd296e3996f",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 32,
+      "hasStructuralAnalysis": false
+    },
+    ".ua/config.json": {
+      "filePath": ".ua/config.json",
+      "contentHash": "de7ae7b841141718a1bd36930e7642f915b847a713410d80cd433977a0691fe0",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 3,
+      "hasStructuralAnalysis": false
+    },
+    "GLOSSARY.md": {
+      "filePath": "GLOSSARY.md",
+      "contentHash": "87a6619b145e9ff47a8095aaa13a265f9965870ff0ca8c1e03511e3a408134b6",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 58,
+      "hasStructuralAnalysis": false
+    },
+    "README.md": {
+      "filePath": "README.md",
+      "contentHash": "9429ab207402a3d6920f4ae6a2d0d531a137bc32d48112dccccb4e0e715d3478",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 2,
+      "hasStructuralAnalysis": false
+    },
+    "ROADMAP.md": {
+      "filePath": "ROADMAP.md",
+      "contentHash": "3a75e9d34a3fd2e85b9b673705234da78d5eec23415cf0b51f4f44085e630005",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 104,
+      "hasStructuralAnalysis": false
+    },
+    "category_tree.py": {
+      "filePath": "category_tree.py",
+      "contentHash": "4c6335f6e0a89e8057bb8cbe0543fc23b632afd683cb9a946dcad4a81124f1c6",
+      "functions": [
+        {
+          "name": "fetch_tree",
+          "params": [],
+          "returnType": "dict",
+          "exported": true,
+          "lineCount": 5
+        },
+        {
+          "name": "flatten",
+          "params": [
+            "nodes",
+            "prefix",
+            "ids",
+            "out"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 18
+        },
+        {
+          "name": "main",
+          "params": [],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 15
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "json",
+          "specifiers": [
+            "json"
+          ]
+        },
+        {
+          "source": "os",
+          "specifiers": [
+            "os"
+          ]
+        },
+        {
+          "source": "urllib.request",
+          "specifiers": [
+            "urllib.request"
+          ]
+        }
+      ],
+      "exports": [
+        "fetch_tree",
+        "flatten",
+        "main"
+      ],
+      "totalLines": 68,
+      "hasStructuralAnalysis": true
+    },
+    "config.py": {
+      "filePath": "config.py",
+      "contentHash": "4a8e00a20f0e5666d1338b202ad5fb64f36e4d6ff230be507df3d9c535a6cc71",
+      "functions": [
+        {
+          "name": "_load",
+          "params": [],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 7
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "os",
+          "specifiers": [
+            "os"
+          ]
+        },
+        {
+          "source": "pathlib",
+          "specifiers": [
+            "Path"
+          ]
+        }
+      ],
+      "exports": [
+        "_load"
+      ],
+      "totalLines": 23,
+      "hasStructuralAnalysis": true
+    },
+    "content_agent.py": {
+      "filePath": "content_agent.py",
+      "contentHash": "ae6326e9d54edb981413567ff033a7ee5a5d468ccce632bddff328e34bba3974",
+      "functions": [
+        {
+          "name": "lookup_category",
+          "params": [
+            "category_id"
+          ],
+          "returnType": "dict | None",
+          "exported": true,
+          "lineCount": 5
+        },
+        {
+          "name": "llm_spec",
+          "params": [
+            "query",
+            "title1688",
+            "cat",
+            "competitor_title"
+          ],
+          "returnType": "dict",
+          "exported": true,
+          "lineCount": 27
+        },
+        {
+          "name": "validate",
+          "params": [
+            "spec",
+            "sources"
+          ],
+          "returnType": "list[str]",
+          "exported": true,
+          "lineCount": 51
+        },
+        {
+          "name": "main",
+          "params": [],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 28
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "json",
+          "specifiers": [
+            "json"
+          ]
+        },
+        {
+          "source": "re",
+          "specifiers": [
+            "re"
+          ]
+        },
+        {
+          "source": "sys",
+          "specifiers": [
+            "sys"
+          ]
+        },
+        {
+          "source": "urllib.request",
+          "specifiers": [
+            "urllib.request"
+          ]
+        },
+        {
+          "source": "pathlib",
+          "specifiers": [
+            "Path"
+          ]
+        },
+        {
+          "source": "config",
+          "specifiers": [
+            "BAILIAN_API_KEY",
+            "BAILIAN_BASE_URL"
+          ]
+        }
+      ],
+      "exports": [
+        "lookup_category",
+        "llm_spec",
+        "validate",
+        "main"
+      ],
+      "totalLines": 195,
+      "hasStructuralAnalysis": true
+    },
+    "data/.DS_Store": {
+      "filePath": "data/.DS_Store",
+      "contentHash": "e2b56accd1cfc63c37b73136b0527a539be70535386a7c01de2334114b4e0eba",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 1,
+      "hasStructuralAnalysis": false
+    },
+    "data/attr-cache/17028714_594158428.json": {
+      "filePath": "data/attr-cache/17028714_594158428.json",
+      "contentHash": "d2131554c60b9ab595dadbed2655fdac49608f3eeb2dc357d8d3d1c3694e028b",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 345,
+      "hasStructuralAnalysis": false
+    },
+    "data/candidates-2026-11-10.json": {
+      "filePath": "data/candidates-2026-11-10.json",
+      "contentHash": "03e4833576d9c6ea6ae4b8b446ee720939b4f8460ca14838e3e1573f6c125d9e",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 161,
+      "hasStructuralAnalysis": false
+    },
+    "data/categories-leaf.json": {
+      "filePath": "data/categories-leaf.json",
+      "contentHash": "8471c30bdf1a9adb8ebb42df5253371ed54ecfc51d3b84c357d705ea5bcd0e1b",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 51543,
+      "hasStructuralAnalysis": false
+    },
+    "data/category-tree-ru.json": {
+      "filePath": "data/category-tree-ru.json",
+      "contentHash": "35b7f4ca3032e52e545826742558cfb5ab8374a443311963b0e7f2756b38396a",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 1,
+      "hasStructuralAnalysis": false
+    },
+    "data/image-search-tasks-2026-11-10.json": {
+      "filePath": "data/image-search-tasks-2026-11-10.json",
+      "contentHash": "62cc698dc39798db92dcc08430ee933eca60558843dc117120bb8df56bee2e67",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 77,
+      "hasStructuralAnalysis": false
+    },
+    "data/ozon-commission.json": {
+      "filePath": "data/ozon-commission.json",
+      "contentHash": "aaf5da883f73cc315ac82741346efdef2dac77f08ea93136a0596c0d5b2c300d",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 5434,
+      "hasStructuralAnalysis": false
+    },
+    "data/ozon-logistics.json": {
+      "filePath": "data/ozon-logistics.json",
+      "contentHash": "f96dbc8e8591569f7cf0ce4abda8621700aa01e4220e07027e36255e86bc7c4c",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 866,
+      "hasStructuralAnalysis": false
+    },
+    "data/sourcing-2026-11-10.json": {
+      "filePath": "data/sourcing-2026-11-10.json",
+      "contentHash": "bf5cc6e25c0c6f855e53d551fc427bc441ec8ca36e76389dfd8f72ec438e1642",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 286,
+      "hasStructuralAnalysis": false
+    },
+    "data/specs/дозатор_для_жидкого_мыла.json": {
+      "filePath": "data/specs/дозатор_для_жидкого_мыла.json",
+      "contentHash": "aafeca27be39a07f0c9af8f4fd2b310d7ef740cc5fd9d4531a31c18b39a8e244",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 80,
+      "hasStructuralAnalysis": false
+    },
+    "data/specs/органайзер_для_столовых_приборов_в_ящик.json": {
+      "filePath": "data/specs/органайзер_для_столовых_приборов_в_ящик.json",
+      "contentHash": "dcac908eba44bf4e13e27e8da207ca73c18b99ee346b429014848f285a032bea",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 170,
+      "hasStructuralAnalysis": false
+    },
+    "dimensions.py": {
+      "filePath": "dimensions.py",
+      "contentHash": "1dc51a9882e6d33d6d8c11a169db1d6fd90201f8b705a6788c98136ddc616c98",
+      "functions": [
+        {
+          "name": "extract_dimensions",
+          "params": [
+            "image"
+          ],
+          "returnType": "str",
+          "exported": true,
+          "lineCount": 31
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "base64",
+          "specifiers": [
+            "base64"
+          ]
+        },
+        {
+          "source": "json",
+          "specifiers": [
+            "json"
+          ]
+        },
+        {
+          "source": "sys",
+          "specifiers": [
+            "sys"
+          ]
+        },
+        {
+          "source": "tempfile",
+          "specifiers": [
+            "tempfile"
+          ]
+        },
+        {
+          "source": "urllib.request",
+          "specifiers": [
+            "urllib.request"
+          ]
+        },
+        {
+          "source": "pathlib",
+          "specifiers": [
+            "Path"
+          ]
+        },
+        {
+          "source": "config",
+          "specifiers": [
+            "BAILIAN_API_KEY",
+            "BAILIAN_BASE_URL"
+          ]
+        }
+      ],
+      "exports": [
+        "extract_dimensions"
+      ],
+      "totalLines": 65,
+      "hasStructuralAnalysis": true
+    },
+    "docs/handoffs/2026-11-11-ozon-listing-editor.md": {
+      "filePath": "docs/handoffs/2026-11-11-ozon-listing-editor.md",
+      "contentHash": "00fad7084a8282870ed33160732de4605d94b43d951eda0a86f1d2dc3654aa41",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 75,
+      "hasStructuralAnalysis": false
+    },
+    "docs/research/1688-real-dimensions.md": {
+      "filePath": "docs/research/1688-real-dimensions.md",
+      "contentHash": "76d038ff24bcde9dc9f3a6ecee9d558693539bfa3372a8d70261039278e8743d",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 77,
+      "hasStructuralAnalysis": false
+    },
+    "docs/research/nexscope-free-alternatives.md": {
+      "filePath": "docs/research/nexscope-free-alternatives.md",
+      "contentHash": "6e4508159e53f0837ebb2e86a9cd3a4a53db26f90fb7af3d66ff9cbc24a1b81d",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 56,
+      "hasStructuralAnalysis": false
+    },
+    "docs/research/ozon-commission-rules.md": {
+      "filePath": "docs/research/ozon-commission-rules.md",
+      "contentHash": "6e12ba609b7d1eed03c326f3554c51290a0c841b5d5e407af6a7d337181f8a3e",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 38,
+      "hasStructuralAnalysis": false
+    },
+    "docs/research/ozon-cover-emotion-v4.md": {
+      "filePath": "docs/research/ozon-cover-emotion-v4.md",
+      "contentHash": "297e38ea79f31f54943a2c210dcd16164c8d577520fa491451c72290422d8652",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 100,
+      "hasStructuralAnalysis": false
+    },
+    "docs/research/ozon-image-set-hot-logic.md": {
+      "filePath": "docs/research/ozon-image-set-hot-logic.md",
+      "contentHash": "cbfd096a3c7ca20ff9758f47950b444190b4856c672561b4c8d05833575c1cd7",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 70,
+      "hasStructuralAnalysis": false
+    },
+    "docs/research/ozon-listing-api.md": {
+      "filePath": "docs/research/ozon-listing-api.md",
+      "contentHash": "c8f37a3bfa6566eaef8c357266912f92d3abea062594daa73b7160e55f85b314",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 68,
+      "hasStructuralAnalysis": false
+    },
+    "docs/research/ozon-pricing-formula.md": {
+      "filePath": "docs/research/ozon-pricing-formula.md",
+      "contentHash": "68c393fe1dc2d83bafc798ae6ab9314eb3dd41bc54063b1ab97fce1ae3a7501e",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 63,
+      "hasStructuralAnalysis": false
+    },
+    "docs/research/ozon-seller-form-alignment.md": {
+      "filePath": "docs/research/ozon-seller-form-alignment.md",
+      "contentHash": "3064468a4b747642c12167577d1285d7906272194ed3844188052f7a1bcf77c5",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 53,
+      "hasStructuralAnalysis": false
+    },
+    "image_worker.py": {
+      "filePath": "image_worker.py",
+      "contentHash": "c6fefc380786a176ab067b700db48dc3b1358052ec50fd6cfab75fd9d1115a43",
+      "functions": [
+        {
+          "name": "_as_image",
+          "params": [
+            "src"
+          ],
+          "returnType": "str",
+          "exported": true,
+          "lineCount": 6
+        },
+        {
+          "name": "call_api",
+          "params": [
+            "prompt",
+            "source_image",
+            "out_path",
+            "style_ref",
+            "negative_prompt"
+          ],
+          "returnType": "dict",
+          "exported": true,
+          "lineCount": 25
+        },
+        {
+          "name": "_vl_has_text",
+          "params": [
+            "image",
+            "question"
+          ],
+          "returnType": "bool",
+          "exported": true,
+          "lineCount": 31
+        },
+        {
+          "name": "_supplier_white_bg",
+          "params": [
+            "source_image",
+            "out_path"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 15
+        },
+        {
+          "name": "render",
+          "params": [
+            "template",
+            "mapping"
+          ],
+          "returnType": "str",
+          "exported": true,
+          "lineCount": 9
+        },
+        {
+          "name": "_slot_spec",
+          "params": [
+            "spec",
+            "name"
+          ],
+          "returnType": "dict | None",
+          "exported": true,
+          "lineCount": 2
+        },
+        {
+          "name": "_measurements_traceable",
+          "params": [
+            "measurements",
+            "sources"
+          ],
+          "returnType": "bool",
+          "exported": true,
+          "lineCount": 7
+        },
+        {
+          "name": "generate_slots",
+          "params": [
+            "spec_path",
+            "source_image",
+            "out_dir",
+            "only"
+          ],
+          "returnType": "list[dict]",
+          "exported": true,
+          "lineCount": 148
+        },
+        {
+          "name": "main",
+          "params": [],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 18
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "base64",
+          "specifiers": [
+            "base64"
+          ]
+        },
+        {
+          "source": "io",
+          "specifiers": [
+            "io"
+          ]
+        },
+        {
+          "source": "json",
+          "specifiers": [
+            "json"
+          ]
+        },
+        {
+          "source": "re",
+          "specifiers": [
+            "re"
+          ]
+        },
+        {
+          "source": "sys",
+          "specifiers": [
+            "sys"
+          ]
+        },
+        {
+          "source": "urllib.request",
+          "specifiers": [
+            "urllib.request"
+          ]
+        },
+        {
+          "source": "datetime",
+          "specifiers": [
+            "datetime"
+          ]
+        },
+        {
+          "source": "pathlib",
+          "specifiers": [
+            "Path"
+          ]
+        },
+        {
+          "source": "PIL",
+          "specifiers": [
+            "Image"
+          ]
+        },
+        {
+          "source": "config",
+          "specifiers": [
+            "BAILIAN_API_KEY",
+            "BAILIAN_BASE_URL"
+          ]
+        },
+        {
+          "source": "text_overlay",
+          "specifiers": [
+            "overlay_caption",
+            "overlay_chips",
+            "overlay_chips_bottom",
+            "overlay_icon_labels",
+            "overlay_title"
+          ]
+        }
+      ],
+      "exports": [
+        "_as_image",
+        "call_api",
+        "_vl_has_text",
+        "_supplier_white_bg",
+        "render",
+        "_slot_spec",
+        "_measurements_traceable",
+        "generate_slots",
+        "main"
+      ],
+      "totalLines": 364,
+      "hasStructuralAnalysis": true
+    },
+    "keyword_library.py": {
+      "filePath": "keyword_library.py",
+      "contentHash": "5300d6ed9d75be4273db8cd6f8147372f7177341e774c33ec1379cd6d8c687a1",
+      "functions": [
+        {
+          "name": "whitelist",
+          "params": [],
+          "returnType": "list[str]",
+          "exported": true,
+          "lineCount": 5
+        },
+        {
+          "name": "_harvested_seeds",
+          "params": [
+            "c"
+          ],
+          "returnType": "set[str]",
+          "exported": true,
+          "lineCount": 2
+        },
+        {
+          "name": "_upsert",
+          "params": [
+            "c",
+            "seed",
+            "rows"
+          ],
+          "returnType": "int",
+          "exported": true,
+          "lineCount": 28
+        },
+        {
+          "name": "build",
+          "params": [
+            "limit",
+            "seeds"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 23
+        },
+        {
+          "name": "passes",
+          "params": [
+            "r"
+          ],
+          "returnType": "bool",
+          "exported": true,
+          "lineCount": 7
+        },
+        {
+          "name": "consume",
+          "params": [
+            "n"
+          ],
+          "returnType": "list[sqlite3.Row]",
+          "exported": true,
+          "lineCount": 12
+        },
+        {
+          "name": "refresh",
+          "params": [],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 17
+        },
+        {
+          "name": "stats",
+          "params": [],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 8
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "json",
+          "specifiers": [
+            "json"
+          ]
+        },
+        {
+          "source": "sqlite3",
+          "specifiers": [
+            "sqlite3"
+          ]
+        },
+        {
+          "source": "sys",
+          "specifiers": [
+            "sys"
+          ]
+        },
+        {
+          "source": "datetime",
+          "specifiers": [
+            "datetime",
+            "timedelta"
+          ]
+        },
+        {
+          "source": "pathlib",
+          "specifiers": [
+            "Path"
+          ]
+        },
+        {
+          "source": "nexscope_client",
+          "specifiers": [
+            "NX"
+          ]
+        },
+        {
+          "source": "pipeline",
+          "specifiers": [
+            "P"
+          ]
+        }
+      ],
+      "exports": [
+        "whitelist",
+        "_harvested_seeds",
+        "_upsert",
+        "build",
+        "passes",
+        "consume",
+        "refresh",
+        "stats"
+      ],
+      "totalLines": 182,
+      "hasStructuralAnalysis": true
+    },
+    "listing_edit.py": {
+      "filePath": "listing_edit.py",
+      "contentHash": "7f29e6f37ef8471667e965b3c0cbcc1a9864790ec3182894d30c0585cfea6cc0",
+      "functions": [
+        {
+          "name": "_validate",
+          "params": [
+            "edits"
+          ],
+          "returnType": "str | None",
+          "exported": true,
+          "lineCount": 17
+        },
+        {
+          "name": "save",
+          "params": [
+            "pid",
+            "edits"
+          ],
+          "returnType": "str | None",
+          "exported": true,
+          "lineCount": 38
+        },
+        {
+          "name": "get_edits",
+          "params": [
+            "metrics"
+          ],
+          "returnType": "dict",
+          "exported": true,
+          "lineCount": 10
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "json",
+          "specifiers": [
+            "json"
+          ]
+        },
+        {
+          "source": "sys",
+          "specifiers": [
+            "sys"
+          ]
+        },
+        {
+          "source": "pathlib",
+          "specifiers": [
+            "Path"
+          ]
+        },
+        {
+          "source": "pipeline",
+          "specifiers": [
+            "P"
+          ]
+        }
+      ],
+      "exports": [
+        "_validate",
+        "save",
+        "get_edits"
+      ],
+      "totalLines": 88,
+      "hasStructuralAnalysis": true
+    },
+    "listing_worker.py": {
+      "filePath": "listing_worker.py",
+      "contentHash": "e77c959665647d07a735566e904b70b0455b961e5ad1daa885cad97fcb2750dc",
+      "functions": [
+        {
+          "name": "build_item",
+          "params": [
+            "pid",
+            "metrics",
+            "spec",
+            "edits",
+            "image_urls"
+          ],
+          "returnType": "dict",
+          "exported": true,
+          "lineCount": 35
+        },
+        {
+          "name": "upload_images",
+          "params": [
+            "pid",
+            "metrics"
+          ],
+          "returnType": "list[str]",
+          "exported": true,
+          "lineCount": 17
+        },
+        {
+          "name": "list_product",
+          "params": [
+            "pid",
+            "dry_run"
+          ],
+          "returnType": "dict",
+          "exported": true,
+          "lineCount": 47
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "argparse",
+          "specifiers": [
+            "argparse"
+          ]
+        },
+        {
+          "source": "json",
+          "specifiers": [
+            "json"
+          ]
+        },
+        {
+          "source": "sys",
+          "specifiers": [
+            "sys"
+          ]
+        },
+        {
+          "source": "time",
+          "specifiers": [
+            "time"
+          ]
+        },
+        {
+          "source": "pathlib",
+          "specifiers": [
+            "Path"
+          ]
+        },
+        {
+          "source": "oss2",
+          "specifiers": [
+            "oss2"
+          ]
+        },
+        {
+          "source": "pipeline",
+          "specifiers": [
+            "P"
+          ]
+        },
+        {
+          "source": "listing_edit",
+          "specifiers": [
+            "LE"
+          ]
+        },
+        {
+          "source": "ozon_client",
+          "specifiers": [
+            "OC"
+          ]
+        },
+        {
+          "source": "config",
+          "specifiers": [
+            "OSS_ACCESS_KEY_ID",
+            "OSS_ACCESS_KEY_SECRET",
+            "OSS_BUCKET",
+            "OSS_ENDPOINT"
+          ]
+        }
+      ],
+      "exports": [
+        "build_item",
+        "upload_images",
+        "list_product"
+      ],
+      "totalLines": 143,
+      "hasStructuralAnalysis": true
+    },
+    "nexscope_client.py": {
+      "filePath": "nexscope_client.py",
+      "contentHash": "b2889f4979bcbb8de8cf33089c9541288cbbdd3fa51b720b6796e5579967f39d",
+      "functions": [
+        {
+          "name": "spent_today",
+          "params": [],
+          "returnType": "int",
+          "exported": true,
+          "lineCount": 6
+        },
+        {
+          "name": "call",
+          "params": [
+            "endpoint",
+            "body",
+            "n_units"
+          ],
+          "returnType": "list",
+          "exported": true,
+          "lineCount": 20
+        },
+        {
+          "name": "market_keyword_search",
+          "params": [
+            "keyword",
+            "page_size"
+          ],
+          "returnType": "list",
+          "exported": true,
+          "lineCount": 4
+        }
+      ],
+      "classes": [
+        {
+          "name": "CreditFuseError",
+          "methods": [],
+          "properties": [],
+          "exported": true,
+          "lineCount": 2
+        }
+      ],
+      "imports": [
+        {
+          "source": "json",
+          "specifiers": [
+            "json"
+          ]
+        },
+        {
+          "source": "sys",
+          "specifiers": [
+            "sys"
+          ]
+        },
+        {
+          "source": "urllib.request",
+          "specifiers": [
+            "urllib.request"
+          ]
+        },
+        {
+          "source": "pathlib",
+          "specifiers": [
+            "Path"
+          ]
+        },
+        {
+          "source": "config",
+          "specifiers": [
+            "NEXSCOPE_API_KEY"
+          ]
+        },
+        {
+          "source": "pipeline",
+          "specifiers": [
+            "P"
+          ]
+        }
+      ],
+      "exports": [
+        "CreditFuseError",
+        "spent_today",
+        "call",
+        "market_keyword_search"
+      ],
+      "totalLines": 64,
+      "hasStructuralAnalysis": true
+    },
+    "ozon_client.py": {
+      "filePath": "ozon_client.py",
+      "contentHash": "a6ae460aae863da2828df8781749ac99738b5c3a2f04232a66fa4a871698618d",
+      "functions": [
+        {
+          "name": "_post",
+          "params": [
+            "path",
+            "body"
+          ],
+          "returnType": "dict",
+          "exported": true,
+          "lineCount": 8
+        },
+        {
+          "name": "parse_category_ids",
+          "params": [
+            "category_id_path"
+          ],
+          "returnType": "tuple[int, int]",
+          "exported": true,
+          "lineCount": 7
+        },
+        {
+          "name": "get_attributes",
+          "params": [
+            "desc_id",
+            "type_id",
+            "refresh"
+          ],
+          "returnType": "list[dict]",
+          "exported": true,
+          "lineCount": 33
+        },
+        {
+          "name": "get_attr_values",
+          "params": [
+            "desc_id",
+            "type_id",
+            "attr_id",
+            "query",
+            "limit"
+          ],
+          "returnType": "list[dict]",
+          "exported": true,
+          "lineCount": 10
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "json",
+          "specifiers": [
+            "json"
+          ]
+        },
+        {
+          "source": "sys",
+          "specifiers": [
+            "sys"
+          ]
+        },
+        {
+          "source": "urllib.error",
+          "specifiers": [
+            "urllib.error"
+          ]
+        },
+        {
+          "source": "urllib.request",
+          "specifiers": [
+            "urllib.request"
+          ]
+        },
+        {
+          "source": "pathlib",
+          "specifiers": [
+            "Path"
+          ]
+        },
+        {
+          "source": "config",
+          "specifiers": [
+            "OZON_API_KEY",
+            "OZON_CLIENT_ID"
+          ]
+        }
+      ],
+      "exports": [
+        "_post",
+        "parse_category_ids",
+        "get_attributes",
+        "get_attr_values"
+      ],
+      "totalLines": 89,
+      "hasStructuralAnalysis": true
+    },
+    "pipeline.html": {
+      "filePath": "pipeline.html",
+      "contentHash": "201bf676753213dcbc5b3ca2b29e53313328cdd8abeecb4d02954331ae8c747d",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 396,
+      "hasStructuralAnalysis": false
+    },
+    "pipeline.py": {
+      "filePath": "pipeline.py",
+      "contentHash": "1e86ecc3d0adc3d30318937a3fa6da28858c793fbc713277546417f1079de39b",
+      "functions": [
+        {
+          "name": "conn",
+          "params": [],
+          "returnType": "sqlite3.Connection",
+          "exported": true,
+          "lineCount": 5
+        },
+        {
+          "name": "_migrate",
+          "params": [
+            "c"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 21
+        },
+        {
+          "name": "now",
+          "params": [],
+          "returnType": "str",
+          "exported": true,
+          "lineCount": 2
+        },
+        {
+          "name": "cmd_init",
+          "params": [],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 5
+        },
+        {
+          "name": "_event",
+          "params": [
+            "c",
+            "pid",
+            "frm",
+            "to",
+            "note"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 3
+        },
+        {
+          "name": "cmd_add",
+          "params": [
+            "query",
+            "ozon_id"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 8
+        },
+        {
+          "name": "cmd_advance",
+          "params": [
+            "pid",
+            "to",
+            "note"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 12
+        },
+        {
+          "name": "cmd_kill",
+          "params": [
+            "pid",
+            "reason"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 9
+        },
+        {
+          "name": "cmd_list",
+          "params": [
+            "state"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 9
+        },
+        {
+          "name": "record_review",
+          "params": [
+            "pid",
+            "kind",
+            "asset",
+            "decision",
+            "reason"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 16
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "json",
+          "specifiers": [
+            "json"
+          ]
+        },
+        {
+          "source": "sqlite3",
+          "specifiers": [
+            "sqlite3"
+          ]
+        },
+        {
+          "source": "sys",
+          "specifiers": [
+            "sys"
+          ]
+        },
+        {
+          "source": "datetime",
+          "specifiers": [
+            "datetime"
+          ]
+        },
+        {
+          "source": "pathlib",
+          "specifiers": [
+            "Path"
+          ]
+        }
+      ],
+      "exports": [
+        "conn",
+        "_migrate",
+        "now",
+        "cmd_init",
+        "_event",
+        "cmd_add",
+        "cmd_advance",
+        "cmd_kill",
+        "cmd_list",
+        "record_review"
+      ],
+      "totalLines": 231,
+      "hasStructuralAnalysis": true
+    },
+    "pricing.py": {
+      "filePath": "pricing.py",
+      "contentHash": "a101369548d355d34d2c40616d02acf4ff26b6c81767e19a21a8ace4d90e8c32",
+      "functions": [
+        {
+          "name": "logistics_class",
+          "params": [
+            "purchase_cny"
+          ],
+          "returnType": "str",
+          "exported": true,
+          "lineCount": 6
+        },
+        {
+          "name": "_load",
+          "params": [
+            "name"
+          ],
+          "returnType": "dict",
+          "exported": true,
+          "lineCount": 2
+        },
+        {
+          "name": "commission_tiers",
+          "params": [
+            "category_id"
+          ],
+          "returnType": "dict",
+          "exported": true,
+          "lineCount": 6
+        },
+        {
+          "name": "shipping_options",
+          "params": [
+            "weight_g"
+          ],
+          "returnType": "list[dict]",
+          "exported": true,
+          "lineCount": 7
+        },
+        {
+          "name": "_price_tier",
+          "params": [
+            "price_rub"
+          ],
+          "returnType": "int",
+          "exported": true,
+          "lineCount": 2
+        },
+        {
+          "name": "calc",
+          "params": [
+            "purchase_cny",
+            "weight_g",
+            "category_id",
+            "rate_cnyrub",
+            "china_fee",
+            "ad_rate",
+            "other_rate",
+            "profit_rate",
+            "old_price_rate",
+            "provider",
+            "mode",
+            "commission_tier"
+          ],
+          "returnType": "dict",
+          "exported": true,
+          "lineCount": 56
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "json",
+          "specifiers": [
+            "json"
+          ]
+        },
+        {
+          "source": "pathlib",
+          "specifiers": [
+            "Path"
+          ]
+        }
+      ],
+      "exports": [
+        "logistics_class",
+        "_load",
+        "commission_tiers",
+        "shipping_options",
+        "_price_tier",
+        "calc"
+      ],
+      "totalLines": 115,
+      "hasStructuralAnalysis": true
+    },
+    "prompts/slot1_cover_hook_v3.txt": {
+      "filePath": "prompts/slot1_cover_hook_v3.txt",
+      "contentHash": "eb337f721b2454765dabd745982a140a9bf12a2b5714fd33b6a0c55b95740416",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 15,
+      "hasStructuralAnalysis": false
+    },
+    "prompts/slot1_payoff_v4.txt": {
+      "filePath": "prompts/slot1_payoff_v4.txt",
+      "contentHash": "d19094c261b312f3f5200ceaf5431b0510431f0dc217f96be78b58f02bcfe66f",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 19,
+      "hasStructuralAnalysis": false
+    },
+    "prompts/slot2_white_bg_v1.txt": {
+      "filePath": "prompts/slot2_white_bg_v1.txt",
+      "contentHash": "1abd40439fef4697ce1c9f9387cdbbf31c92ce100b0344fa0c90e68791748464",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 3,
+      "hasStructuralAnalysis": false
+    },
+    "prompts/slot3_arguments_v3.txt": {
+      "filePath": "prompts/slot3_arguments_v3.txt",
+      "contentHash": "6d37c0508c959b55c18d95469a735b5605e959daeb36948924a41b5b2c737cec",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 13,
+      "hasStructuralAnalysis": false
+    },
+    "prompts/slot4_usage_v3.txt": {
+      "filePath": "prompts/slot4_usage_v3.txt",
+      "contentHash": "81a0439c7ee17a32b635c71dda5eae193c159228c1d3b3f7651dc0581325030a",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 10,
+      "hasStructuralAnalysis": false
+    },
+    "prompts/slot5_scene_v3.txt": {
+      "filePath": "prompts/slot5_scene_v3.txt",
+      "contentHash": "7a0a4a276b3f02f93c09263c0399a54d8350f407c5dc41505788dcf07522f8c9",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 10,
+      "hasStructuralAnalysis": false
+    },
+    "prompts/slot6_detail_v3.txt": {
+      "filePath": "prompts/slot6_detail_v3.txt",
+      "contentHash": "17ea209968ed41215fed237c24824c10371264a4a81574ac71bca892c1d69501",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 9,
+      "hasStructuralAnalysis": false
+    },
+    "prompts/slot7_size_v3.txt": {
+      "filePath": "prompts/slot7_size_v3.txt",
+      "contentHash": "e34452b810502b9958267d05d2c256c9c93be72d1ff5b89170c5081a2c92558b",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 10,
+      "hasStructuralAnalysis": false
+    },
+    "prompts/slot8_scenarios_v3.txt": {
+      "filePath": "prompts/slot8_scenarios_v3.txt",
+      "contentHash": "7ef6a1a33c1e4b9cc60a837926cb344ab12e57581344f9360e50653b6aee1ee7",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 15,
+      "hasStructuralAnalysis": false
+    },
+    "prompts/style_ref/detail_strips_v1.webp": {
+      "filePath": "prompts/style_ref/detail_strips_v1.webp",
+      "contentHash": "d690525930d2d8ac5084e845f25713bb4c39d9bf800fca479e869a476709b072",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 346,
+      "hasStructuralAnalysis": false
+    },
+    "prompts/style_ref/main_headline_v1.webp": {
+      "filePath": "prompts/style_ref/main_headline_v1.webp",
+      "contentHash": "7e3a29cff70795efe81e8432b8f31a9ee9f1baf9d40f64767509e43332d6e54a",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 322,
+      "hasStructuralAnalysis": false
+    },
+    "prompts/style_ref/scenarios_circle_v1.webp": {
+      "filePath": "prompts/style_ref/scenarios_circle_v1.webp",
+      "contentHash": "82cb42e67de8da5b7eb7245853b7e6c3aa8ff483364aad6d1017b6a3b1942428",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 302,
+      "hasStructuralAnalysis": false
+    },
+    "prompts/style_ref/selling_point_v1.webp": {
+      "filePath": "prompts/style_ref/selling_point_v1.webp",
+      "contentHash": "c50f10d8991de66ae7090ed062492c0cfc492b8a4d453e5f337ec7e7bfb23aeb",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 270,
+      "hasStructuralAnalysis": false
+    },
+    "prompts/style_ref/size_arrows_v1.webp": {
+      "filePath": "prompts/style_ref/size_arrows_v1.webp",
+      "contentHash": "5cc0ad0fe4df2bcd9374dfe778431c114537f57dcfc44ca2643b2d567437632f",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 262,
+      "hasStructuralAnalysis": false
+    },
+    "prompts/style_ref/usage_grid_v1.webp": {
+      "filePath": "prompts/style_ref/usage_grid_v1.webp",
+      "contentHash": "b14495aaecf31c5ec9ea4b299ff5c7f63f7fd54f6440fba87897fdcbb69648eb",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 370,
+      "hasStructuralAnalysis": false
+    },
+    "review_server.py": {
+      "filePath": "review_server.py",
+      "contentHash": "5b31c473dd02f2d37e7d707b43942f80a89ea8272629ad9fe4b5ad1d672a70d4",
+      "functions": [
+        {
+          "name": "load",
+          "params": [
+            "pid_row"
+          ],
+          "returnType": "dict",
+          "exported": true,
+          "lineCount": 2
+        },
+        {
+          "name": "topbar",
+          "params": [
+            "c"
+          ],
+          "returnType": "str",
+          "exported": true,
+          "lineCount": 24
+        },
+        {
+          "name": "page",
+          "params": [
+            "title",
+            "tab",
+            "body"
+          ],
+          "returnType": "bytes",
+          "exported": true,
+          "lineCount": 68
+        },
+        {
+          "name": "mini",
+          "params": [
+            "p",
+            "m",
+            "dead"
+          ],
+          "returnType": "str",
+          "exported": true,
+          "lineCount": 12
+        },
+        {
+          "name": "board",
+          "params": [],
+          "returnType": "bytes",
+          "exported": true,
+          "lineCount": 23
+        },
+        {
+          "name": "_spec",
+          "params": [
+            "pid_metrics"
+          ],
+          "returnType": "dict",
+          "exported": true,
+          "lineCount": 11
+        },
+        {
+          "name": "_slots",
+          "params": [
+            "m",
+            "pid"
+          ],
+          "returnType": "str",
+          "exported": true,
+          "lineCount": 22
+        },
+        {
+          "name": "_compose_measurements",
+          "params": [
+            "form"
+          ],
+          "returnType": "str",
+          "exported": true,
+          "lineCount": 12
+        },
+        {
+          "name": "gen_slot7",
+          "params": [
+            "pid",
+            "measurements"
+          ],
+          "returnType": "str | None",
+          "exported": true,
+          "lineCount": 33
+        },
+        {
+          "name": "review",
+          "params": [
+            "pid",
+            "flash"
+          ],
+          "returnType": "bytes",
+          "exported": true,
+          "lineCount": 132
+        },
+        {
+          "name": "trace",
+          "params": [
+            "pid"
+          ],
+          "returnType": "bytes",
+          "exported": true,
+          "lineCount": 28
+        },
+        {
+          "name": "_spec_ids",
+          "params": [
+            "m"
+          ],
+          "returnType": "tuple[int, int]",
+          "exported": true,
+          "lineCount": 2
+        },
+        {
+          "name": "_editor_attrs",
+          "params": [
+            "attrs"
+          ],
+          "returnType": "list[dict]",
+          "exported": true,
+          "lineCount": 4
+        },
+        {
+          "name": "_commission_options",
+          "params": [
+            "category_id"
+          ],
+          "returnType": "str",
+          "exported": true,
+          "lineCount": 12
+        },
+        {
+          "name": "editor_data",
+          "params": [
+            "pid"
+          ],
+          "returnType": "dict",
+          "exported": true,
+          "lineCount": 20
+        },
+        {
+          "name": "attr_values",
+          "params": [
+            "pid",
+            "attr_id",
+            "query"
+          ],
+          "returnType": "dict",
+          "exported": true,
+          "lineCount": 6
+        },
+        {
+          "name": "shipping",
+          "params": [
+            "purchase",
+            "weight"
+          ],
+          "returnType": "dict",
+          "exported": true,
+          "lineCount": 3
+        },
+        {
+          "name": "api_price",
+          "params": [
+            "form"
+          ],
+          "returnType": "dict",
+          "exported": true,
+          "lineCount": 18
+        },
+        {
+          "name": "api_edit",
+          "params": [
+            "form"
+          ],
+          "returnType": "dict",
+          "exported": true,
+          "lineCount": 16
+        }
+      ],
+      "classes": [
+        {
+          "name": "Handler",
+          "methods": [
+            "_send",
+            "_redirect",
+            "do_GET",
+            "do_POST",
+            "log_message"
+          ],
+          "properties": [],
+          "exported": true,
+          "lineCount": 104
+        }
+      ],
+      "imports": [
+        {
+          "source": "html",
+          "specifiers": [
+            "html"
+          ]
+        },
+        {
+          "source": "json",
+          "specifiers": [
+            "json"
+          ]
+        },
+        {
+          "source": "re",
+          "specifiers": [
+            "re"
+          ]
+        },
+        {
+          "source": "subprocess",
+          "specifiers": [
+            "subprocess"
+          ]
+        },
+        {
+          "source": "sys",
+          "specifiers": [
+            "sys"
+          ]
+        },
+        {
+          "source": "urllib.parse",
+          "specifiers": [
+            "urllib.parse"
+          ]
+        },
+        {
+          "source": "datetime",
+          "specifiers": [
+            "date"
+          ]
+        },
+        {
+          "source": "http.server",
+          "specifiers": [
+            "BaseHTTPRequestHandler",
+            "ThreadingHTTPServer"
+          ]
+        },
+        {
+          "source": "pathlib",
+          "specifiers": [
+            "Path"
+          ]
+        },
+        {
+          "source": "pipeline",
+          "specifiers": [
+            "P"
+          ]
+        },
+        {
+          "source": "listing_edit",
+          "specifiers": [
+            "LE"
+          ]
+        },
+        {
+          "source": "ozon_client",
+          "specifiers": [
+            "OC"
+          ]
+        },
+        {
+          "source": "pricing",
+          "specifiers": [
+            "pricing"
+          ]
+        }
+      ],
+      "exports": [
+        "load",
+        "topbar",
+        "page",
+        "mini",
+        "board",
+        "_spec",
+        "_slots",
+        "_compose_measurements",
+        "gen_slot7",
+        "review",
+        "trace",
+        "_spec_ids",
+        "_editor_attrs",
+        "_commission_options",
+        "editor_data",
+        "attr_values",
+        "shipping",
+        "api_price",
+        "api_edit",
+        "Handler"
+      ],
+      "totalLines": 932,
+      "hasStructuralAnalysis": true
+    },
+    "seeds.txt": {
+      "filePath": "seeds.txt",
+      "contentHash": "5b52858448c3b51b348872d5ed59230a73b7f4bab60eaf6bc1e6f71f3aff05f2",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 8,
+      "hasStructuralAnalysis": false
+    },
+    "select_products.py": {
+      "filePath": "select_products.py",
+      "contentHash": "3fa7c814ea407195f91cb796017fbf2e916c87291610b0ff221102523615fa19",
+      "functions": [
+        {
+          "name": "main",
+          "params": [],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 37
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "json",
+          "specifiers": [
+            "json"
+          ]
+        },
+        {
+          "source": "sys",
+          "specifiers": [
+            "sys"
+          ]
+        },
+        {
+          "source": "datetime",
+          "specifiers": [
+            "date"
+          ]
+        },
+        {
+          "source": "pathlib",
+          "specifiers": [
+            "Path"
+          ]
+        },
+        {
+          "source": "keyword_library",
+          "specifiers": [
+            "lib"
+          ]
+        }
+      ],
+      "exports": [
+        "main"
+      ],
+      "totalLines": 70,
+      "hasStructuralAnalysis": true
+    },
+    "sourcing_agent.py": {
+      "filePath": "sourcing_agent.py",
+      "contentHash": "54b254b95c7ed86c01299a4f2b101efc2350682cef497b663e2814ee822f1d41",
+      "functions": [
+        {
+          "name": "run_skill",
+          "params": [
+            "args",
+            "timeout"
+          ],
+          "returnType": "dict",
+          "exported": true,
+          "lineCount": 15
+        },
+        {
+          "name": "localize",
+          "params": [
+            "image",
+            "tmp"
+          ],
+          "returnType": "str",
+          "exported": true,
+          "lineCount": 18
+        },
+        {
+          "name": "pick_suppliers",
+          "params": [
+            "products",
+            "min_sim"
+          ],
+          "returnType": "list[dict]",
+          "exported": true,
+          "lineCount": 21
+        },
+        {
+          "name": "search_one",
+          "params": [
+            "image",
+            "tmp"
+          ],
+          "returnType": "dict",
+          "exported": true,
+          "lineCount": 12
+        },
+        {
+          "name": "vl_same_product",
+          "params": [
+            "ozon_image",
+            "cand_url",
+            "tmp"
+          ],
+          "returnType": "bool",
+          "exported": true,
+          "lineCount": 30
+        },
+        {
+          "name": "identity_gate",
+          "params": [
+            "ozon_image",
+            "suppliers",
+            "tmp",
+            "max_checks"
+          ],
+          "returnType": "list",
+          "exported": true,
+          "lineCount": 13
+        },
+        {
+          "name": "search_text",
+          "params": [
+            "query_cn",
+            "ozon_image",
+            "tmp"
+          ],
+          "returnType": "dict",
+          "exported": true,
+          "lineCount": 30
+        },
+        {
+          "name": "vl_describe",
+          "params": [
+            "image",
+            "tmp"
+          ],
+          "returnType": "dict",
+          "exported": true,
+          "lineCount": 38
+        },
+        {
+          "name": "search_with_fallback",
+          "params": [
+            "image",
+            "tmp",
+            "query_cn"
+          ],
+          "returnType": "dict",
+          "exported": true,
+          "lineCount": 14
+        },
+        {
+          "name": "search_vl",
+          "params": [
+            "image",
+            "tmp"
+          ],
+          "returnType": "dict",
+          "exported": true,
+          "lineCount": 50
+        },
+        {
+          "name": "main",
+          "params": [],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 40
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "json",
+          "specifiers": [
+            "json"
+          ]
+        },
+        {
+          "source": "subprocess",
+          "specifiers": [
+            "subprocess"
+          ]
+        },
+        {
+          "source": "sys",
+          "specifiers": [
+            "sys"
+          ]
+        },
+        {
+          "source": "tempfile",
+          "specifiers": [
+            "tempfile"
+          ]
+        },
+        {
+          "source": "urllib.request",
+          "specifiers": [
+            "urllib.request"
+          ]
+        },
+        {
+          "source": "datetime",
+          "specifiers": [
+            "date"
+          ]
+        },
+        {
+          "source": "pathlib",
+          "specifiers": [
+            "Path"
+          ]
+        },
+        {
+          "source": "config",
+          "specifiers": [
+            "BAILIAN_API_KEY",
+            "BAILIAN_BASE_URL"
+          ]
+        }
+      ],
+      "exports": [
+        "run_skill",
+        "localize",
+        "pick_suppliers",
+        "search_one",
+        "vl_same_product",
+        "identity_gate",
+        "search_text",
+        "vl_describe",
+        "search_with_fallback",
+        "search_vl",
+        "main"
+      ],
+      "totalLines": 341,
+      "hasStructuralAnalysis": true
+    },
+    "sync_to_db.py": {
+      "filePath": "sync_to_db.py",
+      "contentHash": "b2452a01f009e270ad7ab4d301db7a71383c7b77c1c3f8599a9e482836c50dc4",
+      "functions": [
+        {
+          "name": "_offer_id",
+          "params": [
+            "url"
+          ],
+          "returnType": "str",
+          "exported": true,
+          "lineCount": 2
+        },
+        {
+          "name": "latest",
+          "params": [
+            "pattern"
+          ],
+          "returnType": "Path | None",
+          "exported": true,
+          "lineCount": 3
+        },
+        {
+          "name": "_advance",
+          "params": [
+            "c",
+            "pid",
+            "frm",
+            "to",
+            "note"
+          ],
+          "exported": true,
+          "lineCount": 4
+        },
+        {
+          "name": "sync",
+          "params": [],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 139
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "json",
+          "specifiers": [
+            "json"
+          ]
+        },
+        {
+          "source": "sys",
+          "specifiers": [
+            "sys"
+          ]
+        },
+        {
+          "source": "pathlib",
+          "specifiers": [
+            "Path"
+          ]
+        },
+        {
+          "source": "pipeline",
+          "specifiers": [
+            "P"
+          ]
+        }
+      ],
+      "exports": [
+        "_offer_id",
+        "latest",
+        "_advance",
+        "sync"
+      ],
+      "totalLines": 192,
+      "hasStructuralAnalysis": true
+    },
+    "tests/test_identity_gate.py": {
+      "filePath": "tests/test_identity_gate.py",
+      "contentHash": "409b0310ddd6c6d362cbca1dd0f3aa4a252db8e16bace7d8754c625da14ec681",
+      "functions": [
+        {
+          "name": "_fake_text_search",
+          "params": [
+            "products"
+          ],
+          "exported": true,
+          "lineCount": 3
+        },
+        {
+          "name": "_prod",
+          "params": [
+            "title",
+            "sold",
+            "img"
+          ],
+          "exported": true,
+          "lineCount": 4
+        },
+        {
+          "name": "test_identity_gate_skips_wrong_product",
+          "params": [
+            "tmp_path",
+            "monkeypatch"
+          ],
+          "exported": true,
+          "lineCount": 9
+        },
+        {
+          "name": "test_identity_gate_all_rejected_means_no_source",
+          "params": [
+            "tmp_path",
+            "monkeypatch"
+          ],
+          "exported": true,
+          "lineCount": 6
+        },
+        {
+          "name": "test_no_ozon_image_keeps_legacy_behavior",
+          "params": [
+            "tmp_path",
+            "monkeypatch"
+          ],
+          "exported": true,
+          "lineCount": 8
+        },
+        {
+          "name": "_minimal_spec",
+          "params": [
+            "tmp_path"
+          ],
+          "exported": true,
+          "lineCount": 5
+        },
+        {
+          "name": "_mock_vl_dims",
+          "params": [
+            "monkeypatch"
+          ],
+          "exported": true,
+          "lineCount": 3
+        },
+        {
+          "name": "test_slot7_manual_source_bypasses_trace_gate",
+          "params": [
+            "tmp_path",
+            "monkeypatch",
+            "_mock_vl_dims"
+          ],
+          "exported": true,
+          "lineCount": 14
+        },
+        {
+          "name": "test_slot7_without_source_still_gated",
+          "params": [
+            "tmp_path",
+            "monkeypatch",
+            "_mock_vl_dims"
+          ],
+          "exported": true,
+          "lineCount": 8
+        },
+        {
+          "name": "test_slot2_supplier_image_with_text_falls_back_to_ai",
+          "params": [
+            "tmp_path",
+            "monkeypatch",
+            "_mock_vl_dims"
+          ],
+          "exported": true,
+          "lineCount": 13
+        },
+        {
+          "name": "test_slot2_clean_supplier_image_used_directly",
+          "params": [
+            "tmp_path",
+            "monkeypatch",
+            "_mock_vl_dims"
+          ],
+          "exported": true,
+          "lineCount": 13
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "json",
+          "specifiers": [
+            "json"
+          ]
+        },
+        {
+          "source": "sys",
+          "specifiers": [
+            "sys"
+          ]
+        },
+        {
+          "source": "pathlib",
+          "specifiers": [
+            "Path"
+          ]
+        },
+        {
+          "source": "pytest",
+          "specifiers": [
+            "pytest"
+          ]
+        },
+        {
+          "source": "sourcing_agent",
+          "specifiers": [
+            "SA"
+          ]
+        },
+        {
+          "source": "image_worker",
+          "specifiers": [
+            "IW"
+          ]
+        }
+      ],
+      "exports": [
+        "_fake_text_search",
+        "_prod",
+        "test_identity_gate_skips_wrong_product",
+        "test_identity_gate_all_rejected_means_no_source",
+        "test_no_ozon_image_keeps_legacy_behavior",
+        "_minimal_spec",
+        "_mock_vl_dims",
+        "test_slot7_manual_source_bypasses_trace_gate",
+        "test_slot7_without_source_still_gated",
+        "test_slot2_supplier_image_with_text_falls_back_to_ai",
+        "test_slot2_clean_supplier_image_used_directly"
+      ],
+      "totalLines": 121,
+      "hasStructuralAnalysis": true
+    },
+    "tests/test_listing_edit.py": {
+      "filePath": "tests/test_listing_edit.py",
+      "contentHash": "a6250734a9657a3ee26b8e685f50d39e5c656a25bff0a9fa85ebdc2f951e642e",
+      "functions": [
+        {
+          "name": "env",
+          "params": [
+            "tmp_path",
+            "monkeypatch"
+          ],
+          "exported": true,
+          "lineCount": 17
+        },
+        {
+          "name": "_edits",
+          "params": [],
+          "exported": true,
+          "lineCount": 8
+        },
+        {
+          "name": "test_save_writes_spec_and_clears_need_confirm",
+          "params": [
+            "env"
+          ],
+          "exported": true,
+          "lineCount": 17
+        },
+        {
+          "name": "test_title_required",
+          "params": [
+            "env"
+          ],
+          "exported": true,
+          "lineCount": 4
+        },
+        {
+          "name": "test_title_too_long",
+          "params": [
+            "env"
+          ],
+          "exported": true,
+          "lineCount": 4
+        },
+        {
+          "name": "test_negative_weight_rejected",
+          "params": [
+            "env"
+          ],
+          "exported": true,
+          "lineCount": 4
+        },
+        {
+          "name": "test_get_edits_roundtrip",
+          "params": [
+            "env"
+          ],
+          "exported": true,
+          "lineCount": 8
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "json",
+          "specifiers": [
+            "json"
+          ]
+        },
+        {
+          "source": "sys",
+          "specifiers": [
+            "sys"
+          ]
+        },
+        {
+          "source": "pathlib",
+          "specifiers": [
+            "Path"
+          ]
+        },
+        {
+          "source": "pytest",
+          "specifiers": [
+            "pytest"
+          ]
+        },
+        {
+          "source": "pipeline",
+          "specifiers": [
+            "P"
+          ]
+        },
+        {
+          "source": "listing_edit",
+          "specifiers": [
+            "LE"
+          ]
+        }
+      ],
+      "exports": [
+        "env",
+        "_edits",
+        "test_save_writes_spec_and_clears_need_confirm",
+        "test_title_required",
+        "test_title_too_long",
+        "test_negative_weight_rejected",
+        "test_get_edits_roundtrip"
+      ],
+      "totalLines": 89,
+      "hasStructuralAnalysis": true
+    },
+    "tests/test_listing_worker.py": {
+      "filePath": "tests/test_listing_worker.py",
+      "contentHash": "1c9ce5d1b20ff023a26c3d810080260d9481e9c4eac25a0df572dcabe85344a1",
+      "functions": [
+        {
+          "name": "test_build_item_core_fields",
+          "params": [],
+          "exported": true,
+          "lineCount": 11
+        },
+        {
+          "name": "test_dimensions_cm_to_mm_and_weight",
+          "params": [],
+          "exported": true,
+          "lineCount": 5
+        },
+        {
+          "name": "test_brand_defaults_to_no_brand",
+          "params": [],
+          "exported": true,
+          "lineCount": 5
+        },
+        {
+          "name": "test_existing_brand_not_overwritten",
+          "params": [],
+          "exported": true,
+          "lineCount": 8
+        },
+        {
+          "name": "test_first_image_is_primary",
+          "params": [],
+          "exported": true,
+          "lineCount": 3
+        },
+        {
+          "name": "test_missing_required_raises",
+          "params": [],
+          "exported": true,
+          "lineCount": 5
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "sys",
+          "specifiers": [
+            "sys"
+          ]
+        },
+        {
+          "source": "pathlib",
+          "specifiers": [
+            "Path"
+          ]
+        },
+        {
+          "source": "pytest",
+          "specifiers": [
+            "pytest"
+          ]
+        },
+        {
+          "source": "listing_worker",
+          "specifiers": [
+            "LW"
+          ]
+        }
+      ],
+      "exports": [
+        "test_build_item_core_fields",
+        "test_dimensions_cm_to_mm_and_weight",
+        "test_brand_defaults_to_no_brand",
+        "test_existing_brand_not_overwritten",
+        "test_first_image_is_primary",
+        "test_missing_required_raises"
+      ],
+      "totalLines": 73,
+      "hasStructuralAnalysis": true
+    },
+    "tests/test_nexscope_flow.py": {
+      "filePath": "tests/test_nexscope_flow.py",
+      "contentHash": "2cd4112d01aa61caeb576f128d3e313ddfc16d8856fbfe101aecb417a949b427",
+      "functions": [
+        {
+          "name": "api_row",
+          "params": [
+            "query",
+            "volume",
+            "growth",
+            "competing",
+            "price",
+            "returns",
+            "n_products",
+            "cn"
+          ],
+          "exported": true,
+          "lineCount": 10
+        },
+        {
+          "name": "db",
+          "params": [
+            "tmp_path",
+            "monkeypatch"
+          ],
+          "exported": true,
+          "lineCount": 6
+        },
+        {
+          "name": "test_build_and_cursor",
+          "params": [
+            "db",
+            "monkeypatch"
+          ],
+          "exported": true,
+          "lineCount": 14
+        },
+        {
+          "name": "test_consume_funnel_and_no_double_emit",
+          "params": [
+            "db",
+            "monkeypatch"
+          ],
+          "exported": true,
+          "lineCount": 13
+        },
+        {
+          "name": "test_select_products_schema",
+          "params": [
+            "db",
+            "tmp_path",
+            "monkeypatch"
+          ],
+          "exported": true,
+          "lineCount": 17
+        },
+        {
+          "name": "test_trend_check_alerts_collapse",
+          "params": [
+            "db",
+            "monkeypatch"
+          ],
+          "exported": true,
+          "lineCount": 15
+        },
+        {
+          "name": "test_trend_check_healthy_no_alert",
+          "params": [
+            "db",
+            "monkeypatch"
+          ],
+          "exported": true,
+          "lineCount": 9
+        },
+        {
+          "name": "test_credit_fuse",
+          "params": [
+            "db",
+            "monkeypatch"
+          ],
+          "exported": true,
+          "lineCount": 4
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "json",
+          "specifiers": [
+            "json"
+          ]
+        },
+        {
+          "source": "sys",
+          "specifiers": [
+            "sys"
+          ]
+        },
+        {
+          "source": "pathlib",
+          "specifiers": [
+            "Path"
+          ]
+        },
+        {
+          "source": "pytest",
+          "specifiers": [
+            "pytest"
+          ]
+        },
+        {
+          "source": "pipeline",
+          "specifiers": [
+            "P"
+          ]
+        },
+        {
+          "source": "nexscope_client",
+          "specifiers": [
+            "NX"
+          ]
+        },
+        {
+          "source": "keyword_library",
+          "specifiers": [
+            "lib"
+          ]
+        },
+        {
+          "source": "select_products",
+          "specifiers": [
+            "SP"
+          ]
+        },
+        {
+          "source": "trend_check",
+          "specifiers": [
+            "TC"
+          ]
+        }
+      ],
+      "exports": [
+        "api_row",
+        "db",
+        "test_build_and_cursor",
+        "test_consume_funnel_and_no_double_emit",
+        "test_select_products_schema",
+        "test_trend_check_alerts_collapse",
+        "test_trend_check_healthy_no_alert",
+        "test_credit_fuse"
+      ],
+      "totalLines": 123,
+      "hasStructuralAnalysis": true
+    },
+    "tests/test_ozon_client.py": {
+      "filePath": "tests/test_ozon_client.py",
+      "contentHash": "2b85276bb17c661caecad300195e160f5b5da865db35176f8c62204ead54fc91",
+      "functions": [
+        {
+          "name": "test_get_attributes_includes_optional_and_collection",
+          "params": [
+            "monkeypatch",
+            "tmp_path"
+          ],
+          "exported": true,
+          "lineCount": 11
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "sys",
+          "specifiers": [
+            "sys"
+          ]
+        },
+        {
+          "source": "pathlib",
+          "specifiers": [
+            "Path"
+          ]
+        },
+        {
+          "source": "pytest",
+          "specifiers": [
+            "pytest"
+          ]
+        },
+        {
+          "source": "ozon_client",
+          "specifiers": [
+            "OC"
+          ]
+        }
+      ],
+      "exports": [
+        "test_get_attributes_includes_optional_and_collection"
+      ],
+      "totalLines": 35,
+      "hasStructuralAnalysis": true
+    },
+    "tests/test_pricing.py": {
+      "filePath": "tests/test_pricing.py",
+      "contentHash": "1fa93f94b99900cf2a73c0fd790022e16e007d2058c1ee76743f8023c2e5fa2d",
+      "functions": [
+        {
+          "name": "test_maozi_reference_case",
+          "params": [],
+          "exported": true,
+          "lineCount": 16
+        },
+        {
+          "name": "test_default_shipping_is_cheapest",
+          "params": [],
+          "exported": true,
+          "lineCount": 6
+        },
+        {
+          "name": "test_commission_tier_iterates_up",
+          "params": [],
+          "exported": true,
+          "lineCount": 8
+        },
+        {
+          "name": "test_commission_tier_manual_override",
+          "params": [],
+          "exported": true,
+          "lineCount": 9
+        },
+        {
+          "name": "test_commission_tier_invalid_raises",
+          "params": [],
+          "exported": true,
+          "lineCount": 3
+        },
+        {
+          "name": "test_editor_attrs_whitelist",
+          "params": [],
+          "exported": true,
+          "lineCount": 16
+        },
+        {
+          "name": "test_logistics_class_thresholds",
+          "params": [],
+          "exported": true,
+          "lineCount": 4
+        },
+        {
+          "name": "test_unknown_category_raises",
+          "params": [],
+          "exported": true,
+          "lineCount": 3
+        },
+        {
+          "name": "test_negative_denominator_raises",
+          "params": [],
+          "exported": true,
+          "lineCount": 5
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "sys",
+          "specifiers": [
+            "sys"
+          ]
+        },
+        {
+          "source": "pathlib",
+          "specifiers": [
+            "Path"
+          ]
+        },
+        {
+          "source": "pytest",
+          "specifiers": [
+            "pytest"
+          ]
+        },
+        {
+          "source": "pricing",
+          "specifiers": [
+            "pricing"
+          ]
+        }
+      ],
+      "exports": [
+        "test_maozi_reference_case",
+        "test_default_shipping_is_cheapest",
+        "test_commission_tier_iterates_up",
+        "test_commission_tier_manual_override",
+        "test_commission_tier_invalid_raises",
+        "test_editor_attrs_whitelist",
+        "test_logistics_class_thresholds",
+        "test_unknown_category_raises",
+        "test_negative_denominator_raises"
+      ],
+      "totalLines": 98,
+      "hasStructuralAnalysis": true
+    },
+    "text_overlay.py": {
+      "filePath": "text_overlay.py",
+      "contentHash": "011082f18198a1d6160a3a63b87fce188e746627f318b5e46b7320737cc2a495",
+      "functions": [
+        {
+          "name": "_font",
+          "params": [
+            "size"
+          ],
+          "returnType": "ImageFont.FreeTypeFont",
+          "exported": true,
+          "lineCount": 8
+        },
+        {
+          "name": "_wrap",
+          "params": [
+            "draw",
+            "words",
+            "font",
+            "max_w"
+          ],
+          "exported": true,
+          "lineCount": 15
+        },
+        {
+          "name": "_adaptive_color",
+          "params": [
+            "img",
+            "band_h"
+          ],
+          "returnType": "tuple",
+          "exported": true,
+          "lineCount": 4
+        },
+        {
+          "name": "overlay_title",
+          "params": [
+            "src",
+            "title",
+            "out",
+            "color"
+          ],
+          "returnType": "dict",
+          "exported": true,
+          "lineCount": 36
+        },
+        {
+          "name": "_fit_single",
+          "params": [
+            "draw",
+            "text",
+            "max_w",
+            "start"
+          ],
+          "exported": true,
+          "lineCount": 7
+        },
+        {
+          "name": "overlay_badge",
+          "params": [
+            "src",
+            "text",
+            "out",
+            "color"
+          ],
+          "returnType": "dict",
+          "exported": true,
+          "lineCount": 19
+        },
+        {
+          "name": "_uniform_fit",
+          "params": [
+            "draw",
+            "texts",
+            "max_w",
+            "start"
+          ],
+          "exported": true,
+          "lineCount": 7
+        },
+        {
+          "name": "_draw_chip",
+          "params": [
+            "draw",
+            "cx",
+            "cy",
+            "text",
+            "font"
+          ],
+          "exported": true,
+          "lineCount": 10
+        },
+        {
+          "name": "_composite",
+          "params": [
+            "img",
+            "draw_fn"
+          ],
+          "returnType": "Image.Image",
+          "exported": true,
+          "lineCount": 4
+        },
+        {
+          "name": "overlay_chips",
+          "params": [
+            "src",
+            "texts",
+            "out"
+          ],
+          "returnType": "dict",
+          "exported": true,
+          "lineCount": 21
+        },
+        {
+          "name": "overlay_chips_bottom",
+          "params": [
+            "src",
+            "texts",
+            "out"
+          ],
+          "returnType": "dict",
+          "exported": true,
+          "lineCount": 17
+        },
+        {
+          "name": "overlay_icon_labels",
+          "params": [
+            "src",
+            "labels",
+            "out",
+            "color"
+          ],
+          "returnType": "dict",
+          "exported": true,
+          "lineCount": 19
+        },
+        {
+          "name": "overlay_caption",
+          "params": [
+            "src",
+            "text",
+            "out",
+            "color"
+          ],
+          "returnType": "dict",
+          "exported": true,
+          "lineCount": 14
+        },
+        {
+          "name": "_selftest",
+          "params": [],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 24
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "sys",
+          "specifiers": [
+            "sys"
+          ]
+        },
+        {
+          "source": "pathlib",
+          "specifiers": [
+            "Path"
+          ]
+        },
+        {
+          "source": "PIL",
+          "specifiers": [
+            "Image",
+            "ImageDraw",
+            "ImageFont",
+            "ImageStat"
+          ]
+        }
+      ],
+      "exports": [
+        "_font",
+        "_wrap",
+        "_adaptive_color",
+        "overlay_title",
+        "_fit_single",
+        "overlay_badge",
+        "_uniform_fit",
+        "_draw_chip",
+        "_composite",
+        "overlay_chips",
+        "overlay_chips_bottom",
+        "overlay_icon_labels",
+        "overlay_caption",
+        "_selftest"
+      ],
+      "totalLines": 270,
+      "hasStructuralAnalysis": true
+    },
+    "trend_check.py": {
+      "filePath": "trend_check.py",
+      "contentHash": "0aa4af08805189dc5fa9ed397b5ca8dc636995ab128a16263252672c1fab19e6",
+      "functions": [
+        {
+          "name": "watch_list",
+          "params": [],
+          "returnType": "list[dict]",
+          "exported": true,
+          "lineCount": 10
+        },
+        {
+          "name": "check",
+          "params": [
+            "dry_run"
+          ],
+          "returnType": "list[str]",
+          "exported": true,
+          "lineCount": 35
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "json",
+          "specifiers": [
+            "json"
+          ]
+        },
+        {
+          "source": "sys",
+          "specifiers": [
+            "sys"
+          ]
+        },
+        {
+          "source": "pathlib",
+          "specifiers": [
+            "Path"
+          ]
+        },
+        {
+          "source": "nexscope_client",
+          "specifiers": [
+            "NX"
+          ]
+        },
+        {
+          "source": "pipeline",
+          "specifiers": [
+            "P"
+          ]
+        }
+      ],
+      "exports": [
+        "watch_list",
+        "check"
+      ],
+      "totalLines": 77,
+      "hasStructuralAnalysis": true
+    },
+    "ui-sketch.html": {
+      "filePath": "ui-sketch.html",
+      "contentHash": "5eafc1f48cac874dbebb13b803d310ebc1bd86bc818e688b70a1dcc5f7f1f954",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 317,
+      "hasStructuralAnalysis": false
+    }
+  }
+}

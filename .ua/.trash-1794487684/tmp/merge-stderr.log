@@ -1,0 +1,24 @@
+Found 10 batch files (9 logical batches, 1 multi-part):
+  batch-1.json: 58 nodes, 109 edges
+  batch-2-part-1.json: 43 nodes, 83 edges
+  batch-2-part-2.json: 23 nodes, 44 edges
+  batch-3.json: 28 nodes, 58 edges
+  batch-4.json: 18 nodes, 35 edges
+  batch-5.json: 6 nodes, 0 edges
+  batch-6.json: 7 nodes, 0 edges
+  batch-7.json: 8 nodes, 0 edges
+  batch-8.json: 9 nodes, 0 edges
+  batch-9.json: 17 nodes, 6 edges
+
+Input: 217 nodes, 335 edges
+
+Tested-by linker:
+     4 × tested_by edges produced (path-convention supplement, production → test)
+     4 × production nodes tagged "tested"
+
+Output: 217 nodes, 339 edges
+
+Imports edge recovery:
+  Recovered 0 `imports` edges from importMap (67 entries scanned)
+
+Written to /Users/jiaoyumin/rust_workspace/ozon-pipeline/.ua/intermediate/assembled-graph.json (161 KB)

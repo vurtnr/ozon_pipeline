@@ -1,0 +1,345 @@
+{
+ "version": 2,
+ "attributes": [
+  {
+   "id": 85,
+   "name": "Бренд",
+   "name_cn": "品牌",
+   "type": "String",
+   "is_required": true,
+   "is_aspect": false,
+   "is_collection": false,
+   "dictionary_id": 28732849
+  },
+  {
+   "id": 8229,
+   "name": "Тип",
+   "name_cn": "类型",
+   "type": "String",
+   "is_required": true,
+   "is_aspect": false,
+   "is_collection": false,
+   "dictionary_id": 1960
+  },
+  {
+   "id": 9048,
+   "name": "Название модели (для объединения в одну карточку)",
+   "name_cn": "型号名称（针对合并为一张商品卡片）",
+   "type": "String",
+   "is_required": true,
+   "is_aspect": false,
+   "is_collection": false,
+   "dictionary_id": 0
+  },
+  {
+   "id": 8415,
+   "name": "Длина, см",
+   "name_cn": "长度，厘米",
+   "type": "Decimal",
+   "is_required": false,
+   "is_aspect": true,
+   "is_collection": false,
+   "dictionary_id": 0
+  },
+  {
+   "id": 8416,
+   "name": "Ширина, см",
+   "name_cn": "宽度，厘米",
+   "type": "Decimal",
+   "is_required": false,
+   "is_aspect": true,
+   "is_collection": false,
+   "dictionary_id": 0
+  },
+  {
+   "id": 10096,
+   "name": "Цвет товара",
+   "name_cn": "商品颜色",
+   "type": "String",
+   "is_required": false,
+   "is_aspect": true,
+   "is_collection": true,
+   "dictionary_id": 1494
+  },
+  {
+   "id": 10097,
+   "name": "Название цвета",
+   "name_cn": "颜色名称",
+   "type": "String",
+   "is_required": false,
+   "is_aspect": true,
+   "is_collection": false,
+   "dictionary_id": 0
+  },
+  {
+   "id": 4180,
+   "name": "Название",
+   "name_cn": "名称",
+   "type": "String",
+   "is_required": false,
+   "is_aspect": false,
+   "is_collection": false,
+   "dictionary_id": 0
+  },
+  {
+   "id": 4191,
+   "name": "Аннотация",
+   "name_cn": "简介",
+   "type": "String",
+   "is_required": false,
+   "is_aspect": false,
+   "is_collection": false,
+   "dictionary_id": 0
+  },
+  {
+   "id": 4383,
+   "name": "Вес товара, г",
+   "name_cn": "商品重量，克",
+   "type": "Decimal",
+   "is_required": false,
+   "is_aspect": false,
+   "is_collection": false,
+   "dictionary_id": 0
+  },
+  {
+   "id": 4384,
+   "name": "Комплектация",
+   "name_cn": "配套",
+   "type": "String",
+   "is_required": false,
+   "is_aspect": false,
+   "is_collection": false,
+   "dictionary_id": 0
+  },
+  {
+   "id": 4389,
+   "name": "Страна-изготовитель",
+   "name_cn": "原产国",
+   "type": "String",
+   "is_required": false,
+   "is_aspect": false,
+   "is_collection": true,
+   "dictionary_id": 1935
+  },
+  {
+   "id": 4497,
+   "name": "Вес с упаковкой, г",
+   "name_cn": "含包装重量，克",
+   "type": "Decimal",
+   "is_required": false,
+   "is_aspect": false,
+   "is_collection": false,
+   "dictionary_id": 0
+  },
+  {
+   "id": 6383,
+   "name": "Материал",
+   "name_cn": "材料",
+   "type": "String",
+   "is_required": false,
+   "is_aspect": false,
+   "is_collection": true,
+   "dictionary_id": 1503
+  },
+  {
+   "id": 6403,
+   "name": "Количество ярусов",
+   "name_cn": "层数",
+   "type": "String",
+   "is_required": false,
+   "is_aspect": false,
+   "is_collection": false,
+   "dictionary_id": 1079
+  },
+  {
+   "id": 8021,
+   "name": "Вид инвентаря",
+   "name_cn": "存货类别",
+   "type": "String",
+   "is_required": false,
+   "is_aspect": false,
+   "is_collection": false,
+   "dictionary_id": 1134
+  },
+  {
+   "id": 8414,
+   "name": "Высота, см",
+   "name_cn": "高度，厘米",
+   "type": "Decimal",
+   "is_required": false,
+   "is_aspect": false,
+   "is_collection": false,
+   "dictionary_id": 0
+  },
+  {
+   "id": 8513,
+   "name": "Количество в упаковке, шт",
+   "name_cn": "每包数量,pcs",
+   "type": "Integer",
+   "is_required": false,
+   "is_aspect": false,
+   "is_collection": false,
+   "dictionary_id": 0
+  },
+  {
+   "id": 8789,
+   "name": "Название файла PDF",
+   "name_cn": "PDF文件名称",
+   "type": "String",
+   "is_required": false,
+   "is_aspect": false,
+   "is_collection": false,
+   "dictionary_id": 0
+  },
+  {
+   "id": 8790,
+   "name": "Документ PDF",
+   "name_cn": "PDF 文件",
+   "type": "URL",
+   "is_required": false,
+   "is_aspect": false,
+   "is_collection": false,
+   "dictionary_id": 0
+  },
+  {
+   "id": 9024,
+   "name": "Код продавца",
+   "name_cn": "卖家代码",
+   "type": "String",
+   "is_required": false,
+   "is_aspect": false,
+   "is_collection": false,
+   "dictionary_id": 0
+  },
+  {
+   "id": 10400,
+   "name": "Гарантия",
+   "name_cn": "保证",
+   "type": "String",
+   "is_required": false,
+   "is_aspect": false,
+   "is_collection": false,
+   "dictionary_id": 46700526
+  },
+  {
+   "id": 11254,
+   "name": "Rich-контент JSON",
+   "name_cn": "JSON富内容",
+   "type": "String",
+   "is_required": false,
+   "is_aspect": false,
+   "is_collection": false,
+   "dictionary_id": 0
+  },
+  {
+   "id": 11650,
+   "name": "Количество заводских упаковок",
+   "name_cn": "原厂包装数量",
+   "type": "Integer",
+   "is_required": false,
+   "is_aspect": false,
+   "is_collection": false,
+   "dictionary_id": 0
+  },
+  {
+   "id": 21699,
+   "name": "Установка сушилки",
+   "name_cn": "安装干燥机",
+   "type": "String",
+   "is_required": false,
+   "is_aspect": false,
+   "is_collection": true,
+   "dictionary_id": 1411
+  },
+  {
+   "id": 21837,
+   "name": "Озон.Видео: название",
+   "name_cn": "臭氧。视频：标题",
+   "type": "String",
+   "is_required": false,
+   "is_aspect": false,
+   "is_collection": false,
+   "dictionary_id": 0
+  },
+  {
+   "id": 21841,
+   "name": "Озон.Видео: ссылка",
+   "name_cn": "臭氧。视频：链接",
+   "type": "String",
+   "is_required": false,
+   "is_aspect": false,
+   "is_collection": false,
+   "dictionary_id": 0
+  },
+  {
+   "id": 21845,
+   "name": "Озон.Видеообложка: ссылка",
+   "name_cn": "臭氧。视频背景：链接",
+   "type": "String",
+   "is_required": false,
+   "is_aspect": false,
+   "is_collection": false,
+   "dictionary_id": 0
+  },
+  {
+   "id": 22232,
+   "name": "ТН ВЭД коды ЕАЭС",
+   "name_cn": "欧亚经济联盟的HS编码",
+   "type": "String",
+   "is_required": false,
+   "is_aspect": false,
+   "is_collection": false,
+   "dictionary_id": 124412395
+  },
+  {
+   "id": 22273,
+   "name": "Озон.Видео: товары на видео",
+   "name_cn": "臭氧。视频：视频产品",
+   "type": "String",
+   "is_required": false,
+   "is_aspect": false,
+   "is_collection": false,
+   "dictionary_id": 0
+  },
+  {
+   "id": 22390,
+   "name": "Объединить в похожие товары",
+   "name_cn": "组合成类似的产品",
+   "type": "String",
+   "is_required": false,
+   "is_aspect": false,
+   "is_collection": false,
+   "dictionary_id": 0
+  },
+  {
+   "id": 23171,
+   "name": "#Хештеги",
+   "name_cn": "#主题标签",
+   "type": "String",
+   "is_required": false,
+   "is_aspect": false,
+   "is_collection": false,
+   "dictionary_id": 0
+  },
+  {
+   "id": 23249,
+   "name": "Количество товара в УЕИ",
+   "name_cn": "统一计量单位中的商品数量",
+   "type": "Decimal",
+   "is_required": false,
+   "is_aspect": false,
+   "is_collection": false,
+   "dictionary_id": 0
+  },
+  {
+   "id": 23536,
+   "name": "Нужен код маркировки",
+   "name_cn": "需要标记代码",
+   "type": "Boolean",
+   "is_required": false,
+   "is_aspect": false,
+   "is_collection": false,
+   "dictionary_id": 0
+  }
+ ]
+}

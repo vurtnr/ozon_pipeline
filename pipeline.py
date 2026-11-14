@@ -128,7 +128,13 @@ def _migrate(c: sqlite3.Connection) -> None:
         "credits INTEGER NOT NULL, detail TEXT, created_at TEXT NOT NULL);"
         "CREATE TABLE IF NOT EXISTS harvested_seeds ("
         "seed TEXT PRIMARY KEY, harvested_at TEXT NOT NULL);"
+        "CREATE TABLE IF NOT EXISTS seerfar_cache ("
+        "endpoint TEXT NOT NULL, body_hash TEXT NOT NULL, response_json TEXT NOT NULL,"
+        "created_at TEXT NOT NULL, PRIMARY KEY(endpoint, body_hash));"
     )
+    cl = {r["name"] for r in c.execute("PRAGMA table_info(credit_log)")}
+    if cl and "run_id" not in cl:
+        c.execute("ALTER TABLE credit_log ADD COLUMN run_id TEXT")
 
 
 def now() -> str:

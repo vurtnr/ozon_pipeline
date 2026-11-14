@@ -1,0 +1,118 @@
+[
+  {
+    "id": "layer:sourcing",
+    "name": "选品与找货层",
+    "description": "负责从 Ozon/Nexscope 关键词与类目数据中筛选候选商品，并驱动 1688 图搜和同一性筛选。",
+    "nodeIds": [
+      "file:sourcing_agent.py",
+      "file:keyword_library.py",
+      "file:nexscope_client.py",
+      "file:select_products.py",
+      "file:trend_check.py",
+      "file:category_tree.py",
+      "document:seeds.txt"
+    ]
+  },
+  {
+    "id": "layer:listing-generation",
+    "name": "内容与套图生成层",
+    "description": "负责生成 Ozon listing 文案、8-slot 套图规格、图像处理提示词和视觉参考素材。",
+    "nodeIds": [
+      "file:content_agent.py",
+      "file:dimensions.py",
+      "file:image_worker.py",
+      "file:text_overlay.py",
+      "document:prompts/slot1_cover_hook_v3.txt",
+      "document:prompts/slot1_payoff_v4.txt",
+      "document:prompts/slot2_white_bg_v1.txt",
+      "document:prompts/slot3_arguments_v3.txt",
+      "document:prompts/slot4_usage_v3.txt",
+      "document:prompts/slot5_scene_v3.txt",
+      "document:prompts/slot6_detail_v3.txt",
+      "document:prompts/slot7_size_v3.txt",
+      "document:prompts/slot8_scenarios_v3.txt",
+      "file:prompts/style_ref/detail_strips_v1.webp",
+      "file:prompts/style_ref/main_headline_v1.webp",
+      "file:prompts/style_ref/scenarios_circle_v1.webp",
+      "file:prompts/style_ref/selling_point_v1.webp",
+      "file:prompts/style_ref/size_arrows_v1.webp",
+      "file:prompts/style_ref/usage_grid_v1.webp"
+    ]
+  },
+  {
+    "id": "layer:data",
+    "name": "数据与定价层",
+    "description": "维护 SQLite 事实源、离线 artifact 同步、Ozon 佣金物流规则、类目缓存和商品 spec 数据。",
+    "nodeIds": [
+      "file:pipeline.py",
+      "file:pricing.py",
+      "file:sync_to_db.py",
+      "config:data/candidates-2026-11-10.json",
+      "config:data/categories-leaf.json",
+      "config:data/category-tree-ru.json",
+      "config:data/image-search-tasks-2026-11-10.json",
+      "config:data/ozon-commission.json",
+      "config:data/ozon-logistics.json",
+      "config:data/sourcing-2026-11-10.json",
+      "file:data/.DS_Store",
+      "config:data/attr-cache/17028714_594158428.json",
+      "config:data/specs/дозатор_для_жидкого_мыла.json",
+      "config:data/specs/органайзер_для_столовых_приборов_в_ящик.json"
+    ]
+  },
+  {
+    "id": "layer:review-publish",
+    "name": "审核台与发布层",
+    "description": "提供本地图审台、上架编辑校验、Ozon Seller API 属性能力和最终 listing 发布链路。",
+    "nodeIds": [
+      "file:listing_edit.py",
+      "file:review_server.py",
+      "file:listing_worker.py",
+      "file:ozon_client.py",
+      "file:pipeline.html",
+      "file:ui-sketch.html"
+    ]
+  },
+  {
+    "id": "layer:config",
+    "name": "配置与项目支持层",
+    "description": "集中保存外部服务凭据入口、Understand-Anything 项目配置和扫描到的仓库级元数据。",
+    "nodeIds": [
+      "file:config.py",
+      "config:.ua/config.json",
+      "file:.DS_Store"
+    ]
+  },
+  {
+    "id": "layer:documentation",
+    "name": "文档与调研层",
+    "description": "记录项目路线、术语、业务规则调研和阶段性交接，为 Ozon Pipeline 的人工决策提供依据。",
+    "nodeIds": [
+      "document:GLOSSARY.md",
+      "document:README.md",
+      "document:ROADMAP.md",
+      "document:docs/research/1688-real-dimensions.md",
+      "document:docs/research/nexscope-free-alternatives.md",
+      "document:docs/research/ozon-commission-rules.md",
+      "document:docs/research/ozon-cover-emotion-v4.md",
+      "document:docs/research/ozon-image-set-hot-logic.md",
+      "document:docs/research/ozon-listing-api.md",
+      "document:docs/research/ozon-pricing-formula.md",
+      "document:docs/research/ozon-seller-form-alignment.md",
+      "document:docs/handoffs/2026-11-11-ozon-listing-editor.md"
+    ]
+  },
+  {
+    "id": "layer:test",
+    "name": "测试层",
+    "description": "用 pytest 覆盖选品、同一性闸、定价、审核编辑、Ozon 客户端和上架 payload 的关键回归路径。",
+    "nodeIds": [
+      "file:tests/test_identity_gate.py",
+      "file:tests/test_listing_edit.py",
+      "file:tests/test_pricing.py",
+      "file:tests/test_nexscope_flow.py",
+      "file:tests/test_listing_worker.py",
+      "file:tests/test_ozon_client.py"
+    ]
+  }
+]

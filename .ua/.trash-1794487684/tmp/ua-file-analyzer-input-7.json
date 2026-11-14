@@ -1,0 +1,63 @@
+{
+  "projectRoot": "/Users/jiaoyumin/rust_workspace/ozon-pipeline",
+  "batchFiles": [
+    {
+      "path": "docs/research/1688-real-dimensions.md",
+      "language": "markdown",
+      "sizeLines": 76,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/research/nexscope-free-alternatives.md",
+      "language": "markdown",
+      "sizeLines": 55,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/research/ozon-commission-rules.md",
+      "language": "markdown",
+      "sizeLines": 37,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/research/ozon-cover-emotion-v4.md",
+      "language": "markdown",
+      "sizeLines": 99,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/research/ozon-image-set-hot-logic.md",
+      "language": "markdown",
+      "sizeLines": 69,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/research/ozon-listing-api.md",
+      "language": "markdown",
+      "sizeLines": 67,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/research/ozon-pricing-formula.md",
+      "language": "markdown",
+      "sizeLines": 62,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/research/ozon-seller-form-alignment.md",
+      "language": "markdown",
+      "sizeLines": 52,
+      "fileCategory": "docs"
+    }
+  ],
+  "batchImportData": {
+    "docs/research/1688-real-dimensions.md": [],
+    "docs/research/nexscope-free-alternatives.md": [],
+    "docs/research/ozon-commission-rules.md": [],
+    "docs/research/ozon-cover-emotion-v4.md": [],
+    "docs/research/ozon-image-set-hot-logic.md": [],
+    "docs/research/ozon-listing-api.md": [],
+    "docs/research/ozon-pricing-formula.md": [],
+    "docs/research/ozon-seller-form-alignment.md": []
+  }
+}

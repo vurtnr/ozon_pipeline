@@ -1,0 +1,1074 @@
+{
+  "schemaVersion": 1,
+  "algorithm": "louvain",
+  "totalFiles": 67,
+  "totalBatches": 9,
+  "exportsByPath": {
+    ".DS_Store": [],
+    "category_tree.py": [
+      "fetch_tree",
+      "flatten",
+      "main"
+    ],
+    "config.py": [
+      "_load"
+    ],
+    "content_agent.py": [
+      "lookup_category",
+      "llm_spec",
+      "validate",
+      "main"
+    ],
+    "data/.DS_Store": [],
+    "dimensions.py": [
+      "extract_dimensions"
+    ],
+    "image_worker.py": [
+      "_as_image",
+      "call_api",
+      "_vl_has_text",
+      "_supplier_white_bg",
+      "render",
+      "_slot_spec",
+      "_measurements_traceable",
+      "generate_slots",
+      "main"
+    ],
+    "keyword_library.py": [
+      "whitelist",
+      "_harvested_seeds",
+      "_upsert",
+      "build",
+      "passes",
+      "consume",
+      "refresh",
+      "stats"
+    ],
+    "listing_edit.py": [
+      "_validate",
+      "save",
+      "get_edits"
+    ],
+    "listing_worker.py": [
+      "build_item",
+      "upload_images",
+      "list_product"
+    ],
+    "nexscope_client.py": [
+      "CreditFuseError",
+      "spent_today",
+      "call",
+      "market_keyword_search"
+    ],
+    "ozon_client.py": [
+      "_post",
+      "parse_category_ids",
+      "get_attributes",
+      "get_attr_values"
+    ],
+    "pipeline.py": [
+      "conn",
+      "_migrate",
+      "now",
+      "cmd_init",
+      "_event",
+      "cmd_add",
+      "cmd_advance",
+      "cmd_kill",
+      "cmd_list",
+      "record_review"
+    ],
+    "pricing.py": [
+      "logistics_class",
+      "_load",
+      "commission_tiers",
+      "shipping_options",
+      "_price_tier",
+      "calc"
+    ],
+    "prompts/style_ref/detail_strips_v1.webp": [],
+    "prompts/style_ref/main_headline_v1.webp": [],
+    "prompts/style_ref/scenarios_circle_v1.webp": [],
+    "prompts/style_ref/selling_point_v1.webp": [],
+    "prompts/style_ref/size_arrows_v1.webp": [],
+    "prompts/style_ref/usage_grid_v1.webp": [],
+    "review_server.py": [
+      "load",
+      "topbar",
+      "page",
+      "mini",
+      "board",
+      "_spec",
+      "_slots",
+      "_compose_measurements",
+      "gen_slot7",
+      "review",
+      "trace",
+      "_spec_ids",
+      "_editor_attrs",
+      "_commission_options",
+      "editor_data",
+      "attr_values",
+      "shipping",
+      "api_price",
+      "api_edit",
+      "Handler"
+    ],
+    "select_products.py": [
+      "main"
+    ],
+    "sourcing_agent.py": [
+      "run_skill",
+      "localize",
+      "pick_suppliers",
+      "search_one",
+      "vl_same_product",
+      "identity_gate",
+      "search_text",
+      "vl_describe",
+      "search_with_fallback",
+      "search_vl",
+      "main"
+    ],
+    "sync_to_db.py": [
+      "_offer_id",
+      "latest",
+      "_advance",
+      "sync"
+    ],
+    "tests/test_identity_gate.py": [
+      "_fake_text_search",
+      "_prod",
+      "test_identity_gate_skips_wrong_product",
+      "test_identity_gate_all_rejected_means_no_source",
+      "test_no_ozon_image_keeps_legacy_behavior",
+      "_minimal_spec",
+      "_mock_vl_dims",
+      "test_slot7_manual_source_bypasses_trace_gate",
+      "test_slot7_without_source_still_gated",
+      "test_slot2_supplier_image_with_text_falls_back_to_ai",
+      "test_slot2_clean_supplier_image_used_directly"
+    ],
+    "tests/test_listing_edit.py": [
+      "env",
+      "_edits",
+      "test_save_writes_spec_and_clears_need_confirm",
+      "test_title_required",
+      "test_title_too_long",
+      "test_negative_weight_rejected",
+      "test_get_edits_roundtrip"
+    ],
+    "tests/test_listing_worker.py": [
+      "test_build_item_core_fields",
+      "test_dimensions_cm_to_mm_and_weight",
+      "test_brand_defaults_to_no_brand",
+      "test_existing_brand_not_overwritten",
+      "test_first_image_is_primary",
+      "test_missing_required_raises"
+    ],
+    "tests/test_nexscope_flow.py": [
+      "api_row",
+      "db",
+      "test_build_and_cursor",
+      "test_consume_funnel_and_no_double_emit",
+      "test_select_products_schema",
+      "test_trend_check_alerts_collapse",
+      "test_trend_check_healthy_no_alert",
+      "test_credit_fuse"
+    ],
+    "tests/test_ozon_client.py": [
+      "test_get_attributes_includes_optional_and_collection"
+    ],
+    "tests/test_pricing.py": [
+      "test_maozi_reference_case",
+      "test_default_shipping_is_cheapest",
+      "test_commission_tier_iterates_up",
+      "test_commission_tier_manual_override",
+      "test_commission_tier_invalid_raises",
+      "test_editor_attrs_whitelist",
+      "test_logistics_class_thresholds",
+      "test_unknown_category_raises",
+      "test_negative_denominator_raises"
+    ],
+    "text_overlay.py": [
+      "_font",
+      "_wrap",
+      "_adaptive_color",
+      "overlay_title",
+      "_fit_single",
+      "overlay_badge",
+      "_uniform_fit",
+      "_draw_chip",
+      "_composite",
+      "overlay_chips",
+      "overlay_chips_bottom",
+      "overlay_icon_labels",
+      "overlay_caption",
+      "_selftest"
+    ],
+    "trend_check.py": [
+      "watch_list",
+      "check"
+    ]
+  },
+  "batches": [
+    {
+      "batchIndex": 1,
+      "files": [
+        {
+          "path": "config.py",
+          "language": "python",
+          "sizeLines": 22,
+          "fileCategory": "code"
+        },
+        {
+          "path": "content_agent.py",
+          "language": "python",
+          "sizeLines": 194,
+          "fileCategory": "code"
+        },
+        {
+          "path": "dimensions.py",
+          "language": "python",
+          "sizeLines": 64,
+          "fileCategory": "code"
+        },
+        {
+          "path": "image_worker.py",
+          "language": "python",
+          "sizeLines": 363,
+          "fileCategory": "code"
+        },
+        {
+          "path": "sourcing_agent.py",
+          "language": "python",
+          "sizeLines": 340,
+          "fileCategory": "code"
+        },
+        {
+          "path": "tests/test_identity_gate.py",
+          "language": "python",
+          "sizeLines": 120,
+          "fileCategory": "code"
+        },
+        {
+          "path": "text_overlay.py",
+          "language": "python",
+          "sizeLines": 269,
+          "fileCategory": "code"
+        }
+      ],
+      "batchImportData": {
+        "config.py": [],
+        "content_agent.py": [
+          "config.py"
+        ],
+        "dimensions.py": [
+          "config.py"
+        ],
+        "image_worker.py": [
+          "config.py",
+          "text_overlay.py"
+        ],
+        "sourcing_agent.py": [
+          "config.py"
+        ],
+        "tests/test_identity_gate.py": [
+          "image_worker.py",
+          "sourcing_agent.py"
+        ],
+        "text_overlay.py": []
+      },
+      "neighborMap": {
+        "config.py": [
+          {
+            "path": "listing_worker.py",
+            "batchIndex": 4,
+            "symbols": [
+              "build_item",
+              "upload_images",
+              "list_product"
+            ]
+          },
+          {
+            "path": "nexscope_client.py",
+            "batchIndex": 3,
+            "symbols": [
+              "CreditFuseError",
+              "spent_today",
+              "call",
+              "market_keyword_search"
+            ]
+          },
+          {
+            "path": "ozon_client.py",
+            "batchIndex": 4,
+            "symbols": [
+              "_post",
+              "parse_category_ids",
+              "get_attributes",
+              "get_attr_values"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "batchIndex": 2,
+      "files": [
+        {
+          "path": "listing_edit.py",
+          "language": "python",
+          "sizeLines": 87,
+          "fileCategory": "code"
+        },
+        {
+          "path": "pipeline.py",
+          "language": "python",
+          "sizeLines": 230,
+          "fileCategory": "code"
+        },
+        {
+          "path": "pricing.py",
+          "language": "python",
+          "sizeLines": 114,
+          "fileCategory": "code"
+        },
+        {
+          "path": "review_server.py",
+          "language": "python",
+          "sizeLines": 931,
+          "fileCategory": "code"
+        },
+        {
+          "path": "sync_to_db.py",
+          "language": "python",
+          "sizeLines": 191,
+          "fileCategory": "code"
+        },
+        {
+          "path": "tests/test_listing_edit.py",
+          "language": "python",
+          "sizeLines": 88,
+          "fileCategory": "code"
+        },
+        {
+          "path": "tests/test_pricing.py",
+          "language": "python",
+          "sizeLines": 97,
+          "fileCategory": "code"
+        }
+      ],
+      "batchImportData": {
+        "listing_edit.py": [
+          "pipeline.py"
+        ],
+        "pipeline.py": [],
+        "pricing.py": [],
+        "review_server.py": [
+          "listing_edit.py",
+          "ozon_client.py",
+          "pipeline.py",
+          "pricing.py"
+        ],
+        "sync_to_db.py": [
+          "pipeline.py"
+        ],
+        "tests/test_listing_edit.py": [
+          "listing_edit.py",
+          "pipeline.py"
+        ],
+        "tests/test_pricing.py": [
+          "pricing.py"
+        ]
+      },
+      "neighborMap": {
+        "listing_edit.py": [
+          {
+            "path": "listing_worker.py",
+            "batchIndex": 4,
+            "symbols": [
+              "build_item",
+              "upload_images",
+              "list_product"
+            ]
+          }
+        ],
+        "pipeline.py": [
+          {
+            "path": "keyword_library.py",
+            "batchIndex": 3,
+            "symbols": [
+              "whitelist",
+              "_harvested_seeds",
+              "_upsert",
+              "build",
+              "passes",
+              "consume",
+              "refresh",
+              "stats"
+            ]
+          },
+          {
+            "path": "listing_worker.py",
+            "batchIndex": 4,
+            "symbols": [
+              "build_item",
+              "upload_images",
+              "list_product"
+            ]
+          },
+          {
+            "path": "nexscope_client.py",
+            "batchIndex": 3,
+            "symbols": [
+              "CreditFuseError",
+              "spent_today",
+              "call",
+              "market_keyword_search"
+            ]
+          },
+          {
+            "path": "tests/test_nexscope_flow.py",
+            "batchIndex": 3,
+            "symbols": [
+              "api_row",
+              "db",
+              "test_build_and_cursor",
+              "test_consume_funnel_and_no_double_emit",
+              "test_select_products_schema",
+              "test_trend_check_alerts_collapse",
+              "test_trend_check_healthy_no_alert",
+              "test_credit_fuse"
+            ]
+          },
+          {
+            "path": "trend_check.py",
+            "batchIndex": 3,
+            "symbols": [
+              "watch_list",
+              "check"
+            ]
+          }
+        ],
+        "review_server.py": [
+          {
+            "path": "ozon_client.py",
+            "batchIndex": 4,
+            "symbols": [
+              "_post",
+              "parse_category_ids",
+              "get_attributes",
+              "get_attr_values"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "batchIndex": 3,
+      "files": [
+        {
+          "path": "keyword_library.py",
+          "language": "python",
+          "sizeLines": 181,
+          "fileCategory": "code"
+        },
+        {
+          "path": "nexscope_client.py",
+          "language": "python",
+          "sizeLines": 63,
+          "fileCategory": "code"
+        },
+        {
+          "path": "select_products.py",
+          "language": "python",
+          "sizeLines": 69,
+          "fileCategory": "code"
+        },
+        {
+          "path": "tests/test_nexscope_flow.py",
+          "language": "python",
+          "sizeLines": 122,
+          "fileCategory": "code"
+        },
+        {
+          "path": "trend_check.py",
+          "language": "python",
+          "sizeLines": 76,
+          "fileCategory": "code"
+        }
+      ],
+      "batchImportData": {
+        "keyword_library.py": [
+          "nexscope_client.py",
+          "pipeline.py"
+        ],
+        "nexscope_client.py": [
+          "config.py",
+          "pipeline.py"
+        ],
+        "select_products.py": [
+          "keyword_library.py"
+        ],
+        "tests/test_nexscope_flow.py": [
+          "keyword_library.py",
+          "nexscope_client.py",
+          "pipeline.py",
+          "select_products.py",
+          "trend_check.py"
+        ],
+        "trend_check.py": [
+          "nexscope_client.py",
+          "pipeline.py"
+        ]
+      },
+      "neighborMap": {
+        "keyword_library.py": [
+          {
+            "path": "pipeline.py",
+            "batchIndex": 2,
+            "symbols": [
+              "conn",
+              "_migrate",
+              "now",
+              "cmd_init",
+              "_event",
+              "cmd_add",
+              "cmd_advance",
+              "cmd_kill",
+              "cmd_list",
+              "record_review"
+            ]
+          }
+        ],
+        "nexscope_client.py": [
+          {
+            "path": "config.py",
+            "batchIndex": 1,
+            "symbols": [
+              "_load"
+            ]
+          },
+          {
+            "path": "pipeline.py",
+            "batchIndex": 2,
+            "symbols": [
+              "conn",
+              "_migrate",
+              "now",
+              "cmd_init",
+              "_event",
+              "cmd_add",
+              "cmd_advance",
+              "cmd_kill",
+              "cmd_list",
+              "record_review"
+            ]
+          }
+        ],
+        "tests/test_nexscope_flow.py": [
+          {
+            "path": "pipeline.py",
+            "batchIndex": 2,
+            "symbols": [
+              "conn",
+              "_migrate",
+              "now",
+              "cmd_init",
+              "_event",
+              "cmd_add",
+              "cmd_advance",
+              "cmd_kill",
+              "cmd_list",
+              "record_review"
+            ]
+          }
+        ],
+        "trend_check.py": [
+          {
+            "path": "pipeline.py",
+            "batchIndex": 2,
+            "symbols": [
+              "conn",
+              "_migrate",
+              "now",
+              "cmd_init",
+              "_event",
+              "cmd_add",
+              "cmd_advance",
+              "cmd_kill",
+              "cmd_list",
+              "record_review"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "batchIndex": 4,
+      "files": [
+        {
+          "path": "listing_worker.py",
+          "language": "python",
+          "sizeLines": 142,
+          "fileCategory": "code"
+        },
+        {
+          "path": "ozon_client.py",
+          "language": "python",
+          "sizeLines": 88,
+          "fileCategory": "code"
+        },
+        {
+          "path": "tests/test_listing_worker.py",
+          "language": "python",
+          "sizeLines": 72,
+          "fileCategory": "code"
+        },
+        {
+          "path": "tests/test_ozon_client.py",
+          "language": "python",
+          "sizeLines": 34,
+          "fileCategory": "code"
+        }
+      ],
+      "batchImportData": {
+        "listing_worker.py": [
+          "config.py",
+          "listing_edit.py",
+          "ozon_client.py",
+          "pipeline.py"
+        ],
+        "ozon_client.py": [
+          "config.py"
+        ],
+        "tests/test_listing_worker.py": [
+          "listing_worker.py"
+        ],
+        "tests/test_ozon_client.py": [
+          "ozon_client.py"
+        ]
+      },
+      "neighborMap": {
+        "listing_worker.py": [
+          {
+            "path": "config.py",
+            "batchIndex": 1,
+            "symbols": [
+              "_load"
+            ]
+          },
+          {
+            "path": "listing_edit.py",
+            "batchIndex": 2,
+            "symbols": [
+              "_validate",
+              "save",
+              "get_edits"
+            ]
+          },
+          {
+            "path": "pipeline.py",
+            "batchIndex": 2,
+            "symbols": [
+              "conn",
+              "_migrate",
+              "now",
+              "cmd_init",
+              "_event",
+              "cmd_add",
+              "cmd_advance",
+              "cmd_kill",
+              "cmd_list",
+              "record_review"
+            ]
+          }
+        ],
+        "ozon_client.py": [
+          {
+            "path": "config.py",
+            "batchIndex": 1,
+            "symbols": [
+              "_load"
+            ]
+          },
+          {
+            "path": "review_server.py",
+            "batchIndex": 2,
+            "symbols": [
+              "load",
+              "topbar",
+              "page",
+              "mini",
+              "board",
+              "_spec",
+              "_slots",
+              "_compose_measurements",
+              "gen_slot7",
+              "review",
+              "trace",
+              "_spec_ids",
+              "_editor_attrs",
+              "_commission_options",
+              "editor_data",
+              "attr_values",
+              "shipping",
+              "api_price",
+              "api_edit",
+              "Handler"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "batchIndex": 5,
+      "files": [
+        {
+          "path": "GLOSSARY.md",
+          "language": "markdown",
+          "sizeLines": 57,
+          "fileCategory": "docs"
+        },
+        {
+          "path": "README.md",
+          "language": "markdown",
+          "sizeLines": 1,
+          "fileCategory": "docs"
+        },
+        {
+          "path": "ROADMAP.md",
+          "language": "markdown",
+          "sizeLines": 103,
+          "fileCategory": "docs"
+        },
+        {
+          "path": "pipeline.html",
+          "language": "html",
+          "sizeLines": 395,
+          "fileCategory": "markup"
+        },
+        {
+          "path": "seeds.txt",
+          "language": "txt",
+          "sizeLines": 7,
+          "fileCategory": "docs"
+        },
+        {
+          "path": "ui-sketch.html",
+          "language": "html",
+          "sizeLines": 316,
+          "fileCategory": "markup"
+        }
+      ],
+      "batchImportData": {
+        "GLOSSARY.md": [],
+        "README.md": [],
+        "ROADMAP.md": [],
+        "pipeline.html": [],
+        "seeds.txt": [],
+        "ui-sketch.html": []
+      },
+      "neighborMap": {}
+    },
+    {
+      "batchIndex": 6,
+      "files": [
+        {
+          "path": "data/candidates-2026-11-10.json",
+          "language": "json",
+          "sizeLines": 160,
+          "fileCategory": "config"
+        },
+        {
+          "path": "data/categories-leaf.json",
+          "language": "json",
+          "sizeLines": 51542,
+          "fileCategory": "config"
+        },
+        {
+          "path": "data/category-tree-ru.json",
+          "language": "json",
+          "sizeLines": 0,
+          "fileCategory": "config"
+        },
+        {
+          "path": "data/image-search-tasks-2026-11-10.json",
+          "language": "json",
+          "sizeLines": 76,
+          "fileCategory": "config"
+        },
+        {
+          "path": "data/ozon-commission.json",
+          "language": "json",
+          "sizeLines": 5433,
+          "fileCategory": "config"
+        },
+        {
+          "path": "data/ozon-logistics.json",
+          "language": "json",
+          "sizeLines": 865,
+          "fileCategory": "config"
+        },
+        {
+          "path": "data/sourcing-2026-11-10.json",
+          "language": "json",
+          "sizeLines": 285,
+          "fileCategory": "config"
+        }
+      ],
+      "batchImportData": {
+        "data/candidates-2026-11-10.json": [],
+        "data/categories-leaf.json": [],
+        "data/category-tree-ru.json": [],
+        "data/image-search-tasks-2026-11-10.json": [],
+        "data/ozon-commission.json": [],
+        "data/ozon-logistics.json": [],
+        "data/sourcing-2026-11-10.json": []
+      },
+      "neighborMap": {}
+    },
+    {
+      "batchIndex": 7,
+      "files": [
+        {
+          "path": "docs/research/1688-real-dimensions.md",
+          "language": "markdown",
+          "sizeLines": 76,
+          "fileCategory": "docs"
+        },
+        {
+          "path": "docs/research/nexscope-free-alternatives.md",
+          "language": "markdown",
+          "sizeLines": 55,
+          "fileCategory": "docs"
+        },
+        {
+          "path": "docs/research/ozon-commission-rules.md",
+          "language": "markdown",
+          "sizeLines": 37,
+          "fileCategory": "docs"
+        },
+        {
+          "path": "docs/research/ozon-cover-emotion-v4.md",
+          "language": "markdown",
+          "sizeLines": 99,
+          "fileCategory": "docs"
+        },
+        {
+          "path": "docs/research/ozon-image-set-hot-logic.md",
+          "language": "markdown",
+          "sizeLines": 69,
+          "fileCategory": "docs"
+        },
+        {
+          "path": "docs/research/ozon-listing-api.md",
+          "language": "markdown",
+          "sizeLines": 67,
+          "fileCategory": "docs"
+        },
+        {
+          "path": "docs/research/ozon-pricing-formula.md",
+          "language": "markdown",
+          "sizeLines": 62,
+          "fileCategory": "docs"
+        },
+        {
+          "path": "docs/research/ozon-seller-form-alignment.md",
+          "language": "markdown",
+          "sizeLines": 52,
+          "fileCategory": "docs"
+        }
+      ],
+      "batchImportData": {
+        "docs/research/1688-real-dimensions.md": [],
+        "docs/research/nexscope-free-alternatives.md": [],
+        "docs/research/ozon-commission-rules.md": [],
+        "docs/research/ozon-cover-emotion-v4.md": [],
+        "docs/research/ozon-image-set-hot-logic.md": [],
+        "docs/research/ozon-listing-api.md": [],
+        "docs/research/ozon-pricing-formula.md": [],
+        "docs/research/ozon-seller-form-alignment.md": []
+      },
+      "neighborMap": {}
+    },
+    {
+      "batchIndex": 8,
+      "files": [
+        {
+          "path": "prompts/slot1_cover_hook_v3.txt",
+          "language": "txt",
+          "sizeLines": 14,
+          "fileCategory": "docs"
+        },
+        {
+          "path": "prompts/slot1_payoff_v4.txt",
+          "language": "txt",
+          "sizeLines": 18,
+          "fileCategory": "docs"
+        },
+        {
+          "path": "prompts/slot2_white_bg_v1.txt",
+          "language": "txt",
+          "sizeLines": 2,
+          "fileCategory": "docs"
+        },
+        {
+          "path": "prompts/slot3_arguments_v3.txt",
+          "language": "txt",
+          "sizeLines": 12,
+          "fileCategory": "docs"
+        },
+        {
+          "path": "prompts/slot4_usage_v3.txt",
+          "language": "txt",
+          "sizeLines": 9,
+          "fileCategory": "docs"
+        },
+        {
+          "path": "prompts/slot5_scene_v3.txt",
+          "language": "txt",
+          "sizeLines": 9,
+          "fileCategory": "docs"
+        },
+        {
+          "path": "prompts/slot6_detail_v3.txt",
+          "language": "txt",
+          "sizeLines": 8,
+          "fileCategory": "docs"
+        },
+        {
+          "path": "prompts/slot7_size_v3.txt",
+          "language": "txt",
+          "sizeLines": 9,
+          "fileCategory": "docs"
+        },
+        {
+          "path": "prompts/slot8_scenarios_v3.txt",
+          "language": "txt",
+          "sizeLines": 14,
+          "fileCategory": "docs"
+        }
+      ],
+      "batchImportData": {
+        "prompts/slot1_cover_hook_v3.txt": [],
+        "prompts/slot1_payoff_v4.txt": [],
+        "prompts/slot2_white_bg_v1.txt": [],
+        "prompts/slot3_arguments_v3.txt": [],
+        "prompts/slot4_usage_v3.txt": [],
+        "prompts/slot5_scene_v3.txt": [],
+        "prompts/slot6_detail_v3.txt": [],
+        "prompts/slot7_size_v3.txt": [],
+        "prompts/slot8_scenarios_v3.txt": []
+      },
+      "neighborMap": {}
+    },
+    {
+      "batchIndex": 9,
+      "files": [
+        {
+          "path": ".DS_Store",
+          "language": "unknown",
+          "sizeLines": 31,
+          "fileCategory": "code"
+        },
+        {
+          "path": ".ua/config.json",
+          "language": "json",
+          "sizeLines": 2,
+          "fileCategory": "config"
+        },
+        {
+          "path": "category_tree.py",
+          "language": "python",
+          "sizeLines": 67,
+          "fileCategory": "code"
+        },
+        {
+          "path": "data/.DS_Store",
+          "language": "unknown",
+          "sizeLines": 0,
+          "fileCategory": "code"
+        },
+        {
+          "path": "data/attr-cache/17028714_594158428.json",
+          "language": "json",
+          "sizeLines": 344,
+          "fileCategory": "config"
+        },
+        {
+          "path": "data/specs/дозатор_для_жидкого_мыла.json",
+          "language": "json",
+          "sizeLines": 79,
+          "fileCategory": "config"
+        },
+        {
+          "path": "data/specs/органайзер_для_столовых_приборов_в_ящик.json",
+          "language": "json",
+          "sizeLines": 169,
+          "fileCategory": "config"
+        },
+        {
+          "path": "docs/handoffs/2026-11-11-ozon-listing-editor.md",
+          "language": "markdown",
+          "sizeLines": 74,
+          "fileCategory": "docs"
+        },
+        {
+          "path": "prompts/style_ref/detail_strips_v1.webp",
+          "language": "webp",
+          "sizeLines": 345,
+          "fileCategory": "code"
+        },
+        {
+          "path": "prompts/style_ref/main_headline_v1.webp",
+          "language": "webp",
+          "sizeLines": 321,
+          "fileCategory": "code"
+        },
+        {
+          "path": "prompts/style_ref/scenarios_circle_v1.webp",
+          "language": "webp",
+          "sizeLines": 301,
+          "fileCategory": "code"
+        },
+        {
+          "path": "prompts/style_ref/selling_point_v1.webp",
+          "language": "webp",
+          "sizeLines": 269,
+          "fileCategory": "code"
+        },
+        {
+          "path": "prompts/style_ref/size_arrows_v1.webp",
+          "language": "webp",
+          "sizeLines": 261,
+          "fileCategory": "code"
+        },
+        {
+          "path": "prompts/style_ref/usage_grid_v1.webp",
+          "language": "webp",
+          "sizeLines": 369,
+          "fileCategory": "code"
+        }
+      ],
+      "batchImportData": {
+        ".DS_Store": [],
+        ".ua/config.json": [],
+        "category_tree.py": [],
+        "data/.DS_Store": [],
+        "data/attr-cache/17028714_594158428.json": [],
+        "data/specs/дозатор_для_жидкого_мыла.json": [],
+        "data/specs/органайзер_для_столовых_приборов_в_ящик.json": [],
+        "docs/handoffs/2026-11-11-ozon-listing-editor.md": [],
+        "prompts/style_ref/detail_strips_v1.webp": [],
+        "prompts/style_ref/main_headline_v1.webp": [],
+        "prompts/style_ref/scenarios_circle_v1.webp": [],
+        "prompts/style_ref/selling_point_v1.webp": [],
+        "prompts/style_ref/size_arrows_v1.webp": [],
+        "prompts/style_ref/usage_grid_v1.webp": []
+      },
+      "neighborMap": {}
+    }
+  ]
+}

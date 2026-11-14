@@ -1,0 +1,132 @@
+[
+  {
+    "order": 1,
+    "title": "项目地图与术语",
+    "description": "先从 README、ROADMAP 和 GLOSSARY 建立整体语境：这个仓库围绕 Ozon 跨境电商，把选品、定价、listing 生成、图审和发布串成一条流水线。pipeline.html 补上静态流程蓝图，帮助你看到哪些阶段是自动化、哪些位置保留人工闸点。读完这一步，再进入真正承载状态的核心代码会更容易。",
+    "nodeIds": [
+      "document:README.md",
+      "document:ROADMAP.md",
+      "document:GLOSSARY.md",
+      "file:pipeline.html"
+    ]
+  },
+  {
+    "order": 2,
+    "title": "SQLite 事实源",
+    "description": "pipeline.py 是整条 Pipeline 的状态机和 SQLite 表结构入口，也是其他阶段共同依赖最多的文件。pricing.py 在这个事实源之上计算 Ozon 售价、划线价、佣金、物流和利润拆分，而佣金与物流 JSON 是这些规则的数据来源。这里先看清数据如何落库、流转和定价，后面的选品与上架才有统一坐标。",
+    "nodeIds": [
+      "file:pipeline.py",
+      "file:pricing.py",
+      "config:data/ozon-commission.json",
+      "config:data/ozon-logistics.json"
+    ],
+    "languageLesson": "SQLite 在这里不是临时缓存，而是唯一事实源；Python 模块用显式函数和命令行操作维护状态，比引入额外服务更轻。"
+  },
+  {
+    "order": 3,
+    "title": "关键词选品入口",
+    "description": "选品从种子词和 Nexscope 指标开始：keyword_library.py 把词级数据资产化到本地 SQLite，nexscope_client.py 负责 API 调用、积分记账和日熔断。select_products.py 再消费合格词，导出候选商品和 Ozon top 商品快照。这个阶段决定流水线后面要为哪些商品投入找货、算价和生成内容。",
+    "nodeIds": [
+      "document:seeds.txt",
+      "file:keyword_library.py",
+      "file:nexscope_client.py",
+      "file:select_products.py",
+      "config:data/candidates-2026-11-10.json"
+    ]
+  },
+  {
+    "order": 4,
+    "title": "1688 找货闸门",
+    "description": "在有候选 Ozon 商品后，sourcing_agent.py 把爆款图交给 1688 图搜，并用 VL 同一性闸过滤掉不像同款的货源。image-search-tasks JSON 连接选品结果和图搜任务，sourcing JSON 保存供应商价格、销量和筛选信息。这个闸门很关键，因为错误货源会污染成本核算和后续套图生成。",
+    "nodeIds": [
+      "file:sourcing_agent.py",
+      "config:data/image-search-tasks-2026-11-10.json",
+      "config:data/sourcing-2026-11-10.json",
+      "document:docs/research/1688-real-dimensions.md"
+    ]
+  },
+  {
+    "order": 5,
+    "title": "类目与文案规格",
+    "description": "content_agent.py 把 Ozon 关键词、1688 标题和类目约束交给 LLM，生成可校验的俄语 listing 文案与 8-slot 套图规格。category_tree.py 和本地类目缓存让模型按真实 Ozon 类目工作，而不是凭空猜测。spec JSON 是这一步的产物，也会继续喂给生图、审核和发布链路。",
+    "nodeIds": [
+      "file:content_agent.py",
+      "file:category_tree.py",
+      "config:data/categories-leaf.json",
+      "config:data/category-tree-ru.json",
+      "config:data/specs/органайзер_для_столовых_приборов_в_ящик.json"
+    ],
+    "languageLesson": "这里的 LLM 输出先被约束成 JSON spec，再进入后续步骤；把生成内容结构化，是让自动化 Pipeline 可审核、可重跑的关键。"
+  },
+  {
+    "order": 6,
+    "title": "8-slot 套图生成",
+    "description": "image_worker.py 消费 content spec 和货源图，调用 qwen-image I2I 生成 Ozon 8-slot 图片。text_overlay.py 用 PIL 后贴俄语标题、徽章、论据芯片和场景标签，避免让模型直接渲染不稳定的西里尔文字。各 slot prompt 文档定义了封面、白底图、尺寸图等视觉职责，使套图不是随机出图，而是按销售漏斗组织。",
+    "nodeIds": [
+      "file:image_worker.py",
+      "file:text_overlay.py",
+      "document:prompts/slot1_payoff_v4.txt",
+      "document:prompts/slot2_white_bg_v1.txt",
+      "document:prompts/slot7_size_v3.txt"
+    ],
+    "languageLesson": "Pillow 负责确定性文字叠加，生成模型负责无字视觉底图；这个分工比让 AI 一次性生成带文案图片更可控。"
+  },
+  {
+    "order": 7,
+    "title": "尺寸溯源与视觉证据",
+    "description": "dimensions.py 从商品图中读取尺寸标注，为 slot7 尺寸图提供可溯源的数字来源。相关研究文档解释为什么真实尺寸不能只靠模型猜测，风格参考 WebP 则记录尺寸箭头和细节图的视觉方向。这个步骤展示了项目如何把视觉生成和业务可信度连接起来。",
+    "nodeIds": [
+      "file:dimensions.py",
+      "document:docs/research/ozon-image-set-hot-logic.md",
+      "file:prompts/style_ref/size_arrows_v1.webp",
+      "file:prompts/style_ref/detail_strips_v1.webp"
+    ]
+  },
+  {
+    "order": 8,
+    "title": "本地图审台",
+    "description": "review_server.py 提供本地 Web 图审台，展示看板、图审队列、商品 trace 和编辑 API。listing_edit.py 把人工修改后的标题、重量、价格和属性校验后写回 SQLite 与 spec 文件，ui-sketch.html 则说明界面如何承载这些操作。Ozon 表单对齐文档和属性缓存让审核台尽量贴近 Seller 后台真实字段。",
+    "nodeIds": [
+      "file:review_server.py",
+      "file:listing_edit.py",
+      "file:ui-sketch.html",
+      "document:docs/research/ozon-seller-form-alignment.md",
+      "config:data/attr-cache/17028714_594158428.json"
+    ]
+  },
+  {
+    "order": 9,
+    "title": "发布到 Ozon",
+    "description": "listing_worker.py 把审核通过的商品组装成 Ozon /v3/product/import payload，并把本地套图上传到 OSS 后发起上架。ozon_client.py 封装类目属性、字典值和类目 ID 解析能力，是审核台与发布 worker 共用的 API 边界。Ozon listing API 调研文档说明了上架接口、价格库存和限流注意点，是理解发布风险的补充材料。",
+    "nodeIds": [
+      "file:listing_worker.py",
+      "file:ozon_client.py",
+      "document:docs/research/ozon-listing-api.md",
+      "document:docs/handoffs/2026-11-11-ozon-listing-editor.md"
+    ]
+  },
+  {
+    "order": 10,
+    "title": "离线产物回灌",
+    "description": "sync_to_db.py 把 candidates、sourcing、specs 和生成图等离线 artifacts 幂等同步回 pipeline.db。它把前面多个松散 JSON 产物重新收束到 SQLite 事实源，让图审和发布看到同一份状态。读这一步可以理解项目为什么允许离线探索，但最终仍要回到统一数据库。",
+    "nodeIds": [
+      "file:sync_to_db.py",
+      "config:data/specs/дозатор_для_жидкого_мыла.json",
+      "config:data/sourcing-2026-11-10.json",
+      "config:data/candidates-2026-11-10.json"
+    ]
+  },
+  {
+    "order": 11,
+    "title": "测试护栏",
+    "description": "最后看测试，了解哪些行为被认为不能退化：Nexscope 流程、同一性闸、定价公式、审核台编辑和 Ozon payload 都有回归覆盖。test_identity_gate.py 与 test_nexscope_flow.py 保护选品和找货入口，test_pricing.py、test_listing_edit.py、test_listing_worker.py 保护后半段商业规则。它们也是新人修改 Pipeline 前最该先跑的安全网。",
+    "nodeIds": [
+      "file:tests/test_nexscope_flow.py",
+      "file:tests/test_identity_gate.py",
+      "file:tests/test_pricing.py",
+      "file:tests/test_listing_edit.py",
+      "file:tests/test_listing_worker.py"
+    ],
+    "languageLesson": "pytest 测试按业务闸点命名，比按实现细节命名更适合这种流水线项目；失败时能直接定位是哪段业务规则破了。"
+  }
+]

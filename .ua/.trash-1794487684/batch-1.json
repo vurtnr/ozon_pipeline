@@ -1,0 +1,1738 @@
+{
+  "nodes": [
+    {
+      "id": "file:config.py",
+      "type": "file",
+      "name": "config.py",
+      "filePath": "config.py",
+      "summary": "加载项目根目录的 .env，并导出各类 API 与 OSS 凭据常量，是所有外部服务客户端共享的配置入口。",
+      "tags": [
+        "配置-加载",
+        "环境-变量",
+        "api-凭据"
+      ],
+      "complexity": "simple",
+      "languageNotes": "Python 脚本以标准库和少量外部 SDK 组合为主，模块级函数承担主要业务步骤。"
+    },
+    {
+      "id": "function:config.py:_load",
+      "type": "function",
+      "name": "_load",
+      "filePath": "config.py",
+      "lineRange": [
+        5,
+        11
+      ],
+      "summary": "读取 .env 文件并把键值写入 os.environ，为后续常量读取提供本地覆盖能力。",
+      "tags": [
+        "内部-辅助",
+        "工具函数",
+        "实现-细节"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:content_agent.py",
+      "type": "file",
+      "name": "content_agent.py",
+      "filePath": "content_agent.py",
+      "summary": "把 Ozon 关键词、1688 标题和类目树约束交给 LLM，生成可校验的商品文案与 8-slot 套图规格 JSON。",
+      "tags": [
+        "内容-生成",
+        "llm",
+        "规格-校验",
+        "套图-规划"
+      ],
+      "complexity": "moderate",
+      "languageNotes": "Python 脚本以标准库和少量外部 SDK 组合为主，模块级函数承担主要业务步骤。"
+    },
+    {
+      "id": "function:content_agent.py:lookup_category",
+      "type": "function",
+      "name": "lookup_category",
+      "filePath": "content_agent.py",
+      "lineRange": [
+        74,
+        78
+      ],
+      "summary": "在本地末级类目表中按 categoryId 查找俄语类目路径，避免让 LLM 猜类目。",
+      "tags": [
+        "业务-逻辑",
+        "工具函数",
+        "python"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:content_agent.py:llm_spec",
+      "type": "function",
+      "name": "llm_spec",
+      "filePath": "content_agent.py",
+      "lineRange": [
+        81,
+        107
+      ],
+      "summary": "组装类目、场景和文案约束后调用 qwen-plus，返回商品 content spec JSON。",
+      "tags": [
+        "业务-逻辑",
+        "工具函数",
+        "python"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:content_agent.py:validate",
+      "type": "function",
+      "name": "validate",
+      "filePath": "content_agent.py",
+      "lineRange": [
+        110,
+        160
+      ],
+      "summary": "机械校验生成规格中的禁忌词、长度、slot 完整性和数字溯源问题。",
+      "tags": [
+        "校验",
+        "闸门",
+        "业务-规则"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:content_agent.py:main",
+      "type": "function",
+      "name": "main",
+      "filePath": "content_agent.py",
+      "lineRange": [
+        163,
+        190
+      ],
+      "summary": "解析命令行参数并串联本文件的主要流程。",
+      "tags": [
+        "入口点",
+        "cli",
+        "编排"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:dimensions.py",
+      "type": "file",
+      "name": "dimensions.py",
+      "filePath": "dimensions.py",
+      "summary": "调用 qwen3-vl-plus 从商品图中读取尺寸标注文本，为 slot7 尺寸图提供可溯源的原始数字。",
+      "tags": [
+        "视觉-识别",
+        "尺寸-溯源",
+        "vl-模型"
+      ],
+      "complexity": "moderate",
+      "languageNotes": "Python 脚本以标准库和少量外部 SDK 组合为主，模块级函数承担主要业务步骤。"
+    },
+    {
+      "id": "function:dimensions.py:extract_dimensions",
+      "type": "function",
+      "name": "extract_dimensions",
+      "filePath": "dimensions.py",
+      "lineRange": [
+        27,
+        57
+      ],
+      "summary": "读取远程或本地图像并调用 VL 模型抽取尺寸标注原文，失败时返回空串。",
+      "tags": [
+        "业务-逻辑",
+        "工具函数",
+        "python"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:image_worker.py",
+      "type": "file",
+      "name": "image_worker.py",
+      "filePath": "image_worker.py",
+      "summary": "消费 content spec 与货源图，调用 qwen-image I2I 生成 Ozon 8-slot 套图，并用本地 text_overlay 贴俄语文案。",
+      "tags": [
+        "图像-生成",
+        "worker",
+        "text-overlay",
+        "质量-闸"
+      ],
+      "complexity": "complex",
+      "languageNotes": "Python 脚本以标准库和少量外部 SDK 组合为主，模块级函数承担主要业务步骤。"
+    },
+    {
+      "id": "function:image_worker.py:_as_image",
+      "type": "function",
+      "name": "_as_image",
+      "filePath": "image_worker.py",
+      "lineRange": [
+        76,
+        81
+      ],
+      "summary": "把本地图片转为 base64 data URL，远程图片则直接复用原 URL。",
+      "tags": [
+        "内部-辅助",
+        "工具函数",
+        "实现-细节"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:image_worker.py:call_api",
+      "type": "function",
+      "name": "call_api",
+      "filePath": "image_worker.py",
+      "lineRange": [
+        84,
+        108
+      ],
+      "summary": "调用 qwen-image I2I 接口生成图片，并把返回的图片下载到目标路径。",
+      "tags": [
+        "api",
+        "服务-调用",
+        "工具函数"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:image_worker.py:_vl_has_text",
+      "type": "function",
+      "name": "_vl_has_text",
+      "filePath": "image_worker.py",
+      "lineRange": [
+        111,
+        141
+      ],
+      "summary": "调用 VL 模型判断图片中是否含文字或标识，用作生成图质量闸。",
+      "tags": [
+        "内部-辅助",
+        "工具函数",
+        "实现-细节"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:image_worker.py:_supplier_white_bg",
+      "type": "function",
+      "name": "_supplier_white_bg",
+      "filePath": "image_worker.py",
+      "lineRange": [
+        144,
+        158
+      ],
+      "summary": "把干净供应商原图贴到 Ozon 白底画布，作为低成本且零形变的 slot2 路径。",
+      "tags": [
+        "内部-辅助",
+        "工具函数",
+        "实现-细节"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:image_worker.py:render",
+      "type": "function",
+      "name": "render",
+      "filePath": "image_worker.py",
+      "lineRange": [
+        161,
+        169
+      ],
+      "summary": "渲染提示词模板并替换占位符，同时拦截未填充变量。",
+      "tags": [
+        "业务-逻辑",
+        "工具函数",
+        "python"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:image_worker.py:_slot_spec",
+      "type": "function",
+      "name": "_slot_spec",
+      "filePath": "image_worker.py",
+      "lineRange": [
+        179,
+        180
+      ],
+      "summary": "从 content spec 中按 slot 名称取出对应配置。",
+      "tags": [
+        "内部-辅助",
+        "工具函数",
+        "实现-细节"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:image_worker.py:_measurements_traceable",
+      "type": "function",
+      "name": "_measurements_traceable",
+      "filePath": "image_worker.py",
+      "lineRange": [
+        183,
+        189
+      ],
+      "summary": "检查尺寸标注中的每个数字是否能在来源文本中找到，防止编造参数。",
+      "tags": [
+        "内部-辅助",
+        "工具函数",
+        "实现-细节"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:image_worker.py:generate_slots",
+      "type": "function",
+      "name": "generate_slots",
+      "filePath": "image_worker.py",
+      "lineRange": [
+        192,
+        339
+      ],
+      "summary": "按 content spec、货源图和 only 参数生成整套或指定 slot 图片，并输出 slots-report。",
+      "tags": [
+        "业务-逻辑",
+        "工具函数",
+        "python"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:image_worker.py:main",
+      "type": "function",
+      "name": "main",
+      "filePath": "image_worker.py",
+      "lineRange": [
+        342,
+        359
+      ],
+      "summary": "解析命令行参数并串联本文件的主要流程。",
+      "tags": [
+        "入口点",
+        "cli",
+        "编排"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:sourcing_agent.py",
+      "type": "file",
+      "name": "sourcing_agent.py",
+      "filePath": "sourcing_agent.py",
+      "summary": "把 Ozon 爆款图喂给 1688 图搜 skill，并用 VL 同一性闸筛出可采购货源。",
+      "tags": [
+        "找货-worker",
+        "1688",
+        "同一性-闸",
+        "图搜"
+      ],
+      "complexity": "complex",
+      "languageNotes": "Python 脚本以标准库和少量外部 SDK 组合为主，模块级函数承担主要业务步骤。"
+    },
+    {
+      "id": "function:sourcing_agent.py:run_skill",
+      "type": "function",
+      "name": "run_skill",
+      "filePath": "sourcing_agent.py",
+      "lineRange": [
+        36,
+        50
+      ],
+      "summary": "执行 1688 图搜 skill 并从 stdout 中解析 JSON 结果。",
+      "tags": [
+        "业务-逻辑",
+        "工具函数",
+        "python"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:sourcing_agent.py:localize",
+      "type": "function",
+      "name": "localize",
+      "filePath": "sourcing_agent.py",
+      "lineRange": [
+        53,
+        70
+      ],
+      "summary": "把远程 Ozon 图片下载到临时目录，提升 1688 网关图搜的稳定性。",
+      "tags": [
+        "业务-逻辑",
+        "工具函数",
+        "python"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:sourcing_agent.py:pick_suppliers",
+      "type": "function",
+      "name": "pick_suppliers",
+      "filePath": "sourcing_agent.py",
+      "lineRange": [
+        73,
+        93
+      ],
+      "summary": "按销量、相似度和价格字段筛选并排序 1688 供应商候选。",
+      "tags": [
+        "业务-逻辑",
+        "工具函数",
+        "python"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:sourcing_agent.py:search_one",
+      "type": "function",
+      "name": "search_one",
+      "filePath": "sourcing_agent.py",
+      "lineRange": [
+        96,
+        107
+      ],
+      "summary": "对单张图片运行 1688 图搜并返回标准化结果。",
+      "tags": [
+        "业务-逻辑",
+        "工具函数",
+        "python"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:sourcing_agent.py:vl_same_product",
+      "type": "function",
+      "name": "vl_same_product",
+      "filePath": "sourcing_agent.py",
+      "lineRange": [
+        110,
+        139
+      ],
+      "summary": "用 VL 对拍 Ozon 原图与 1688 候选图，判断是否为同一商品。",
+      "tags": [
+        "业务-逻辑",
+        "工具函数",
+        "python"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:sourcing_agent.py:identity_gate",
+      "type": "function",
+      "name": "identity_gate",
+      "filePath": "sourcing_agent.py",
+      "lineRange": [
+        142,
+        154
+      ],
+      "summary": "按销量顺序检查供应商图片，只保留通过同一性闸的候选。",
+      "tags": [
+        "校验",
+        "闸门",
+        "业务-规则"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:sourcing_agent.py:search_text",
+      "type": "function",
+      "name": "search_text",
+      "filePath": "sourcing_agent.py",
+      "lineRange": [
+        157,
+        186
+      ],
+      "summary": "使用中文关键词执行文字找货，作为图搜失败或相似度不足时的降级路径。",
+      "tags": [
+        "业务-逻辑",
+        "工具函数",
+        "python"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:sourcing_agent.py:vl_describe",
+      "type": "function",
+      "name": "vl_describe",
+      "filePath": "sourcing_agent.py",
+      "lineRange": [
+        189,
+        226
+      ],
+      "summary": "用 VL 从 Ozon 图片生成中文商品描述和采购关键词。",
+      "tags": [
+        "业务-逻辑",
+        "工具函数",
+        "python"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:sourcing_agent.py:search_with_fallback",
+      "type": "function",
+      "name": "search_with_fallback",
+      "filePath": "sourcing_agent.py",
+      "lineRange": [
+        229,
+        242
+      ],
+      "summary": "优先图搜并在相似度不足时自动降级到文字搜索。",
+      "tags": [
+        "业务-逻辑",
+        "工具函数",
+        "python"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:sourcing_agent.py:search_vl",
+      "type": "function",
+      "name": "search_vl",
+      "filePath": "sourcing_agent.py",
+      "lineRange": [
+        245,
+        294
+      ],
+      "summary": "结合 VL 描述、图搜和文字搜索生成找货结果，是默认混合模式。",
+      "tags": [
+        "业务-逻辑",
+        "工具函数",
+        "python"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:sourcing_agent.py:main",
+      "type": "function",
+      "name": "main",
+      "filePath": "sourcing_agent.py",
+      "lineRange": [
+        297,
+        336
+      ],
+      "summary": "解析命令行参数并串联本文件的主要流程。",
+      "tags": [
+        "入口点",
+        "cli",
+        "编排"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:tests/test_identity_gate.py",
+      "type": "file",
+      "name": "test_identity_gate.py",
+      "filePath": "tests/test_identity_gate.py",
+      "summary": "覆盖 1688 货源同一性闸、slot2 供应商图文字闸和 slot7 数字溯源闸的回归测试。",
+      "tags": [
+        "测试",
+        "pytest",
+        "回归-闸门"
+      ],
+      "complexity": "moderate",
+      "languageNotes": "Python 脚本以标准库和少量外部 SDK 组合为主，模块级函数承担主要业务步骤。"
+    },
+    {
+      "id": "function:tests/test_identity_gate.py:_fake_text_search",
+      "type": "function",
+      "name": "_fake_text_search",
+      "filePath": "tests/test_identity_gate.py",
+      "lineRange": [
+        14,
+        16
+      ],
+      "summary": "_fake_text_search 是 tests/test_identity_gate.py 内部辅助函数，封装该模块主流程复用的局部逻辑。",
+      "tags": [
+        "测试",
+        "pytest",
+        "回归"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_identity_gate.py:_prod",
+      "type": "function",
+      "name": "_prod",
+      "filePath": "tests/test_identity_gate.py",
+      "lineRange": [
+        19,
+        22
+      ],
+      "summary": "_prod 是 tests/test_identity_gate.py 内部辅助函数，封装该模块主流程复用的局部逻辑。",
+      "tags": [
+        "测试",
+        "pytest",
+        "回归"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_identity_gate.py:test_identity_gate_skips_wrong_product",
+      "type": "function",
+      "name": "test_identity_gate_skips_wrong_product",
+      "filePath": "tests/test_identity_gate.py",
+      "lineRange": [
+        25,
+        33
+      ],
+      "summary": "验证 identity gate skips wrong product 场景，作为该流水线行为的回归保护。",
+      "tags": [
+        "测试",
+        "pytest",
+        "回归"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_identity_gate.py:test_identity_gate_all_rejected_means_no_source",
+      "type": "function",
+      "name": "test_identity_gate_all_rejected_means_no_source",
+      "filePath": "tests/test_identity_gate.py",
+      "lineRange": [
+        36,
+        41
+      ],
+      "summary": "验证 identity gate all rejected means no source 场景，作为该流水线行为的回归保护。",
+      "tags": [
+        "测试",
+        "pytest",
+        "回归"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_identity_gate.py:test_no_ozon_image_keeps_legacy_behavior",
+      "type": "function",
+      "name": "test_no_ozon_image_keeps_legacy_behavior",
+      "filePath": "tests/test_identity_gate.py",
+      "lineRange": [
+        44,
+        51
+      ],
+      "summary": "验证 no ozon image keeps legacy behavior 场景，作为该流水线行为的回归保护。",
+      "tags": [
+        "测试",
+        "pytest",
+        "回归"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_identity_gate.py:_minimal_spec",
+      "type": "function",
+      "name": "_minimal_spec",
+      "filePath": "tests/test_identity_gate.py",
+      "lineRange": [
+        54,
+        58
+      ],
+      "summary": "_minimal_spec 是 tests/test_identity_gate.py 内部辅助函数，封装该模块主流程复用的局部逻辑。",
+      "tags": [
+        "测试",
+        "pytest",
+        "回归"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_identity_gate.py:_mock_vl_dims",
+      "type": "function",
+      "name": "_mock_vl_dims",
+      "filePath": "tests/test_identity_gate.py",
+      "lineRange": [
+        62,
+        64
+      ],
+      "summary": "_mock_vl_dims 是 tests/test_identity_gate.py 内部辅助函数，封装该模块主流程复用的局部逻辑。",
+      "tags": [
+        "测试",
+        "pytest",
+        "回归"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_identity_gate.py:test_slot7_manual_source_bypasses_trace_gate",
+      "type": "function",
+      "name": "test_slot7_manual_source_bypasses_trace_gate",
+      "filePath": "tests/test_identity_gate.py",
+      "lineRange": [
+        67,
+        80
+      ],
+      "summary": "验证 slot7 manual source bypasses trace gate 场景，作为该流水线行为的回归保护。",
+      "tags": [
+        "测试",
+        "pytest",
+        "回归"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_identity_gate.py:test_slot7_without_source_still_gated",
+      "type": "function",
+      "name": "test_slot7_without_source_still_gated",
+      "filePath": "tests/test_identity_gate.py",
+      "lineRange": [
+        83,
+        90
+      ],
+      "summary": "验证 slot7 without source still gated 场景，作为该流水线行为的回归保护。",
+      "tags": [
+        "测试",
+        "pytest",
+        "回归"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_identity_gate.py:test_slot2_supplier_image_with_text_falls_back_to_ai",
+      "type": "function",
+      "name": "test_slot2_supplier_image_with_text_falls_back_to_ai",
+      "filePath": "tests/test_identity_gate.py",
+      "lineRange": [
+        93,
+        105
+      ],
+      "summary": "验证 slot2 supplier image with text falls back to ai 场景，作为该流水线行为的回归保护。",
+      "tags": [
+        "测试",
+        "pytest",
+        "回归"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_identity_gate.py:test_slot2_clean_supplier_image_used_directly",
+      "type": "function",
+      "name": "test_slot2_clean_supplier_image_used_directly",
+      "filePath": "tests/test_identity_gate.py",
+      "lineRange": [
+        108,
+        120
+      ],
+      "summary": "验证 slot2 clean supplier image used directly 场景，作为该流水线行为的回归保护。",
+      "tags": [
+        "测试",
+        "pytest",
+        "回归"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:text_overlay.py",
+      "type": "file",
+      "name": "text_overlay.py",
+      "filePath": "text_overlay.py",
+      "summary": "基于 PIL 在生成图上叠加俄语标题、徽章、芯片和场景标签，避免 AI 直接渲染西里尔文字。",
+      "tags": [
+        "图像-处理",
+        "pil",
+        "贴字",
+        "俄语-文案"
+      ],
+      "complexity": "complex",
+      "languageNotes": "Python 脚本以标准库和少量外部 SDK 组合为主，模块级函数承担主要业务步骤。"
+    },
+    {
+      "id": "function:text_overlay.py:_font",
+      "type": "function",
+      "name": "_font",
+      "filePath": "text_overlay.py",
+      "lineRange": [
+        23,
+        30
+      ],
+      "summary": "按候选路径加载字体并回退到 PIL 默认字体，保证贴字流程可运行。",
+      "tags": [
+        "内部-辅助",
+        "工具函数",
+        "实现-细节"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:text_overlay.py:_wrap",
+      "type": "function",
+      "name": "_wrap",
+      "filePath": "text_overlay.py",
+      "lineRange": [
+        33,
+        47
+      ],
+      "summary": "按像素宽度贪心折行，超过最大行数时交给更小字号重试。",
+      "tags": [
+        "内部-辅助",
+        "工具函数",
+        "实现-细节"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:text_overlay.py:_adaptive_color",
+      "type": "function",
+      "name": "_adaptive_color",
+      "filePath": "text_overlay.py",
+      "lineRange": [
+        50,
+        53
+      ],
+      "summary": "根据标题区域平均亮度选择深色或浅色文字，提高封面可读性。",
+      "tags": [
+        "内部-辅助",
+        "工具函数",
+        "实现-细节"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:text_overlay.py:overlay_title",
+      "type": "function",
+      "name": "overlay_title",
+      "filePath": "text_overlay.py",
+      "lineRange": [
+        56,
+        91
+      ],
+      "summary": "在图片顶部区域居中叠加自适应俄语大标题。",
+      "tags": [
+        "业务-逻辑",
+        "工具函数",
+        "python"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:text_overlay.py:_fit_single",
+      "type": "function",
+      "name": "_fit_single",
+      "filePath": "text_overlay.py",
+      "lineRange": [
+        94,
+        100
+      ],
+      "summary": "为单行文本寻找能放入限定宽度的最大字号。",
+      "tags": [
+        "内部-辅助",
+        "工具函数",
+        "实现-细节"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:text_overlay.py:overlay_badge",
+      "type": "function",
+      "name": "overlay_badge",
+      "filePath": "text_overlay.py",
+      "lineRange": [
+        103,
+        121
+      ],
+      "summary": "在底部区域绘制圆角数字徽章与粗体白字。",
+      "tags": [
+        "业务-逻辑",
+        "工具函数",
+        "python"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:text_overlay.py:_uniform_fit",
+      "type": "function",
+      "name": "_uniform_fit",
+      "filePath": "text_overlay.py",
+      "lineRange": [
+        124,
+        130
+      ],
+      "summary": "为多条芯片文本计算统一字号，保持视觉一致。",
+      "tags": [
+        "内部-辅助",
+        "工具函数",
+        "实现-细节"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:text_overlay.py:_draw_chip",
+      "type": "function",
+      "name": "_draw_chip",
+      "filePath": "text_overlay.py",
+      "lineRange": [
+        137,
+        146
+      ],
+      "summary": "绘制半透明圆角芯片并返回芯片高度。",
+      "tags": [
+        "内部-辅助",
+        "工具函数",
+        "实现-细节"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:text_overlay.py:_composite",
+      "type": "function",
+      "name": "_composite",
+      "filePath": "text_overlay.py",
+      "lineRange": [
+        149,
+        152
+      ],
+      "summary": "把透明叠加层合成回原图。",
+      "tags": [
+        "内部-辅助",
+        "工具函数",
+        "实现-细节"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:text_overlay.py:overlay_chips",
+      "type": "function",
+      "name": "overlay_chips",
+      "filePath": "text_overlay.py",
+      "lineRange": [
+        155,
+        175
+      ],
+      "summary": "在 slot1 左中区域竖排叠加利益点芯片。",
+      "tags": [
+        "业务-逻辑",
+        "工具函数",
+        "python"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:text_overlay.py:overlay_chips_bottom",
+      "type": "function",
+      "name": "overlay_chips_bottom",
+      "filePath": "text_overlay.py",
+      "lineRange": [
+        178,
+        194
+      ],
+      "summary": "在 slot3 底部预留区水平均分叠加论据芯片。",
+      "tags": [
+        "业务-逻辑",
+        "工具函数",
+        "python"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:text_overlay.py:overlay_icon_labels",
+      "type": "function",
+      "name": "overlay_icon_labels",
+      "filePath": "text_overlay.py",
+      "lineRange": [
+        197,
+        215
+      ],
+      "summary": "在 slot8 三列场景格下方叠加俄语标签。",
+      "tags": [
+        "业务-逻辑",
+        "工具函数",
+        "python"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:text_overlay.py:overlay_caption",
+      "type": "function",
+      "name": "overlay_caption",
+      "filePath": "text_overlay.py",
+      "lineRange": [
+        218,
+        231
+      ],
+      "summary": "在 slot8 底部叠加固定格式说明带。",
+      "tags": [
+        "业务-逻辑",
+        "工具函数",
+        "python"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:text_overlay.py:_selftest",
+      "type": "function",
+      "name": "_selftest",
+      "filePath": "text_overlay.py",
+      "lineRange": [
+        234,
+        257
+      ],
+      "summary": "生成本地自测图片以验证标题、徽章和芯片贴字效果。",
+      "tags": [
+        "内部-辅助",
+        "工具函数",
+        "实现-细节"
+      ],
+      "complexity": "simple"
+    }
+  ],
+  "edges": [
+    {
+      "source": "file:config.py",
+      "target": "function:config.py:_load",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:config.py",
+      "target": "function:config.py:_load",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:content_agent.py",
+      "target": "function:content_agent.py:lookup_category",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:content_agent.py",
+      "target": "function:content_agent.py:lookup_category",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:content_agent.py",
+      "target": "function:content_agent.py:llm_spec",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:content_agent.py",
+      "target": "function:content_agent.py:llm_spec",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:content_agent.py",
+      "target": "function:content_agent.py:validate",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:content_agent.py",
+      "target": "function:content_agent.py:validate",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:content_agent.py",
+      "target": "function:content_agent.py:main",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:content_agent.py",
+      "target": "function:content_agent.py:main",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:dimensions.py",
+      "target": "function:dimensions.py:extract_dimensions",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:dimensions.py",
+      "target": "function:dimensions.py:extract_dimensions",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:image_worker.py",
+      "target": "function:image_worker.py:_as_image",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:image_worker.py",
+      "target": "function:image_worker.py:_as_image",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:image_worker.py",
+      "target": "function:image_worker.py:call_api",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:image_worker.py",
+      "target": "function:image_worker.py:call_api",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:image_worker.py",
+      "target": "function:image_worker.py:_vl_has_text",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:image_worker.py",
+      "target": "function:image_worker.py:_vl_has_text",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:image_worker.py",
+      "target": "function:image_worker.py:_supplier_white_bg",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:image_worker.py",
+      "target": "function:image_worker.py:_supplier_white_bg",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:image_worker.py",
+      "target": "function:image_worker.py:render",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:image_worker.py",
+      "target": "function:image_worker.py:render",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:image_worker.py",
+      "target": "function:image_worker.py:_slot_spec",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:image_worker.py",
+      "target": "function:image_worker.py:_slot_spec",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:image_worker.py",
+      "target": "function:image_worker.py:_measurements_traceable",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:image_worker.py",
+      "target": "function:image_worker.py:_measurements_traceable",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:image_worker.py",
+      "target": "function:image_worker.py:generate_slots",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:image_worker.py",
+      "target": "function:image_worker.py:generate_slots",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:image_worker.py",
+      "target": "function:image_worker.py:main",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:image_worker.py",
+      "target": "function:image_worker.py:main",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:sourcing_agent.py",
+      "target": "function:sourcing_agent.py:run_skill",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:sourcing_agent.py",
+      "target": "function:sourcing_agent.py:run_skill",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:sourcing_agent.py",
+      "target": "function:sourcing_agent.py:localize",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:sourcing_agent.py",
+      "target": "function:sourcing_agent.py:localize",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:sourcing_agent.py",
+      "target": "function:sourcing_agent.py:pick_suppliers",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:sourcing_agent.py",
+      "target": "function:sourcing_agent.py:pick_suppliers",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:sourcing_agent.py",
+      "target": "function:sourcing_agent.py:search_one",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:sourcing_agent.py",
+      "target": "function:sourcing_agent.py:search_one",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:sourcing_agent.py",
+      "target": "function:sourcing_agent.py:vl_same_product",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:sourcing_agent.py",
+      "target": "function:sourcing_agent.py:vl_same_product",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:sourcing_agent.py",
+      "target": "function:sourcing_agent.py:identity_gate",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:sourcing_agent.py",
+      "target": "function:sourcing_agent.py:identity_gate",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:sourcing_agent.py",
+      "target": "function:sourcing_agent.py:search_text",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:sourcing_agent.py",
+      "target": "function:sourcing_agent.py:search_text",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:sourcing_agent.py",
+      "target": "function:sourcing_agent.py:vl_describe",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:sourcing_agent.py",
+      "target": "function:sourcing_agent.py:vl_describe",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:sourcing_agent.py",
+      "target": "function:sourcing_agent.py:search_with_fallback",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:sourcing_agent.py",
+      "target": "function:sourcing_agent.py:search_with_fallback",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:sourcing_agent.py",
+      "target": "function:sourcing_agent.py:search_vl",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:sourcing_agent.py",
+      "target": "function:sourcing_agent.py:search_vl",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:sourcing_agent.py",
+      "target": "function:sourcing_agent.py:main",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:sourcing_agent.py",
+      "target": "function:sourcing_agent.py:main",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_identity_gate.py",
+      "target": "function:tests/test_identity_gate.py:_fake_text_search",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_identity_gate.py",
+      "target": "function:tests/test_identity_gate.py:_fake_text_search",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_identity_gate.py",
+      "target": "function:tests/test_identity_gate.py:_prod",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_identity_gate.py",
+      "target": "function:tests/test_identity_gate.py:_prod",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_identity_gate.py",
+      "target": "function:tests/test_identity_gate.py:test_identity_gate_skips_wrong_product",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_identity_gate.py",
+      "target": "function:tests/test_identity_gate.py:test_identity_gate_skips_wrong_product",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_identity_gate.py",
+      "target": "function:tests/test_identity_gate.py:test_identity_gate_all_rejected_means_no_source",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_identity_gate.py",
+      "target": "function:tests/test_identity_gate.py:test_identity_gate_all_rejected_means_no_source",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_identity_gate.py",
+      "target": "function:tests/test_identity_gate.py:test_no_ozon_image_keeps_legacy_behavior",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_identity_gate.py",
+      "target": "function:tests/test_identity_gate.py:test_no_ozon_image_keeps_legacy_behavior",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_identity_gate.py",
+      "target": "function:tests/test_identity_gate.py:_minimal_spec",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_identity_gate.py",
+      "target": "function:tests/test_identity_gate.py:_minimal_spec",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_identity_gate.py",
+      "target": "function:tests/test_identity_gate.py:_mock_vl_dims",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_identity_gate.py",
+      "target": "function:tests/test_identity_gate.py:_mock_vl_dims",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_identity_gate.py",
+      "target": "function:tests/test_identity_gate.py:test_slot7_manual_source_bypasses_trace_gate",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_identity_gate.py",
+      "target": "function:tests/test_identity_gate.py:test_slot7_manual_source_bypasses_trace_gate",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_identity_gate.py",
+      "target": "function:tests/test_identity_gate.py:test_slot7_without_source_still_gated",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_identity_gate.py",
+      "target": "function:tests/test_identity_gate.py:test_slot7_without_source_still_gated",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_identity_gate.py",
+      "target": "function:tests/test_identity_gate.py:test_slot2_supplier_image_with_text_falls_back_to_ai",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_identity_gate.py",
+      "target": "function:tests/test_identity_gate.py:test_slot2_supplier_image_with_text_falls_back_to_ai",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_identity_gate.py",
+      "target": "function:tests/test_identity_gate.py:test_slot2_clean_supplier_image_used_directly",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_identity_gate.py",
+      "target": "function:tests/test_identity_gate.py:test_slot2_clean_supplier_image_used_directly",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:text_overlay.py",
+      "target": "function:text_overlay.py:_font",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:text_overlay.py",
+      "target": "function:text_overlay.py:_font",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:text_overlay.py",
+      "target": "function:text_overlay.py:_wrap",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:text_overlay.py",
+      "target": "function:text_overlay.py:_wrap",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:text_overlay.py",
+      "target": "function:text_overlay.py:_adaptive_color",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:text_overlay.py",
+      "target": "function:text_overlay.py:_adaptive_color",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:text_overlay.py",
+      "target": "function:text_overlay.py:overlay_title",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:text_overlay.py",
+      "target": "function:text_overlay.py:overlay_title",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:text_overlay.py",
+      "target": "function:text_overlay.py:_fit_single",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:text_overlay.py",
+      "target": "function:text_overlay.py:_fit_single",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:text_overlay.py",
+      "target": "function:text_overlay.py:overlay_badge",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:text_overlay.py",
+      "target": "function:text_overlay.py:overlay_badge",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:text_overlay.py",
+      "target": "function:text_overlay.py:_uniform_fit",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:text_overlay.py",
+      "target": "function:text_overlay.py:_uniform_fit",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:text_overlay.py",
+      "target": "function:text_overlay.py:_draw_chip",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:text_overlay.py",
+      "target": "function:text_overlay.py:_draw_chip",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:text_overlay.py",
+      "target": "function:text_overlay.py:_composite",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:text_overlay.py",
+      "target": "function:text_overlay.py:_composite",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:text_overlay.py",
+      "target": "function:text_overlay.py:overlay_chips",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:text_overlay.py",
+      "target": "function:text_overlay.py:overlay_chips",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:text_overlay.py",
+      "target": "function:text_overlay.py:overlay_chips_bottom",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:text_overlay.py",
+      "target": "function:text_overlay.py:overlay_chips_bottom",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:text_overlay.py",
+      "target": "function:text_overlay.py:overlay_icon_labels",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:text_overlay.py",
+      "target": "function:text_overlay.py:overlay_icon_labels",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:text_overlay.py",
+      "target": "function:text_overlay.py:overlay_caption",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:text_overlay.py",
+      "target": "function:text_overlay.py:overlay_caption",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:text_overlay.py",
+      "target": "function:text_overlay.py:_selftest",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:text_overlay.py",
+      "target": "function:text_overlay.py:_selftest",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:content_agent.py",
+      "target": "file:config.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:dimensions.py",
+      "target": "file:config.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:image_worker.py",
+      "target": "file:config.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:image_worker.py",
+      "target": "file:text_overlay.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:sourcing_agent.py",
+      "target": "file:config.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:tests/test_identity_gate.py",
+      "target": "file:image_worker.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:tests/test_identity_gate.py",
+      "target": "file:sourcing_agent.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    }
+  ]
+}

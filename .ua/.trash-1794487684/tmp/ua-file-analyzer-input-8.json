@@ -1,0 +1,70 @@
+{
+  "projectRoot": "/Users/jiaoyumin/rust_workspace/ozon-pipeline",
+  "batchFiles": [
+    {
+      "path": "prompts/slot1_cover_hook_v3.txt",
+      "language": "txt",
+      "sizeLines": 14,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "prompts/slot1_payoff_v4.txt",
+      "language": "txt",
+      "sizeLines": 18,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "prompts/slot2_white_bg_v1.txt",
+      "language": "txt",
+      "sizeLines": 2,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "prompts/slot3_arguments_v3.txt",
+      "language": "txt",
+      "sizeLines": 12,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "prompts/slot4_usage_v3.txt",
+      "language": "txt",
+      "sizeLines": 9,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "prompts/slot5_scene_v3.txt",
+      "language": "txt",
+      "sizeLines": 9,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "prompts/slot6_detail_v3.txt",
+      "language": "txt",
+      "sizeLines": 8,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "prompts/slot7_size_v3.txt",
+      "language": "txt",
+      "sizeLines": 9,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "prompts/slot8_scenarios_v3.txt",
+      "language": "txt",
+      "sizeLines": 14,
+      "fileCategory": "docs"
+    }
+  ],
+  "batchImportData": {
+    "prompts/slot1_cover_hook_v3.txt": [],
+    "prompts/slot1_payoff_v4.txt": [],
+    "prompts/slot2_white_bg_v1.txt": [],
+    "prompts/slot3_arguments_v3.txt": [],
+    "prompts/slot4_usage_v3.txt": [],
+    "prompts/slot5_scene_v3.txt": [],
+    "prompts/slot6_detail_v3.txt": [],
+    "prompts/slot7_size_v3.txt": [],
+    "prompts/slot8_scenarios_v3.txt": []
+  }
+}

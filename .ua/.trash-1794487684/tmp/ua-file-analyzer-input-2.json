@@ -1,0 +1,70 @@
+{
+  "projectRoot": "/Users/jiaoyumin/rust_workspace/ozon-pipeline",
+  "batchFiles": [
+    {
+      "path": "listing_edit.py",
+      "language": "python",
+      "sizeLines": 87,
+      "fileCategory": "code"
+    },
+    {
+      "path": "pipeline.py",
+      "language": "python",
+      "sizeLines": 230,
+      "fileCategory": "code"
+    },
+    {
+      "path": "pricing.py",
+      "language": "python",
+      "sizeLines": 114,
+      "fileCategory": "code"
+    },
+    {
+      "path": "review_server.py",
+      "language": "python",
+      "sizeLines": 931,
+      "fileCategory": "code"
+    },
+    {
+      "path": "sync_to_db.py",
+      "language": "python",
+      "sizeLines": 191,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/test_listing_edit.py",
+      "language": "python",
+      "sizeLines": 88,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/test_pricing.py",
+      "language": "python",
+      "sizeLines": 97,
+      "fileCategory": "code"
+    }
+  ],
+  "batchImportData": {
+    "listing_edit.py": [
+      "pipeline.py"
+    ],
+    "pipeline.py": [],
+    "pricing.py": [],
+    "review_server.py": [
+      "listing_edit.py",
+      "ozon_client.py",
+      "pipeline.py",
+      "pricing.py"
+    ],
+    "sync_to_db.py": [
+      "pipeline.py"
+    ],
+    "tests/test_listing_edit.py": [
+      "listing_edit.py",
+      "pipeline.py"
+    ],
+    "tests/test_pricing.py": [
+      "pricing.py"
+    ]
+  }
+}

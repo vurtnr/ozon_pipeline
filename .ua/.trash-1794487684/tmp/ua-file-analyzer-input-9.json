@@ -1,0 +1,105 @@
+{
+  "projectRoot": "/Users/jiaoyumin/rust_workspace/ozon-pipeline",
+  "batchFiles": [
+    {
+      "path": ".DS_Store",
+      "language": "unknown",
+      "sizeLines": 31,
+      "fileCategory": "code"
+    },
+    {
+      "path": ".ua/config.json",
+      "language": "json",
+      "sizeLines": 2,
+      "fileCategory": "config"
+    },
+    {
+      "path": "category_tree.py",
+      "language": "python",
+      "sizeLines": 67,
+      "fileCategory": "code"
+    },
+    {
+      "path": "data/.DS_Store",
+      "language": "unknown",
+      "sizeLines": 0,
+      "fileCategory": "code"
+    },
+    {
+      "path": "data/attr-cache/17028714_594158428.json",
+      "language": "json",
+      "sizeLines": 344,
+      "fileCategory": "config"
+    },
+    {
+      "path": "data/specs/дозатор_для_жидкого_мыла.json",
+      "language": "json",
+      "sizeLines": 79,
+      "fileCategory": "config"
+    },
+    {
+      "path": "data/specs/органайзер_для_столовых_приборов_в_ящик.json",
+      "language": "json",
+      "sizeLines": 169,
+      "fileCategory": "config"
+    },
+    {
+      "path": "docs/handoffs/2026-11-11-ozon-listing-editor.md",
+      "language": "markdown",
+      "sizeLines": 74,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "prompts/style_ref/detail_strips_v1.webp",
+      "language": "webp",
+      "sizeLines": 345,
+      "fileCategory": "code"
+    },
+    {
+      "path": "prompts/style_ref/main_headline_v1.webp",
+      "language": "webp",
+      "sizeLines": 321,
+      "fileCategory": "code"
+    },
+    {
+      "path": "prompts/style_ref/scenarios_circle_v1.webp",
+      "language": "webp",
+      "sizeLines": 301,
+      "fileCategory": "code"
+    },
+    {
+      "path": "prompts/style_ref/selling_point_v1.webp",
+      "language": "webp",
+      "sizeLines": 269,
+      "fileCategory": "code"
+    },
+    {
+      "path": "prompts/style_ref/size_arrows_v1.webp",
+      "language": "webp",
+      "sizeLines": 261,
+      "fileCategory": "code"
+    },
+    {
+      "path": "prompts/style_ref/usage_grid_v1.webp",
+      "language": "webp",
+      "sizeLines": 369,
+      "fileCategory": "code"
+    }
+  ],
+  "batchImportData": {
+    ".DS_Store": [],
+    ".ua/config.json": [],
+    "category_tree.py": [],
+    "data/.DS_Store": [],
+    "data/attr-cache/17028714_594158428.json": [],
+    "data/specs/дозатор_для_жидкого_мыла.json": [],
+    "data/specs/органайзер_для_столовых_приборов_в_ящик.json": [],
+    "docs/handoffs/2026-11-11-ozon-listing-editor.md": [],
+    "prompts/style_ref/detail_strips_v1.webp": [],
+    "prompts/style_ref/main_headline_v1.webp": [],
+    "prompts/style_ref/scenarios_circle_v1.webp": [],
+    "prompts/style_ref/selling_point_v1.webp": [],
+    "prompts/style_ref/size_arrows_v1.webp": [],
+    "prompts/style_ref/usage_grid_v1.webp": []
+  }
+}

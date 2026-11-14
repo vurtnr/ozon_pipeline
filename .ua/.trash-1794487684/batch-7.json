@@ -1,0 +1,117 @@
+{
+  "nodes": [
+    {
+      "id": "document:docs/research/1688-real-dimensions.md",
+      "type": "document",
+      "name": "1688-real-dimensions.md",
+      "filePath": "docs/research/1688-real-dimensions.md",
+      "summary": "调研 1688 商品真实尺寸数据来源与备选方案，为 slot7 尺寸图溯源闸提供依据。",
+      "tags": [
+        "调研",
+        "业务-规则",
+        "文档"
+      ],
+      "complexity": "moderate",
+      "languageNotes": "Markdown 文档以研究结论和执行约束为主，服务后续实现决策。"
+    },
+    {
+      "id": "document:docs/research/nexscope-free-alternatives.md",
+      "type": "document",
+      "name": "nexscope-free-alternatives.md",
+      "filePath": "docs/research/nexscope-free-alternatives.md",
+      "summary": "调研 Nexscope 余额耗尽后的免费选品与热词替代来源，并给出字段映射。",
+      "tags": [
+        "调研",
+        "业务-规则",
+        "文档"
+      ],
+      "complexity": "simple",
+      "languageNotes": "Markdown 文档以研究结论和执行约束为主，服务后续实现决策。"
+    },
+    {
+      "id": "document:docs/research/ozon-commission-rules.md",
+      "type": "document",
+      "name": "ozon-commission-rules.md",
+      "filePath": "docs/research/ozon-commission-rules.md",
+      "summary": "梳理 Ozon 佣金按类目与售价档计算的规则，并指向 pricing.py 的实现落点。",
+      "tags": [
+        "调研",
+        "业务-规则",
+        "文档"
+      ],
+      "complexity": "simple",
+      "languageNotes": "Markdown 文档以研究结论和执行约束为主，服务后续实现决策。"
+    },
+    {
+      "id": "document:docs/research/ozon-cover-emotion-v4.md",
+      "type": "document",
+      "name": "ozon-cover-emotion-v4.md",
+      "filePath": "docs/research/ozon-cover-emotion-v4.md",
+      "summary": "研究 Ozon 封面图的情绪价值与 slot1 v4 优化方向，用于提高 CTR 和加购率。",
+      "tags": [
+        "调研",
+        "业务-规则",
+        "文档"
+      ],
+      "complexity": "moderate",
+      "languageNotes": "Markdown 文档以研究结论和执行约束为主，服务后续实现决策。"
+    },
+    {
+      "id": "document:docs/research/ozon-image-set-hot-logic.md",
+      "type": "document",
+      "name": "ozon-image-set-hot-logic.md",
+      "filePath": "docs/research/ozon-image-set-hot-logic.md",
+      "summary": "总结 Ozon 热卖商品 8 张套图的漏斗逻辑和 qwen-image I2I 提示词实践。",
+      "tags": [
+        "调研",
+        "业务-规则",
+        "文档"
+      ],
+      "complexity": "moderate",
+      "languageNotes": "Markdown 文档以研究结论和执行约束为主，服务后续实现决策。"
+    },
+    {
+      "id": "document:docs/research/ozon-listing-api.md",
+      "type": "document",
+      "name": "ozon-listing-api.md",
+      "filePath": "docs/research/ozon-listing-api.md",
+      "summary": "调研 Ozon Seller API 上架链路、类目属性、价格库存接口与限流注意点。",
+      "tags": [
+        "调研",
+        "业务-规则",
+        "文档"
+      ],
+      "complexity": "simple",
+      "languageNotes": "Markdown 文档以研究结论和执行约束为主，服务后续实现决策。"
+    },
+    {
+      "id": "document:docs/research/ozon-pricing-formula.md",
+      "type": "document",
+      "name": "ozon-pricing-formula.md",
+      "filePath": "docs/research/ozon-pricing-formula.md",
+      "summary": "记录跨境定价公式、佣金迭代和物流尺寸档规则，是 pricing.py 的业务依据。",
+      "tags": [
+        "调研",
+        "业务-规则",
+        "文档"
+      ],
+      "complexity": "simple",
+      "languageNotes": "Markdown 文档以研究结论和执行约束为主，服务后续实现决策。"
+    },
+    {
+      "id": "document:docs/research/ozon-seller-form-alignment.md",
+      "type": "document",
+      "name": "ozon-seller-form-alignment.md",
+      "filePath": "docs/research/ozon-seller-form-alignment.md",
+      "summary": "对齐 Ozon 后台上架表单字段与本地审核台编辑器需要展示的属性。",
+      "tags": [
+        "调研",
+        "业务-规则",
+        "文档"
+      ],
+      "complexity": "simple",
+      "languageNotes": "Markdown 文档以研究结论和执行约束为主，服务后续实现决策。"
+    }
+  ],
+  "edges": []
+}

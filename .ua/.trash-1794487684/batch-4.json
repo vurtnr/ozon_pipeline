@@ -1,0 +1,546 @@
+{
+  "nodes": [
+    {
+      "id": "file:listing_worker.py",
+      "type": "file",
+      "name": "listing_worker.py",
+      "filePath": "listing_worker.py",
+      "summary": "把审核通过的商品组装成 Ozon /v3/product/import payload，上传本地套图到 OSS 后发起上架。",
+      "tags": [
+        "上架-worker",
+        "ozon-api",
+        "oss",
+        "payload"
+      ],
+      "complexity": "moderate",
+      "languageNotes": "Python 脚本以标准库和少量外部 SDK 组合为主，模块级函数承担主要业务步骤。"
+    },
+    {
+      "id": "function:listing_worker.py:build_item",
+      "type": "function",
+      "name": "build_item",
+      "filePath": "listing_worker.py",
+      "lineRange": [
+        32,
+        66
+      ],
+      "summary": "把产品、spec、审核编辑和图片 URL 组装为 Ozon import item。",
+      "tags": [
+        "业务-逻辑",
+        "工具函数",
+        "python"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:listing_worker.py:upload_images",
+      "type": "function",
+      "name": "upload_images",
+      "filePath": "listing_worker.py",
+      "lineRange": [
+        69,
+        85
+      ],
+      "summary": "把本地 slot 图片上传到 OSS，并返回 Ozon 可拉取的公网 URL。",
+      "tags": [
+        "业务-逻辑",
+        "工具函数",
+        "python"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:listing_worker.py:list_product",
+      "type": "function",
+      "name": "list_product",
+      "filePath": "listing_worker.py",
+      "lineRange": [
+        88,
+        134
+      ],
+      "summary": "校验产品状态和编辑数据后上传图片、调用 Ozon import 并轮询任务结果。",
+      "tags": [
+        "业务-逻辑",
+        "工具函数",
+        "python"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:ozon_client.py",
+      "type": "file",
+      "name": "ozon_client.py",
+      "filePath": "ozon_client.py",
+      "summary": "封装 Ozon Seller API 中审核台需要的类目属性、字典值和类目 ID 解析能力，并维护属性缓存。",
+      "tags": [
+        "api-client",
+        "ozon",
+        "属性-缓存"
+      ],
+      "complexity": "moderate",
+      "languageNotes": "Python 脚本以标准库和少量外部 SDK 组合为主，模块级函数承担主要业务步骤。"
+    },
+    {
+      "id": "function:ozon_client.py:_post",
+      "type": "function",
+      "name": "_post",
+      "filePath": "ozon_client.py",
+      "lineRange": [
+        25,
+        32
+      ],
+      "summary": "向 Ozon Seller API 发送 POST 请求，并把 HTTP 错误包装为 RuntimeError。",
+      "tags": [
+        "内部-辅助",
+        "工具函数",
+        "实现-细节"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:ozon_client.py:parse_category_ids",
+      "type": "function",
+      "name": "parse_category_ids",
+      "filePath": "ozon_client.py",
+      "lineRange": [
+        35,
+        41
+      ],
+      "summary": "把下划线 categoryId 路径解析为 Ozon description_category_id 和 type_id。",
+      "tags": [
+        "api",
+        "服务-调用",
+        "工具函数"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:ozon_client.py:get_attributes",
+      "type": "function",
+      "name": "get_attributes",
+      "filePath": "ozon_client.py",
+      "lineRange": [
+        44,
+        76
+      ],
+      "summary": "获取并缓存类目属性全量定义，同时合并中文属性名供审核台展示。",
+      "tags": [
+        "api",
+        "服务-调用",
+        "工具函数"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:ozon_client.py:get_attr_values",
+      "type": "function",
+      "name": "get_attr_values",
+      "filePath": "ozon_client.py",
+      "lineRange": [
+        79,
+        88
+      ],
+      "summary": "查询字典属性可选值，支持品牌等大字典按 query 过滤。",
+      "tags": [
+        "api",
+        "服务-调用",
+        "工具函数"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:tests/test_listing_worker.py",
+      "type": "file",
+      "name": "test_listing_worker.py",
+      "filePath": "tests/test_listing_worker.py",
+      "summary": "验证 Ozon 上架 payload 的核心字段、尺寸单位换算、品牌默认值、主图顺序和必填校验。",
+      "tags": [
+        "测试",
+        "pytest",
+        "上架-payload"
+      ],
+      "complexity": "moderate",
+      "languageNotes": "Python 脚本以标准库和少量外部 SDK 组合为主，模块级函数承担主要业务步骤。"
+    },
+    {
+      "id": "function:tests/test_listing_worker.py:test_build_item_core_fields",
+      "type": "function",
+      "name": "test_build_item_core_fields",
+      "filePath": "tests/test_listing_worker.py",
+      "lineRange": [
+        26,
+        36
+      ],
+      "summary": "验证 build item core fields 场景，作为该流水线行为的回归保护。",
+      "tags": [
+        "测试",
+        "pytest",
+        "回归"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_listing_worker.py:test_dimensions_cm_to_mm_and_weight",
+      "type": "function",
+      "name": "test_dimensions_cm_to_mm_and_weight",
+      "filePath": "tests/test_listing_worker.py",
+      "lineRange": [
+        39,
+        43
+      ],
+      "summary": "验证 dimensions cm to mm and weight 场景，作为该流水线行为的回归保护。",
+      "tags": [
+        "测试",
+        "pytest",
+        "回归"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_listing_worker.py:test_brand_defaults_to_no_brand",
+      "type": "function",
+      "name": "test_brand_defaults_to_no_brand",
+      "filePath": "tests/test_listing_worker.py",
+      "lineRange": [
+        46,
+        50
+      ],
+      "summary": "验证 brand defaults to no brand 场景，作为该流水线行为的回归保护。",
+      "tags": [
+        "测试",
+        "pytest",
+        "回归"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_listing_worker.py:test_existing_brand_not_overwritten",
+      "type": "function",
+      "name": "test_existing_brand_not_overwritten",
+      "filePath": "tests/test_listing_worker.py",
+      "lineRange": [
+        53,
+        60
+      ],
+      "summary": "验证 existing brand not overwritten 场景，作为该流水线行为的回归保护。",
+      "tags": [
+        "测试",
+        "pytest",
+        "回归"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_listing_worker.py:test_first_image_is_primary",
+      "type": "function",
+      "name": "test_first_image_is_primary",
+      "filePath": "tests/test_listing_worker.py",
+      "lineRange": [
+        63,
+        65
+      ],
+      "summary": "验证 first image is primary 场景，作为该流水线行为的回归保护。",
+      "tags": [
+        "测试",
+        "pytest",
+        "回归"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_listing_worker.py:test_missing_required_raises",
+      "type": "function",
+      "name": "test_missing_required_raises",
+      "filePath": "tests/test_listing_worker.py",
+      "lineRange": [
+        68,
+        72
+      ],
+      "summary": "验证 missing required raises 场景，作为该流水线行为的回归保护。",
+      "tags": [
+        "测试",
+        "pytest",
+        "回归"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:tests/test_ozon_client.py",
+      "type": "file",
+      "name": "test_ozon_client.py",
+      "filePath": "tests/test_ozon_client.py",
+      "summary": "验证 Ozon 类目属性缓存保留可选属性、多值属性并按必填与筛选字段排序。",
+      "tags": [
+        "测试",
+        "pytest",
+        "ozon-client"
+      ],
+      "complexity": "simple",
+      "languageNotes": "Python 脚本以标准库和少量外部 SDK 组合为主，模块级函数承担主要业务步骤。"
+    },
+    {
+      "id": "function:tests/test_ozon_client.py:test_get_attributes_includes_optional_and_collection",
+      "type": "function",
+      "name": "test_get_attributes_includes_optional_and_collection",
+      "filePath": "tests/test_ozon_client.py",
+      "lineRange": [
+        24,
+        34
+      ],
+      "summary": "验证 get attributes includes optional and collection 场景，作为该流水线行为的回归保护。",
+      "tags": [
+        "测试",
+        "pytest",
+        "回归"
+      ],
+      "complexity": "simple"
+    }
+  ],
+  "edges": [
+    {
+      "source": "file:listing_worker.py",
+      "target": "function:listing_worker.py:build_item",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:listing_worker.py",
+      "target": "function:listing_worker.py:build_item",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:listing_worker.py",
+      "target": "function:listing_worker.py:upload_images",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:listing_worker.py",
+      "target": "function:listing_worker.py:upload_images",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:listing_worker.py",
+      "target": "function:listing_worker.py:list_product",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:listing_worker.py",
+      "target": "function:listing_worker.py:list_product",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:ozon_client.py",
+      "target": "function:ozon_client.py:_post",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:ozon_client.py",
+      "target": "function:ozon_client.py:_post",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:ozon_client.py",
+      "target": "function:ozon_client.py:parse_category_ids",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:ozon_client.py",
+      "target": "function:ozon_client.py:parse_category_ids",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:ozon_client.py",
+      "target": "function:ozon_client.py:get_attributes",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:ozon_client.py",
+      "target": "function:ozon_client.py:get_attributes",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:ozon_client.py",
+      "target": "function:ozon_client.py:get_attr_values",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:ozon_client.py",
+      "target": "function:ozon_client.py:get_attr_values",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_listing_worker.py",
+      "target": "function:tests/test_listing_worker.py:test_build_item_core_fields",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_listing_worker.py",
+      "target": "function:tests/test_listing_worker.py:test_build_item_core_fields",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_listing_worker.py",
+      "target": "function:tests/test_listing_worker.py:test_dimensions_cm_to_mm_and_weight",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_listing_worker.py",
+      "target": "function:tests/test_listing_worker.py:test_dimensions_cm_to_mm_and_weight",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_listing_worker.py",
+      "target": "function:tests/test_listing_worker.py:test_brand_defaults_to_no_brand",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_listing_worker.py",
+      "target": "function:tests/test_listing_worker.py:test_brand_defaults_to_no_brand",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_listing_worker.py",
+      "target": "function:tests/test_listing_worker.py:test_existing_brand_not_overwritten",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_listing_worker.py",
+      "target": "function:tests/test_listing_worker.py:test_existing_brand_not_overwritten",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_listing_worker.py",
+      "target": "function:tests/test_listing_worker.py:test_first_image_is_primary",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_listing_worker.py",
+      "target": "function:tests/test_listing_worker.py:test_first_image_is_primary",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_listing_worker.py",
+      "target": "function:tests/test_listing_worker.py:test_missing_required_raises",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_listing_worker.py",
+      "target": "function:tests/test_listing_worker.py:test_missing_required_raises",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_ozon_client.py",
+      "target": "function:tests/test_ozon_client.py:test_get_attributes_includes_optional_and_collection",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_ozon_client.py",
+      "target": "function:tests/test_ozon_client.py:test_get_attributes_includes_optional_and_collection",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:listing_worker.py",
+      "target": "file:config.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:listing_worker.py",
+      "target": "file:listing_edit.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:listing_worker.py",
+      "target": "file:ozon_client.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:listing_worker.py",
+      "target": "file:pipeline.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:ozon_client.py",
+      "target": "file:config.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:tests/test_listing_worker.py",
+      "target": "file:listing_worker.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:tests/test_ozon_client.py",
+      "target": "file:ozon_client.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    }
+  ]
+}

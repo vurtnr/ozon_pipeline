@@ -1,79 +1,80 @@
 {
-  "category_path_ru": "Дом и сад/Аксессуары для бани и ванной/Дозатор для жидкого мыла",
-  "style_note": "强调免打孔安装体验与生活情绪价值，数字仅用于可信支撑（如USB充电、容量），避免参数堆砌",
-  "ozon_title": "Дозатор для жидкого мыла сенсорный, подвесной, без сверления, USB-зарядка",
-  "description_ru": "Умный дозатор реагирует на движение руки — никаких касаний и бактерий. Крепится за 3 секунды: не требует сверления, не оставляет следов. Работает от встроенного аккумулятора с USB-зарядкой. Подходит для мыла, геля и жидкого шампуня.\n— Без сверления\n— Зарядка через USB\n— Объём резервуара 350 мл\n— Быстрая установка\n— Гигиеничный бесконтактный режим",
-  "slots": [
-    {
-      "slot": "slot1",
-      "scene": "modern bathroom with marble countertop",
-      "copy_title": "Без сверления — за 3 секунды",
-      "copy_icons": [
-        "Без сверления",
-        "3 сек",
-        "Нет следов"
-      ]
-    },
-    {
-      "slot": "slot3",
-      "scene_hint": "white studio background",
-      "copy_headline": "USB-зарядка и 350 мл",
-      "args": [
-        "USB-зарядка",
-        "350 мл",
-        "до 30 дней"
-      ]
-    },
-    {
-      "slot": "slot4",
-      "action_en": "hand waving under sensor",
-      "copy_line": "Реагирует мгновенно — без прикосновения"
-    },
-    {
-      "slot": "slot5",
-      "scene": "bright kitchen with wooden surface",
-      "copy_line": "Для кухни и ванной"
-    },
-    {
-      "slot": "slot6",
-      "detail_en": "matte ABS plastic body with silicone seal",
-      "copy_word": "Матовый АБС"
-    },
-    {
-      "slot": "slot7",
-      "measurements": "18 × 9 × 12 см"
-    },
-    {
-      "slot": "slot8",
-      "scenarios": [
-        "Ванная комната",
-        "Кухня",
-        "Гостевой санузел"
-      ],
-      "scenarios_en": [
-        "Modern bathroom with marble countertop",
-        "Bright kitchen with wooden surface",
-        "Minimal beige wall with green plant"
-      ]
-    }
-  ],
-  "need_confirm": true,
-  "_meta": {
-    "query": "дозатор для жидкого мыла",
-    "categoryId": "17027494_17027905_92014",
-    "title1688": "厨房智能感应器洗洁精机洗手机浴室出液器USB充电款壁挂式皂液器",
-    "llm": "qwen-plus",
-    "validation": [
-      "数字无出处(疑似编造): 3 in description_ru",
-      "数字无出处(疑似编造): 350 in description_ru",
-      "数字无出处(疑似编造): 3 in 'Без сверления — за 3 секунды'",
-      "数字无出处(疑似编造): 3 in '3 сек'",
-      "数字无出处(疑似编造): 350 in 'USB-зарядка и 350 мл'",
-      "数字无出处(疑似编造): 350 in '350 мл'",
-      "数字无出处(疑似编造): 30 in 'до 30 дней'",
-      "数字无出处(疑似编造): 18 in '18 × 9 × 12 см'",
-      "数字无出处(疑似编造): 9 in '18 × 9 × 12 см'",
-      "数字无出处(疑似编造): 12 in '18 × 9 × 12 см'"
-    ]
+ "category_path_ru": "Дом и сад/Аксессуары для бани и ванной/Дозатор для жидкого мыла",
+ "style_note": "强调免打孔安装体验与生活情绪价值，数字仅用于可信支撑（如USB充电、容量），避免参数堆砌",
+ "ozon_title": "Дозатор для жидкого мыла сенсорный, подвесной, без сверления, USB-зарядка",
+ "description_ru": "Умный дозатор реагирует на движение руки — никаких касаний и бактерий. Крепится за 3 секунды: не требует сверления, не оставляет следов. Работает от встроенного аккумулятора с USB-зарядкой. Подходит для мыла, геля и жидкого шампуня.\n— Без сверления\n— Зарядка через USB\n— Объём резервуара 350 мл\n— Быстрая установка\n— Гигиеничный бесконтактный режим",
+ "slots": [
+  {
+   "slot": "slot1",
+   "scene": "modern bathroom with marble countertop",
+   "copy_title": "Без сверления — за 3 секунды",
+   "copy_icons": [
+    "Без сверления",
+    "3 сек",
+    "Нет следов"
+   ],
+   "cover_action_en": "a relaxed open palm held under the dispenser nozzle, rich white foam dispensing into the palm"
+  },
+  {
+   "slot": "slot3",
+   "scene_hint": "white studio background",
+   "copy_headline": "USB-зарядка и 350 мл",
+   "args": [
+    "USB-зарядка",
+    "350 мл",
+    "до 30 дней"
+   ]
+  },
+  {
+   "slot": "slot4",
+   "action_en": "hand waving under sensor",
+   "copy_line": "Реагирует мгновенно — без прикосновения"
+  },
+  {
+   "slot": "slot5",
+   "scene": "bright kitchen with wooden surface",
+   "copy_line": "Для кухни и ванной"
+  },
+  {
+   "slot": "slot6",
+   "detail_en": "matte ABS plastic body with silicone seal",
+   "copy_word": "Матовый АБС"
+  },
+  {
+   "slot": "slot7",
+   "measurements": "18 × 9 × 12 см"
+  },
+  {
+   "slot": "slot8",
+   "scenarios": [
+    "Ванная комната",
+    "Кухня",
+    "Гостевой санузел"
+   ],
+   "scenarios_en": [
+    "Modern bathroom with marble countertop",
+    "Bright kitchen with wooden surface",
+    "Minimal beige wall with green plant"
+   ]
   }
+ ],
+ "need_confirm": true,
+ "_meta": {
+  "query": "дозатор для жидкого мыла",
+  "categoryId": "17027494_17027905_92014",
+  "title1688": "厨房智能感应器洗洁精机洗手机浴室出液器USB充电款壁挂式皂液器",
+  "llm": "qwen-plus",
+  "validation": [
+   "数字无出处(疑似编造): 3 in description_ru",
+   "数字无出处(疑似编造): 350 in description_ru",
+   "数字无出处(疑似编造): 3 in 'Без сверления — за 3 секунды'",
+   "数字无出处(疑似编造): 3 in '3 сек'",
+   "数字无出处(疑似编造): 350 in 'USB-зарядка и 350 мл'",
+   "数字无出处(疑似编造): 350 in '350 мл'",
+   "数字无出处(疑似编造): 30 in 'до 30 дней'",
+   "数字无出处(疑似编造): 18 in '18 × 9 × 12 см'",
+   "数字无出处(疑似编造): 9 in '18 × 9 × 12 см'",
+   "数字无出处(疑似编造): 12 in '18 × 9 × 12 см'"
+  ]
+ }
 }

@@ -1,0 +1,430 @@
+{
+  "scriptCompleted": true,
+  "contentDigest": "85f324641d3e163b3913f119637aef655ca2bea721cf04dba8fa1492595ef6c7",
+  "files": [
+    {
+      "path": ".DS_Store",
+      "language": "unknown",
+      "sizeLines": 31,
+      "fileCategory": "code"
+    },
+    {
+      "path": ".ua/config.json",
+      "language": "json",
+      "sizeLines": 2,
+      "fileCategory": "config"
+    },
+    {
+      "path": "GLOSSARY.md",
+      "language": "markdown",
+      "sizeLines": 57,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "README.md",
+      "language": "markdown",
+      "sizeLines": 1,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "ROADMAP.md",
+      "language": "markdown",
+      "sizeLines": 103,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "category_tree.py",
+      "language": "python",
+      "sizeLines": 67,
+      "fileCategory": "code"
+    },
+    {
+      "path": "config.py",
+      "language": "python",
+      "sizeLines": 22,
+      "fileCategory": "code"
+    },
+    {
+      "path": "content_agent.py",
+      "language": "python",
+      "sizeLines": 194,
+      "fileCategory": "code"
+    },
+    {
+      "path": "data/.DS_Store",
+      "language": "unknown",
+      "sizeLines": 0,
+      "fileCategory": "code"
+    },
+    {
+      "path": "data/attr-cache/17028714_594158428.json",
+      "language": "json",
+      "sizeLines": 344,
+      "fileCategory": "config"
+    },
+    {
+      "path": "data/candidates-2026-11-10.json",
+      "language": "json",
+      "sizeLines": 160,
+      "fileCategory": "config"
+    },
+    {
+      "path": "data/categories-leaf.json",
+      "language": "json",
+      "sizeLines": 51542,
+      "fileCategory": "config"
+    },
+    {
+      "path": "data/category-tree-ru.json",
+      "language": "json",
+      "sizeLines": 0,
+      "fileCategory": "config"
+    },
+    {
+      "path": "data/image-search-tasks-2026-11-10.json",
+      "language": "json",
+      "sizeLines": 76,
+      "fileCategory": "config"
+    },
+    {
+      "path": "data/ozon-commission.json",
+      "language": "json",
+      "sizeLines": 5433,
+      "fileCategory": "config"
+    },
+    {
+      "path": "data/ozon-logistics.json",
+      "language": "json",
+      "sizeLines": 865,
+      "fileCategory": "config"
+    },
+    {
+      "path": "data/sourcing-2026-11-10.json",
+      "language": "json",
+      "sizeLines": 285,
+      "fileCategory": "config"
+    },
+    {
+      "path": "data/specs/дозатор_для_жидкого_мыла.json",
+      "language": "json",
+      "sizeLines": 79,
+      "fileCategory": "config"
+    },
+    {
+      "path": "data/specs/органайзер_для_столовых_приборов_в_ящик.json",
+      "language": "json",
+      "sizeLines": 169,
+      "fileCategory": "config"
+    },
+    {
+      "path": "dimensions.py",
+      "language": "python",
+      "sizeLines": 64,
+      "fileCategory": "code"
+    },
+    {
+      "path": "docs/handoffs/2026-11-11-ozon-listing-editor.md",
+      "language": "markdown",
+      "sizeLines": 74,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/research/1688-real-dimensions.md",
+      "language": "markdown",
+      "sizeLines": 76,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/research/nexscope-free-alternatives.md",
+      "language": "markdown",
+      "sizeLines": 55,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/research/ozon-commission-rules.md",
+      "language": "markdown",
+      "sizeLines": 37,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/research/ozon-cover-emotion-v4.md",
+      "language": "markdown",
+      "sizeLines": 99,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/research/ozon-image-set-hot-logic.md",
+      "language": "markdown",
+      "sizeLines": 69,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/research/ozon-listing-api.md",
+      "language": "markdown",
+      "sizeLines": 67,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/research/ozon-pricing-formula.md",
+      "language": "markdown",
+      "sizeLines": 62,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/research/ozon-seller-form-alignment.md",
+      "language": "markdown",
+      "sizeLines": 52,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "image_worker.py",
+      "language": "python",
+      "sizeLines": 363,
+      "fileCategory": "code"
+    },
+    {
+      "path": "keyword_library.py",
+      "language": "python",
+      "sizeLines": 181,
+      "fileCategory": "code"
+    },
+    {
+      "path": "listing_edit.py",
+      "language": "python",
+      "sizeLines": 87,
+      "fileCategory": "code"
+    },
+    {
+      "path": "listing_worker.py",
+      "language": "python",
+      "sizeLines": 142,
+      "fileCategory": "code"
+    },
+    {
+      "path": "nexscope_client.py",
+      "language": "python",
+      "sizeLines": 63,
+      "fileCategory": "code"
+    },
+    {
+      "path": "ozon_client.py",
+      "language": "python",
+      "sizeLines": 88,
+      "fileCategory": "code"
+    },
+    {
+      "path": "pipeline.html",
+      "language": "html",
+      "sizeLines": 395,
+      "fileCategory": "markup"
+    },
+    {
+      "path": "pipeline.py",
+      "language": "python",
+      "sizeLines": 230,
+      "fileCategory": "code"
+    },
+    {
+      "path": "pricing.py",
+      "language": "python",
+      "sizeLines": 114,
+      "fileCategory": "code"
+    },
+    {
+      "path": "prompts/slot1_cover_hook_v3.txt",
+      "language": "txt",
+      "sizeLines": 14,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "prompts/slot1_payoff_v4.txt",
+      "language": "txt",
+      "sizeLines": 18,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "prompts/slot2_white_bg_v1.txt",
+      "language": "txt",
+      "sizeLines": 2,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "prompts/slot3_arguments_v3.txt",
+      "language": "txt",
+      "sizeLines": 12,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "prompts/slot4_usage_v3.txt",
+      "language": "txt",
+      "sizeLines": 9,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "prompts/slot5_scene_v3.txt",
+      "language": "txt",
+      "sizeLines": 9,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "prompts/slot6_detail_v3.txt",
+      "language": "txt",
+      "sizeLines": 8,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "prompts/slot7_size_v3.txt",
+      "language": "txt",
+      "sizeLines": 9,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "prompts/slot8_scenarios_v3.txt",
+      "language": "txt",
+      "sizeLines": 14,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "prompts/style_ref/detail_strips_v1.webp",
+      "language": "webp",
+      "sizeLines": 345,
+      "fileCategory": "code"
+    },
+    {
+      "path": "prompts/style_ref/main_headline_v1.webp",
+      "language": "webp",
+      "sizeLines": 321,
+      "fileCategory": "code"
+    },
+    {
+      "path": "prompts/style_ref/scenarios_circle_v1.webp",
+      "language": "webp",
+      "sizeLines": 301,
+      "fileCategory": "code"
+    },
+    {
+      "path": "prompts/style_ref/selling_point_v1.webp",
+      "language": "webp",
+      "sizeLines": 269,
+      "fileCategory": "code"
+    },
+    {
+      "path": "prompts/style_ref/size_arrows_v1.webp",
+      "language": "webp",
+      "sizeLines": 261,
+      "fileCategory": "code"
+    },
+    {
+      "path": "prompts/style_ref/usage_grid_v1.webp",
+      "language": "webp",
+      "sizeLines": 369,
+      "fileCategory": "code"
+    },
+    {
+      "path": "review_server.py",
+      "language": "python",
+      "sizeLines": 931,
+      "fileCategory": "code"
+    },
+    {
+      "path": "seeds.txt",
+      "language": "txt",
+      "sizeLines": 7,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "select_products.py",
+      "language": "python",
+      "sizeLines": 69,
+      "fileCategory": "code"
+    },
+    {
+      "path": "sourcing_agent.py",
+      "language": "python",
+      "sizeLines": 340,
+      "fileCategory": "code"
+    },
+    {
+      "path": "sync_to_db.py",
+      "language": "python",
+      "sizeLines": 191,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/test_identity_gate.py",
+      "language": "python",
+      "sizeLines": 120,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/test_listing_edit.py",
+      "language": "python",
+      "sizeLines": 88,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/test_listing_worker.py",
+      "language": "python",
+      "sizeLines": 72,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/test_nexscope_flow.py",
+      "language": "python",
+      "sizeLines": 122,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/test_ozon_client.py",
+      "language": "python",
+      "sizeLines": 34,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/test_pricing.py",
+      "language": "python",
+      "sizeLines": 97,
+      "fileCategory": "code"
+    },
+    {
+      "path": "text_overlay.py",
+      "language": "python",
+      "sizeLines": 269,
+      "fileCategory": "code"
+    },
+    {
+      "path": "trend_check.py",
+      "language": "python",
+      "sizeLines": 76,
+      "fileCategory": "code"
+    },
+    {
+      "path": "ui-sketch.html",
+      "language": "html",
+      "sizeLines": 316,
+      "fileCategory": "markup"
+    }
+  ],
+  "totalFiles": 67,
+  "filteredByIgnore": 4,
+  "estimatedComplexity": "moderate",
+  "failures": [],
+  "stats": {
+    "filesScanned": 67,
+    "byCategory": {
+      "code": 32,
+      "config": 11,
+      "docs": 22,
+      "markup": 2
+    },
+    "byLanguage": {
+      "unknown": 2,
+      "json": 11,
+      "markdown": 12,
+      "python": 24,
+      "html": 2,
+      "txt": 10,
+      "webp": 6
+    }
+  }
+}

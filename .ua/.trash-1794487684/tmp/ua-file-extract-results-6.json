@@ -1,0 +1,165 @@
+{
+  "scriptCompleted": true,
+  "filesAnalyzed": 7,
+  "filesSkipped": [],
+  "filesUnreadable": [],
+  "analysisOutcomes": {
+    "structure": {
+      "succeeded": 7,
+      "failed": 0
+    },
+    "callGraph": {
+      "succeeded": 0,
+      "failed": 0,
+      "skipped": 7
+    }
+  },
+  "results": [
+    {
+      "path": "data/candidates-2026-11-10.json",
+      "language": "json",
+      "fileCategory": "config",
+      "totalLines": 161,
+      "nonEmptyLines": 161,
+      "sections": [
+        {
+          "heading": "generated_at",
+          "level": 1,
+          "line": 2
+        },
+        {
+          "heading": "source",
+          "level": 1,
+          "line": 3
+        },
+        {
+          "heading": "candidates",
+          "level": 1,
+          "line": 4
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 3
+      }
+    },
+    {
+      "path": "data/categories-leaf.json",
+      "language": "json",
+      "fileCategory": "config",
+      "totalLines": 51543,
+      "nonEmptyLines": 51543,
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 0
+      }
+    },
+    {
+      "path": "data/category-tree-ru.json",
+      "language": "json",
+      "fileCategory": "config",
+      "totalLines": 1,
+      "nonEmptyLines": 1,
+      "sections": [
+        {
+          "heading": "result",
+          "level": 1,
+          "line": 1
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 1
+      }
+    },
+    {
+      "path": "data/image-search-tasks-2026-11-10.json",
+      "language": "json",
+      "fileCategory": "config",
+      "totalLines": 77,
+      "nonEmptyLines": 77,
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 0
+      }
+    },
+    {
+      "path": "data/ozon-commission.json",
+      "language": "json",
+      "fileCategory": "config",
+      "totalLines": 5434,
+      "nonEmptyLines": 5434,
+      "sections": [
+        {
+          "heading": "_meta",
+          "level": 1,
+          "line": 2
+        },
+        {
+          "heading": "commission",
+          "level": 1,
+          "line": 12
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 2
+      }
+    },
+    {
+      "path": "data/ozon-logistics.json",
+      "language": "json",
+      "fileCategory": "config",
+      "totalLines": 866,
+      "nonEmptyLines": 866,
+      "sections": [
+        {
+          "heading": "_meta",
+          "level": 1,
+          "line": 2
+        },
+        {
+          "heading": "classes",
+          "level": 1,
+          "line": 18
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 2
+      }
+    },
+    {
+      "path": "data/sourcing-2026-11-10.json",
+      "language": "json",
+      "fileCategory": "config",
+      "totalLines": 286,
+      "nonEmptyLines": 286,
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 0
+      }
+    }
+  ]
+}

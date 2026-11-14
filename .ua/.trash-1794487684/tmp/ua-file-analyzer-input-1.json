@@ -1,0 +1,68 @@
+{
+  "projectRoot": "/Users/jiaoyumin/rust_workspace/ozon-pipeline",
+  "batchFiles": [
+    {
+      "path": "config.py",
+      "language": "python",
+      "sizeLines": 22,
+      "fileCategory": "code"
+    },
+    {
+      "path": "content_agent.py",
+      "language": "python",
+      "sizeLines": 194,
+      "fileCategory": "code"
+    },
+    {
+      "path": "dimensions.py",
+      "language": "python",
+      "sizeLines": 64,
+      "fileCategory": "code"
+    },
+    {
+      "path": "image_worker.py",
+      "language": "python",
+      "sizeLines": 363,
+      "fileCategory": "code"
+    },
+    {
+      "path": "sourcing_agent.py",
+      "language": "python",
+      "sizeLines": 340,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/test_identity_gate.py",
+      "language": "python",
+      "sizeLines": 120,
+      "fileCategory": "code"
+    },
+    {
+      "path": "text_overlay.py",
+      "language": "python",
+      "sizeLines": 269,
+      "fileCategory": "code"
+    }
+  ],
+  "batchImportData": {
+    "config.py": [],
+    "content_agent.py": [
+      "config.py"
+    ],
+    "dimensions.py": [
+      "config.py"
+    ],
+    "image_worker.py": [
+      "config.py",
+      "text_overlay.py"
+    ],
+    "sourcing_agent.py": [
+      "config.py"
+    ],
+    "tests/test_identity_gate.py": [
+      "image_worker.py",
+      "sourcing_agent.py"
+    ],
+    "text_overlay.py": []
+  }
+}

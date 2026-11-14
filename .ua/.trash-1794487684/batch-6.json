@@ -1,0 +1,103 @@
+{
+  "nodes": [
+    {
+      "id": "config:data/candidates-2026-11-10.json",
+      "type": "config",
+      "name": "candidates-2026-11-10.json",
+      "filePath": "data/candidates-2026-11-10.json",
+      "summary": "保存由关键词库生成的候选词与 Ozon top 商品快照，是选品阶段的输入数据。",
+      "tags": [
+        "数据-缓存",
+        "配置",
+        "业务-规则"
+      ],
+      "complexity": "moderate",
+      "languageNotes": "JSON 文件作为本地事实缓存或配置输入，由对应 worker 直接读取。"
+    },
+    {
+      "id": "config:data/categories-leaf.json",
+      "type": "config",
+      "name": "categories-leaf.json",
+      "filePath": "data/categories-leaf.json",
+      "summary": "保存 Ozon 末级类目展开表，供 content_agent 查类目路径和 keyword_library 生成白名单。",
+      "tags": [
+        "数据-缓存",
+        "配置",
+        "业务-规则"
+      ],
+      "complexity": "complex",
+      "languageNotes": "JSON 文件作为本地事实缓存或配置输入，由对应 worker 直接读取。"
+    },
+    {
+      "id": "config:data/category-tree-ru.json",
+      "type": "config",
+      "name": "category-tree-ru.json",
+      "filePath": "data/category-tree-ru.json",
+      "summary": "保存 Ozon Seller API 返回的俄语原始类目树，是末级类目表的上游缓存。",
+      "tags": [
+        "数据-缓存",
+        "配置",
+        "业务-规则"
+      ],
+      "complexity": "simple",
+      "languageNotes": "JSON 文件作为本地事实缓存或配置输入，由对应 worker 直接读取。"
+    },
+    {
+      "id": "config:data/image-search-tasks-2026-11-10.json",
+      "type": "config",
+      "name": "image-search-tasks-2026-11-10.json",
+      "filePath": "data/image-search-tasks-2026-11-10.json",
+      "summary": "保存待执行 1688 图搜的 Ozon 图片任务列表，连接选品结果与找货 worker。",
+      "tags": [
+        "数据-缓存",
+        "配置",
+        "业务-规则"
+      ],
+      "complexity": "moderate",
+      "languageNotes": "JSON 文件作为本地事实缓存或配置输入，由对应 worker 直接读取。"
+    },
+    {
+      "id": "config:data/ozon-commission.json",
+      "type": "config",
+      "name": "ozon-commission.json",
+      "filePath": "data/ozon-commission.json",
+      "summary": "保存 Ozon 类目佣金三档费率数据，pricing.py 用它按售价档计算佣金。",
+      "tags": [
+        "数据-缓存",
+        "配置",
+        "业务-规则"
+      ],
+      "complexity": "complex",
+      "languageNotes": "JSON 文件作为本地事实缓存或配置输入，由对应 worker 直接读取。"
+    },
+    {
+      "id": "config:data/ozon-logistics.json",
+      "type": "config",
+      "name": "ozon-logistics.json",
+      "filePath": "data/ozon-logistics.json",
+      "summary": "保存 Ozon 跨境物流方案、费用公式和尺寸档元数据，支撑 pricing.py 的运费计算。",
+      "tags": [
+        "数据-缓存",
+        "配置",
+        "业务-规则"
+      ],
+      "complexity": "complex",
+      "languageNotes": "JSON 文件作为本地事实缓存或配置输入，由对应 worker 直接读取。"
+    },
+    {
+      "id": "config:data/sourcing-2026-11-10.json",
+      "type": "config",
+      "name": "sourcing-2026-11-10.json",
+      "filePath": "data/sourcing-2026-11-10.json",
+      "summary": "保存 1688 找货结果、供应商价格、销量和同一性筛选信息，是成本核算与生图的输入。",
+      "tags": [
+        "数据-缓存",
+        "配置",
+        "业务-规则"
+      ],
+      "complexity": "complex",
+      "languageNotes": "JSON 文件作为本地事实缓存或配置输入，由对应 worker 直接读取。"
+    }
+  ],
+  "edges": []
+}

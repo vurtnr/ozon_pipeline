@@ -1,85 +1,170 @@
 {
-  "category_path_ru": "Дом и сад/Инвентарь для дома/Органайзер для столовых приборов",
-  "style_note": "强调免工具安装体验与空间适配情绪价值，数字仅用于分格数和容量等可验证参数",
+ "category_path_ru": "Дом и сад/Инвентарь для дома/Органайзер для столовых приборов",
+ "style_note": "强调免工具安装体验与空间适配情绪价值，数字仅用于分格数和容量等可验证参数",
+ "ozon_title": "Раздвижной органайзер для столовых приборов в ящик, 8 секций, черный",
+ "description_ru": "Убирает хаос в ящике — легко адаптируется под любую глубину. Подходит для ножей, вилок, ложек и даже мелких кухонных аксессуаров. Устойчивая конструкция не смещается при открывании-закрывании ящика.\n- 8 функциональных секций\n- Регулируемая ширина: от 32 до 45 см\n- Объем: 350 мл на секцию\n- Установка без сверления и инструментов\n- Материал: прочный ПП (полипропилен)",
+ "slots": [
+  {
+   "slot": "slot1",
+   "scene": "bright kitchen with wooden surface",
+   "copy_title": "Влезает в любой ящик",
+   "copy_icons": [
+    "8 секций",
+    "Без сверления",
+    "32–45 см"
+   ],
+   "cover_action_en": "the expandable organizer, keeping its exact light-grey color and its exact compartment layout, inside a fully open kitchen drawer, compartments neatly filled with forks, spoons and knives, seen from a slightly high angle; no people, no hands"
+  },
+  {
+   "slot": "slot3",
+   "scene_hint": "white studio background",
+   "copy_headline": "Подстраивается под ваш ящик",
+   "args": [
+    "32 см",
+    "45 см",
+    "8 секций"
+   ]
+  },
+  {
+   "slot": "slot4",
+   "action_en": "a hand placing the expanded organizer into a kitchen drawer filled with forks, spoons and knives",
+   "copy_line": "Растягивается за 3 секунды"
+  },
+  {
+   "slot": "slot5",
+   "scene": "modern bathroom with marble countertop",
+   "copy_line": "Идеален для туалетных принадлежностей"
+  },
+  {
+   "slot": "slot6",
+   "detail_en": "close-up of textured PP surface",
+   "copy_word": "ПП"
+  },
+  {
+   "slot": "slot7",
+   "measurements": "32–45 × 15 × 5 см"
+  },
+  {
+   "slot": "slot8",
+   "scenarios": [
+    "Кухня",
+    "Ванная",
+    "Рабочий стол"
+   ],
+   "scenarios_en": [
+    "Bright kitchen drawer with cutlery",
+    "Modern bathroom vanity with grooming tools",
+    "Minimal desk drawer with stationery"
+   ]
+  }
+ ],
+ "need_confirm": true,
+ "_meta": {
+  "query": "органайзер для столовых приборов в ящик",
+  "categoryId": "17027494_17028714_594158428",
+  "title1688": "TEMU跨境伸缩厨房餐具收纳盒多格刀叉勺整理托盘大容量抽屉分隔盒",
+  "llm": "qwen-plus",
+  "validation": [
+   "数字无出处(疑似编造): 8 in description_ru",
+   "数字无出处(疑似编造): 32 in description_ru",
+   "数字无出处(疑似编造): 45 in description_ru",
+   "数字无出处(疑似编造): 350 in description_ru",
+   "数字无出处(疑似编造): 8 in 'Раздвижной органайзер для столовых приборов в ящик, 8 секций, черный'",
+   "数字无出处(疑似编造): 8 in '8 секций'",
+   "数字无出处(疑似编造): 32 in '32–45 см'",
+   "数字无出处(疑似编造): 45 in '32–45 см'",
+   "数字无出处(疑似编造): 32 in '32 см'",
+   "数字无出处(疑似编造): 45 in '45 см'",
+   "数字无出处(疑似编造): 8 in '8 секций'",
+   "数字无出处(疑似编造): 3 in 'Растягивается за 3 секунды'",
+   "数字无出处(疑似编造): 32 in '32–45 × 15 × 5 см'",
+   "数字无出处(疑似编造): 45 in '32–45 × 15 × 5 см'",
+   "数字无出处(疑似编造): 15 in '32–45 × 15 × 5 см'",
+   "数字无出处(疑似编造): 5 in '32–45 × 15 × 5 см'"
+  ]
+ },
+ "listing_edits": {
   "ozon_title": "Раздвижной органайзер для столовых приборов в ящик, 8 секций, черный",
   "description_ru": "Убирает хаос в ящике — легко адаптируется под любую глубину. Подходит для ножей, вилок, ложек и даже мелких кухонных аксессуаров. Устойчивая конструкция не смещается при открывании-закрывании ящика.\n- 8 функциональных секций\n- Регулируемая ширина: от 32 до 45 см\n- Объем: 350 мл на секцию\n- Установка без сверления и инструментов\n- Материал: прочный ПП (полипропилен)",
-  "slots": [
-    {
-      "slot": "slot1",
-      "scene": "bright kitchen with wooden surface",
-      "copy_title": "Влезает в любой ящик",
-      "copy_icons": [
-        "8 секций",
-        "Без сверления",
-        "32–45 см"
-      ]
-    },
-    {
-      "slot": "slot3",
-      "scene_hint": "white studio background",
-      "copy_headline": "Подстраивается под ваш ящик",
-      "args": [
-        "32 см",
-        "45 см",
-        "8 секций"
-      ]
-    },
-    {
-      "slot": "slot4",
-      "action_en": "a hand placing the expanded organizer into a kitchen drawer filled with forks, spoons and knives",
-      "copy_line": "Растягивается за 3 секунды"
-    },
-    {
-      "slot": "slot5",
-      "scene": "modern bathroom with marble countertop",
-      "copy_line": "Идеален для туалетных принадлежностей"
-    },
-    {
-      "slot": "slot6",
-      "detail_en": "close-up of textured PP surface",
-      "copy_word": "ПП"
-    },
-    {
-      "slot": "slot7",
-      "measurements": "32–45 × 15 × 5 см"
-    },
-    {
-      "slot": "slot8",
-      "scenarios": [
-        "Кухня",
-        "Ванная",
-        "Рабочий стол"
-      ],
-      "scenarios_en": [
-        "Bright kitchen drawer with cutlery",
-        "Modern bathroom vanity with grooming tools",
-        "Minimal desk drawer with stationery"
-      ]
-    }
-  ],
-  "need_confirm": true,
-  "_meta": {
-    "query": "органайзер для столовых приборов в ящик",
-    "categoryId": "17027494_17028714_594158428",
-    "title1688": "TEMU跨境伸缩厨房餐具收纳盒多格刀叉勺整理托盘大容量抽屉分隔盒",
-    "llm": "qwen-plus",
-    "validation": [
-      "数字无出处(疑似编造): 8 in description_ru",
-      "数字无出处(疑似编造): 32 in description_ru",
-      "数字无出处(疑似编造): 45 in description_ru",
-      "数字无出处(疑似编造): 350 in description_ru",
-      "数字无出处(疑似编造): 8 in 'Раздвижной органайзер для столовых приборов в ящик, 8 секций, черный'",
-      "数字无出处(疑似编造): 8 in '8 секций'",
-      "数字无出处(疑似编造): 32 in '32–45 см'",
-      "数字无出处(疑似编造): 45 in '32–45 см'",
-      "数字无出处(疑似编造): 32 in '32 см'",
-      "数字无出处(疑似编造): 45 in '45 см'",
-      "数字无出处(疑似编造): 8 in '8 секций'",
-      "数字无出处(疑似编造): 3 in 'Растягивается за 3 секунды'",
-      "数字无出处(疑似编造): 32 in '32–45 × 15 × 5 см'",
-      "数字无出处(疑似编造): 45 in '32–45 × 15 × 5 см'",
-      "数字无出处(疑似编造): 15 in '32–45 × 15 × 5 см'",
-      "数字无出处(疑似编造): 5 in '32–45 × 15 × 5 см'"
+  "dimensions_cm": {
+   "length": 35.0,
+   "width": 25.0,
+   "height": 6.0
+  },
+  "weight_g": 300.0,
+  "attributes": [
+   {
+    "id": 8229,
+    "complex_id": 0,
+    "values": [
+     {
+      "dictionary_value_id": 594158428,
+      "value": "Органайзер для столовых приборов"
+     }
     ]
-  }
+   },
+   {
+    "id": 9048,
+    "complex_id": 0,
+    "values": [
+     {
+      "value": "Органайзер раздвижной 8 секций"
+     }
+    ]
+   },
+   {
+    "id": 8415,
+    "complex_id": 0,
+    "values": [
+     {
+      "value": "35"
+     }
+    ]
+   },
+   {
+    "id": 8416,
+    "complex_id": 0,
+    "values": [
+     {
+      "value": "25"
+     }
+    ]
+   },
+   {
+    "id": 10097,
+    "complex_id": 0,
+    "values": [
+     {
+      "value": "Черный"
+     }
+    ]
+   }
+  ],
+  "pricing": {
+   "price_cny": 31.54,
+   "old_price_cny": 63.09,
+   "price_rub": 393.36,
+   "currency": "CNY",
+   "commission_tier": 1,
+   "commission_pct": 12,
+   "cate_fee": 3.79,
+   "logistics": {
+    "class": "extra_small",
+    "provider": "OGL",
+    "mode": "economy",
+    "delivery_days": "10-15",
+    "fee": 10.4
+   },
+   "purchase_cny": 10,
+   "china_fee": 0,
+   "ad_fee": 0,
+   "other_fee": 0.32,
+   "ito_fee": 0.1,
+   "wc_fee": 0.63,
+   "profit_cny": 6.31,
+   "rate_cnyrub": 12.47
+  },
+  "edited_at": "2026-11-11T15:47:17",
+  "source": "manual"
+ }
 }

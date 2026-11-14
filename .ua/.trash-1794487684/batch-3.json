@@ -1,0 +1,874 @@
+{
+  "nodes": [
+    {
+      "id": "file:keyword_library.py",
+      "type": "file",
+      "name": "keyword_library.py",
+      "filePath": "keyword_library.py",
+      "summary": "把 Nexscope 词级指标资产化到本地 SQLite，支持类目 harvest、合格词消费、刷新和统计。",
+      "tags": [
+        "关键词-库",
+        "nexscope",
+        "sqlite",
+        "选品"
+      ],
+      "complexity": "moderate",
+      "languageNotes": "Python 脚本以标准库和少量外部 SDK 组合为主，模块级函数承担主要业务步骤。"
+    },
+    {
+      "id": "function:keyword_library.py:whitelist",
+      "type": "function",
+      "name": "whitelist",
+      "filePath": "keyword_library.py",
+      "lineRange": [
+        49,
+        53
+      ],
+      "summary": "从 Ozon 末级类目表中过滤禁用和黑名单一级类目，生成可 harvest 的叶类目名。",
+      "tags": [
+        "业务-逻辑",
+        "工具函数",
+        "python"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:keyword_library.py:_harvested_seeds",
+      "type": "function",
+      "name": "_harvested_seeds",
+      "filePath": "keyword_library.py",
+      "lineRange": [
+        56,
+        57
+      ],
+      "summary": "读取已经 harvest 过的类目种子集合，用作轮换游标。",
+      "tags": [
+        "内部-辅助",
+        "工具函数",
+        "实现-细节"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:keyword_library.py:_upsert",
+      "type": "function",
+      "name": "_upsert",
+      "filePath": "keyword_library.py",
+      "lineRange": [
+        60,
+        87
+      ],
+      "summary": "把 Nexscope 返回的关键词指标和 top 商品写入 keywords 表。",
+      "tags": [
+        "内部-辅助",
+        "工具函数",
+        "实现-细节"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:keyword_library.py:build",
+      "type": "function",
+      "name": "build",
+      "filePath": "keyword_library.py",
+      "lineRange": [
+        90,
+        112
+      ],
+      "summary": "按白名单或显式 seeds 调用 Nexscope 建库，并记录已 harvest 类目。",
+      "tags": [
+        "业务-逻辑",
+        "工具函数",
+        "python"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:keyword_library.py:passes",
+      "type": "function",
+      "name": "passes",
+      "filePath": "keyword_library.py",
+      "lineRange": [
+        115,
+        121
+      ],
+      "summary": "判断关键词是否满足搜索量、增长、竞争、价格和退货率漏斗阈值。",
+      "tags": [
+        "业务-逻辑",
+        "工具函数",
+        "python"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:keyword_library.py:consume",
+      "type": "function",
+      "name": "consume",
+      "filePath": "keyword_library.py",
+      "lineRange": [
+        124,
+        135
+      ],
+      "summary": "按月搜降序弹出合格未消费词并标记 consumed_at。",
+      "tags": [
+        "业务-逻辑",
+        "工具函数",
+        "python"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:keyword_library.py:refresh",
+      "type": "function",
+      "name": "refresh",
+      "filePath": "keyword_library.py",
+      "lineRange": [
+        138,
+        154
+      ],
+      "summary": "重查 TTL 过期关键词并更新本地指标。",
+      "tags": [
+        "业务-逻辑",
+        "工具函数",
+        "python"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:keyword_library.py:stats",
+      "type": "function",
+      "name": "stats",
+      "filePath": "keyword_library.py",
+      "lineRange": [
+        157,
+        164
+      ],
+      "summary": "统计总词数、合格未消费词、已消费词和今日估算积分。",
+      "tags": [
+        "业务-逻辑",
+        "工具函数",
+        "python"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:nexscope_client.py",
+      "type": "file",
+      "name": "nexscope_client.py",
+      "filePath": "nexscope_client.py",
+      "summary": "封装 Nexscope API 调用、积分记账与日熔断，避免批量循环误烧额度。",
+      "tags": [
+        "api-client",
+        "积分-熔断",
+        "nexscope"
+      ],
+      "complexity": "moderate",
+      "languageNotes": "Python 脚本以标准库和少量外部 SDK 组合为主，模块级函数承担主要业务步骤。"
+    },
+    {
+      "id": "function:nexscope_client.py:spent_today",
+      "type": "function",
+      "name": "spent_today",
+      "filePath": "nexscope_client.py",
+      "lineRange": [
+        30,
+        35
+      ],
+      "summary": "汇总当天 credit_log 中的估算积分消耗。",
+      "tags": [
+        "api",
+        "服务-调用",
+        "工具函数"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:nexscope_client.py:call",
+      "type": "function",
+      "name": "call",
+      "filePath": "nexscope_client.py",
+      "lineRange": [
+        38,
+        57
+      ],
+      "summary": "在日熔断保护下 POST Nexscope endpoint，并把估算积分写入 credit_log。",
+      "tags": [
+        "api",
+        "服务-调用",
+        "工具函数"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:nexscope_client.py:market_keyword_search",
+      "type": "function",
+      "name": "market_keyword_search",
+      "filePath": "nexscope_client.py",
+      "lineRange": [
+        60,
+        63
+      ],
+      "summary": "调用 marketKeywordSearch 查询单个关键词并返回相关词级指标。",
+      "tags": [
+        "api",
+        "服务-调用",
+        "工具函数"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "class:nexscope_client.py:CreditFuseError",
+      "type": "class",
+      "name": "CreditFuseError",
+      "filePath": "nexscope_client.py",
+      "lineRange": [
+        26,
+        27
+      ],
+      "summary": "表示 Nexscope 日积分预算被熔断的运行时错误，阻止继续调用付费 API。",
+      "tags": [
+        "异常",
+        "熔断",
+        "错误-处理"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:select_products.py",
+      "type": "file",
+      "name": "select_products.py",
+      "filePath": "select_products.py",
+      "summary": "从本地关键词库消费合格词，导出候选商品及 top Ozon 商品，驱动后续找货阶段。",
+      "tags": [
+        "选品",
+        "导出",
+        "候选-商品"
+      ],
+      "complexity": "moderate",
+      "languageNotes": "Python 脚本以标准库和少量外部 SDK 组合为主，模块级函数承担主要业务步骤。"
+    },
+    {
+      "id": "function:select_products.py:main",
+      "type": "function",
+      "name": "main",
+      "filePath": "select_products.py",
+      "lineRange": [
+        29,
+        65
+      ],
+      "summary": "从关键词库消费候选词并导出 candidates JSON。",
+      "tags": [
+        "入口点",
+        "cli",
+        "编排"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:tests/test_nexscope_flow.py",
+      "type": "file",
+      "name": "test_nexscope_flow.py",
+      "filePath": "tests/test_nexscope_flow.py",
+      "summary": "覆盖 Nexscope 关键词库构建、消费、防重复、趋势检查和积分熔断的端到端流程。",
+      "tags": [
+        "测试",
+        "pytest",
+        "nexscope-流程"
+      ],
+      "complexity": "moderate",
+      "languageNotes": "Python 脚本以标准库和少量外部 SDK 组合为主，模块级函数承担主要业务步骤。"
+    },
+    {
+      "id": "function:tests/test_nexscope_flow.py:api_row",
+      "type": "function",
+      "name": "api_row",
+      "filePath": "tests/test_nexscope_flow.py",
+      "lineRange": [
+        20,
+        29
+      ],
+      "summary": "api_row 实现 tests/test_nexscope_flow.py 中对外可复用的业务步骤，支撑该模块的主流程。",
+      "tags": [
+        "测试",
+        "pytest",
+        "回归"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_nexscope_flow.py:db",
+      "type": "function",
+      "name": "db",
+      "filePath": "tests/test_nexscope_flow.py",
+      "lineRange": [
+        33,
+        38
+      ],
+      "summary": "db 实现 tests/test_nexscope_flow.py 中对外可复用的业务步骤，支撑该模块的主流程。",
+      "tags": [
+        "测试",
+        "pytest",
+        "回归"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_nexscope_flow.py:test_build_and_cursor",
+      "type": "function",
+      "name": "test_build_and_cursor",
+      "filePath": "tests/test_nexscope_flow.py",
+      "lineRange": [
+        41,
+        54
+      ],
+      "summary": "验证 build and cursor 场景，作为该流水线行为的回归保护。",
+      "tags": [
+        "测试",
+        "pytest",
+        "回归"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_nexscope_flow.py:test_consume_funnel_and_no_double_emit",
+      "type": "function",
+      "name": "test_consume_funnel_and_no_double_emit",
+      "filePath": "tests/test_nexscope_flow.py",
+      "lineRange": [
+        57,
+        69
+      ],
+      "summary": "验证 consume funnel and no double emit 场景，作为该流水线行为的回归保护。",
+      "tags": [
+        "测试",
+        "pytest",
+        "回归"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_nexscope_flow.py:test_select_products_schema",
+      "type": "function",
+      "name": "test_select_products_schema",
+      "filePath": "tests/test_nexscope_flow.py",
+      "lineRange": [
+        72,
+        88
+      ],
+      "summary": "验证 select products schema 场景，作为该流水线行为的回归保护。",
+      "tags": [
+        "测试",
+        "pytest",
+        "回归"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_nexscope_flow.py:test_trend_check_alerts_collapse",
+      "type": "function",
+      "name": "test_trend_check_alerts_collapse",
+      "filePath": "tests/test_nexscope_flow.py",
+      "lineRange": [
+        91,
+        105
+      ],
+      "summary": "验证 trend check alerts collapse 场景，作为该流水线行为的回归保护。",
+      "tags": [
+        "测试",
+        "pytest",
+        "回归"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_nexscope_flow.py:test_trend_check_healthy_no_alert",
+      "type": "function",
+      "name": "test_trend_check_healthy_no_alert",
+      "filePath": "tests/test_nexscope_flow.py",
+      "lineRange": [
+        108,
+        116
+      ],
+      "summary": "验证 trend check healthy no alert 场景，作为该流水线行为的回归保护。",
+      "tags": [
+        "测试",
+        "pytest",
+        "回归"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_nexscope_flow.py:test_credit_fuse",
+      "type": "function",
+      "name": "test_credit_fuse",
+      "filePath": "tests/test_nexscope_flow.py",
+      "lineRange": [
+        119,
+        122
+      ],
+      "summary": "验证 credit fuse 场景，作为该流水线行为的回归保护。",
+      "tags": [
+        "测试",
+        "pytest",
+        "回归"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:trend_check.py",
+      "type": "file",
+      "name": "trend_check.py",
+      "filePath": "trend_check.py",
+      "summary": "对在监商品重新查询 Nexscope 词级指标，发现搜索量或均价剧烈变化时输出告警。",
+      "tags": [
+        "趋势-检查",
+        "监控",
+        "告警"
+      ],
+      "complexity": "moderate",
+      "languageNotes": "Python 脚本以标准库和少量外部 SDK 组合为主，模块级函数承担主要业务步骤。"
+    },
+    {
+      "id": "function:trend_check.py:watch_list",
+      "type": "function",
+      "name": "watch_list",
+      "filePath": "trend_check.py",
+      "lineRange": [
+        26,
+        35
+      ],
+      "summary": "读取在监商品及其关键词基线，供趋势检查使用。",
+      "tags": [
+        "业务-逻辑",
+        "工具函数",
+        "python"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:trend_check.py:check",
+      "type": "function",
+      "name": "check",
+      "filePath": "trend_check.py",
+      "lineRange": [
+        38,
+        72
+      ],
+      "summary": "重查关键词指标并根据搜索量或均价变化生成趋势告警。",
+      "tags": [
+        "业务-逻辑",
+        "工具函数",
+        "python"
+      ],
+      "complexity": "moderate"
+    }
+  ],
+  "edges": [
+    {
+      "source": "file:keyword_library.py",
+      "target": "function:keyword_library.py:whitelist",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:keyword_library.py",
+      "target": "function:keyword_library.py:whitelist",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:keyword_library.py",
+      "target": "function:keyword_library.py:_harvested_seeds",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:keyword_library.py",
+      "target": "function:keyword_library.py:_harvested_seeds",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:keyword_library.py",
+      "target": "function:keyword_library.py:_upsert",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:keyword_library.py",
+      "target": "function:keyword_library.py:_upsert",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:keyword_library.py",
+      "target": "function:keyword_library.py:build",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:keyword_library.py",
+      "target": "function:keyword_library.py:build",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:keyword_library.py",
+      "target": "function:keyword_library.py:passes",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:keyword_library.py",
+      "target": "function:keyword_library.py:passes",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:keyword_library.py",
+      "target": "function:keyword_library.py:consume",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:keyword_library.py",
+      "target": "function:keyword_library.py:consume",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:keyword_library.py",
+      "target": "function:keyword_library.py:refresh",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:keyword_library.py",
+      "target": "function:keyword_library.py:refresh",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:keyword_library.py",
+      "target": "function:keyword_library.py:stats",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:keyword_library.py",
+      "target": "function:keyword_library.py:stats",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:nexscope_client.py",
+      "target": "function:nexscope_client.py:spent_today",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:nexscope_client.py",
+      "target": "function:nexscope_client.py:spent_today",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:nexscope_client.py",
+      "target": "function:nexscope_client.py:call",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:nexscope_client.py",
+      "target": "function:nexscope_client.py:call",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:nexscope_client.py",
+      "target": "function:nexscope_client.py:market_keyword_search",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:nexscope_client.py",
+      "target": "function:nexscope_client.py:market_keyword_search",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:nexscope_client.py",
+      "target": "class:nexscope_client.py:CreditFuseError",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:nexscope_client.py",
+      "target": "class:nexscope_client.py:CreditFuseError",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:select_products.py",
+      "target": "function:select_products.py:main",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:select_products.py",
+      "target": "function:select_products.py:main",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_nexscope_flow.py",
+      "target": "function:tests/test_nexscope_flow.py:api_row",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_nexscope_flow.py",
+      "target": "function:tests/test_nexscope_flow.py:api_row",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_nexscope_flow.py",
+      "target": "function:tests/test_nexscope_flow.py:db",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_nexscope_flow.py",
+      "target": "function:tests/test_nexscope_flow.py:db",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_nexscope_flow.py",
+      "target": "function:tests/test_nexscope_flow.py:test_build_and_cursor",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_nexscope_flow.py",
+      "target": "function:tests/test_nexscope_flow.py:test_build_and_cursor",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_nexscope_flow.py",
+      "target": "function:tests/test_nexscope_flow.py:test_consume_funnel_and_no_double_emit",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_nexscope_flow.py",
+      "target": "function:tests/test_nexscope_flow.py:test_consume_funnel_and_no_double_emit",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_nexscope_flow.py",
+      "target": "function:tests/test_nexscope_flow.py:test_select_products_schema",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_nexscope_flow.py",
+      "target": "function:tests/test_nexscope_flow.py:test_select_products_schema",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_nexscope_flow.py",
+      "target": "function:tests/test_nexscope_flow.py:test_trend_check_alerts_collapse",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_nexscope_flow.py",
+      "target": "function:tests/test_nexscope_flow.py:test_trend_check_alerts_collapse",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_nexscope_flow.py",
+      "target": "function:tests/test_nexscope_flow.py:test_trend_check_healthy_no_alert",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_nexscope_flow.py",
+      "target": "function:tests/test_nexscope_flow.py:test_trend_check_healthy_no_alert",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_nexscope_flow.py",
+      "target": "function:tests/test_nexscope_flow.py:test_credit_fuse",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_nexscope_flow.py",
+      "target": "function:tests/test_nexscope_flow.py:test_credit_fuse",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:trend_check.py",
+      "target": "function:trend_check.py:watch_list",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:trend_check.py",
+      "target": "function:trend_check.py:watch_list",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:trend_check.py",
+      "target": "function:trend_check.py:check",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:trend_check.py",
+      "target": "function:trend_check.py:check",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:keyword_library.py",
+      "target": "file:nexscope_client.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:keyword_library.py",
+      "target": "file:pipeline.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:nexscope_client.py",
+      "target": "file:config.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:nexscope_client.py",
+      "target": "file:pipeline.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:select_products.py",
+      "target": "file:keyword_library.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:tests/test_nexscope_flow.py",
+      "target": "file:keyword_library.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:tests/test_nexscope_flow.py",
+      "target": "file:nexscope_client.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:tests/test_nexscope_flow.py",
+      "target": "file:pipeline.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:tests/test_nexscope_flow.py",
+      "target": "file:select_products.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:tests/test_nexscope_flow.py",
+      "target": "file:trend_check.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:trend_check.py",
+      "target": "file:nexscope_client.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:trend_check.py",
+      "target": "file:pipeline.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    }
+  ]
+}

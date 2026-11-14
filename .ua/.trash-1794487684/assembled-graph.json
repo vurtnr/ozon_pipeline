@@ -1,0 +1,6135 @@
+{
+  "version": "1.0.0",
+  "project": {
+    "name": "ozon_pipeline",
+    "languages": [
+      "html",
+      "json",
+      "markdown",
+      "python",
+      "txt",
+      "unknown",
+      "webp"
+    ],
+    "frameworks": [
+      "Pillow",
+      "pytest"
+    ],
+    "description": "面向 Ozon 跨境电商的自动化流水线：选品（sourcing）→ 定价 → 图文 listing 生成（8-slot 图片 + 文案）→ 本地图审台审核 → 同步发布，SQLite 作为唯一事实源。",
+    "analyzedAt": "2026-11-12T12:47:51.173841Z",
+    "gitCommitHash": "3eebdabe217002255a18df0a3767c9d5a8d2ea12"
+  },
+  "nodes": [
+    {
+      "id": "file:config.py",
+      "type": "file",
+      "name": "config.py",
+      "filePath": "config.py",
+      "summary": "加载项目根目录的 .env，并导出各类 API 与 OSS 凭据常量，是所有外部服务客户端共享的配置入口。",
+      "tags": [
+        "配置-加载",
+        "环境-变量",
+        "api-凭据"
+      ],
+      "complexity": "simple",
+      "languageNotes": "Python 脚本以标准库和少量外部 SDK 组合为主，模块级函数承担主要业务步骤。"
+    },
+    {
+      "id": "function:config.py:_load",
+      "type": "function",
+      "name": "_load",
+      "filePath": "config.py",
+      "lineRange": [
+        5,
+        11
+      ],
+      "summary": "读取 .env 文件并把键值写入 os.environ，为后续常量读取提供本地覆盖能力。",
+      "tags": [
+        "内部-辅助",
+        "工具函数",
+        "实现-细节"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:content_agent.py",
+      "type": "file",
+      "name": "content_agent.py",
+      "filePath": "content_agent.py",
+      "summary": "把 Ozon 关键词、1688 标题和类目树约束交给 LLM，生成可校验的商品文案与 8-slot 套图规格 JSON。",
+      "tags": [
+        "内容-生成",
+        "llm",
+        "规格-校验",
+        "套图-规划"
+      ],
+      "complexity": "moderate",
+      "languageNotes": "Python 脚本以标准库和少量外部 SDK 组合为主，模块级函数承担主要业务步骤。"
+    },
+    {
+      "id": "function:content_agent.py:lookup_category",
+      "type": "function",
+      "name": "lookup_category",
+      "filePath": "content_agent.py",
+      "lineRange": [
+        74,
+        78
+      ],
+      "summary": "在本地末级类目表中按 categoryId 查找俄语类目路径，避免让 LLM 猜类目。",
+      "tags": [
+        "业务-逻辑",
+        "工具函数",
+        "python"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:content_agent.py:llm_spec",
+      "type": "function",
+      "name": "llm_spec",
+      "filePath": "content_agent.py",
+      "lineRange": [
+        81,
+        107
+      ],
+      "summary": "组装类目、场景和文案约束后调用 qwen-plus，返回商品 content spec JSON。",
+      "tags": [
+        "业务-逻辑",
+        "工具函数",
+        "python"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:content_agent.py:validate",
+      "type": "function",
+      "name": "validate",
+      "filePath": "content_agent.py",
+      "lineRange": [
+        110,
+        160
+      ],
+      "summary": "机械校验生成规格中的禁忌词、长度、slot 完整性和数字溯源问题。",
+      "tags": [
+        "校验",
+        "闸门",
+        "业务-规则"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:content_agent.py:main",
+      "type": "function",
+      "name": "main",
+      "filePath": "content_agent.py",
+      "lineRange": [
+        163,
+        190
+      ],
+      "summary": "解析命令行参数并串联本文件的主要流程。",
+      "tags": [
+        "入口点",
+        "cli",
+        "编排"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:dimensions.py",
+      "type": "file",
+      "name": "dimensions.py",
+      "filePath": "dimensions.py",
+      "summary": "调用 qwen3-vl-plus 从商品图中读取尺寸标注文本，为 slot7 尺寸图提供可溯源的原始数字。",
+      "tags": [
+        "视觉-识别",
+        "尺寸-溯源",
+        "vl-模型"
+      ],
+      "complexity": "moderate",
+      "languageNotes": "Python 脚本以标准库和少量外部 SDK 组合为主，模块级函数承担主要业务步骤。"
+    },
+    {
+      "id": "function:dimensions.py:extract_dimensions",
+      "type": "function",
+      "name": "extract_dimensions",
+      "filePath": "dimensions.py",
+      "lineRange": [
+        27,
+        57
+      ],
+      "summary": "读取远程或本地图像并调用 VL 模型抽取尺寸标注原文，失败时返回空串。",
+      "tags": [
+        "业务-逻辑",
+        "工具函数",
+        "python"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:image_worker.py",
+      "type": "file",
+      "name": "image_worker.py",
+      "filePath": "image_worker.py",
+      "summary": "消费 content spec 与货源图，调用 qwen-image I2I 生成 Ozon 8-slot 套图，并用本地 text_overlay 贴俄语文案。",
+      "tags": [
+        "图像-生成",
+        "worker",
+        "text-overlay",
+        "质量-闸"
+      ],
+      "complexity": "complex",
+      "languageNotes": "Python 脚本以标准库和少量外部 SDK 组合为主，模块级函数承担主要业务步骤。"
+    },
+    {
+      "id": "function:image_worker.py:_as_image",
+      "type": "function",
+      "name": "_as_image",
+      "filePath": "image_worker.py",
+      "lineRange": [
+        76,
+        81
+      ],
+      "summary": "把本地图片转为 base64 data URL，远程图片则直接复用原 URL。",
+      "tags": [
+        "内部-辅助",
+        "工具函数",
+        "实现-细节"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:image_worker.py:call_api",
+      "type": "function",
+      "name": "call_api",
+      "filePath": "image_worker.py",
+      "lineRange": [
+        84,
+        108
+      ],
+      "summary": "调用 qwen-image I2I 接口生成图片，并把返回的图片下载到目标路径。",
+      "tags": [
+        "api",
+        "服务-调用",
+        "工具函数"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:image_worker.py:_vl_has_text",
+      "type": "function",
+      "name": "_vl_has_text",
+      "filePath": "image_worker.py",
+      "lineRange": [
+        111,
+        141
+      ],
+      "summary": "调用 VL 模型判断图片中是否含文字或标识，用作生成图质量闸。",
+      "tags": [
+        "内部-辅助",
+        "工具函数",
+        "实现-细节"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:image_worker.py:_supplier_white_bg",
+      "type": "function",
+      "name": "_supplier_white_bg",
+      "filePath": "image_worker.py",
+      "lineRange": [
+        144,
+        158
+      ],
+      "summary": "把干净供应商原图贴到 Ozon 白底画布，作为低成本且零形变的 slot2 路径。",
+      "tags": [
+        "内部-辅助",
+        "工具函数",
+        "实现-细节"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:image_worker.py:render",
+      "type": "function",
+      "name": "render",
+      "filePath": "image_worker.py",
+      "lineRange": [
+        161,
+        169
+      ],
+      "summary": "渲染提示词模板并替换占位符，同时拦截未填充变量。",
+      "tags": [
+        "业务-逻辑",
+        "工具函数",
+        "python"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:image_worker.py:_slot_spec",
+      "type": "function",
+      "name": "_slot_spec",
+      "filePath": "image_worker.py",
+      "lineRange": [
+        179,
+        180
+      ],
+      "summary": "从 content spec 中按 slot 名称取出对应配置。",
+      "tags": [
+        "内部-辅助",
+        "工具函数",
+        "实现-细节"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:image_worker.py:_measurements_traceable",
+      "type": "function",
+      "name": "_measurements_traceable",
+      "filePath": "image_worker.py",
+      "lineRange": [
+        183,
+        189
+      ],
+      "summary": "检查尺寸标注中的每个数字是否能在来源文本中找到，防止编造参数。",
+      "tags": [
+        "内部-辅助",
+        "工具函数",
+        "实现-细节"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:image_worker.py:generate_slots",
+      "type": "function",
+      "name": "generate_slots",
+      "filePath": "image_worker.py",
+      "lineRange": [
+        192,
+        339
+      ],
+      "summary": "按 content spec、货源图和 only 参数生成整套或指定 slot 图片，并输出 slots-report。",
+      "tags": [
+        "业务-逻辑",
+        "工具函数",
+        "python"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:image_worker.py:main",
+      "type": "function",
+      "name": "main",
+      "filePath": "image_worker.py",
+      "lineRange": [
+        342,
+        359
+      ],
+      "summary": "解析命令行参数并串联本文件的主要流程。",
+      "tags": [
+        "入口点",
+        "cli",
+        "编排"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:sourcing_agent.py",
+      "type": "file",
+      "name": "sourcing_agent.py",
+      "filePath": "sourcing_agent.py",
+      "summary": "把 Ozon 爆款图喂给 1688 图搜 skill，并用 VL 同一性闸筛出可采购货源。",
+      "tags": [
+        "找货-worker",
+        "1688",
+        "同一性-闸",
+        "图搜"
+      ],
+      "complexity": "complex",
+      "languageNotes": "Python 脚本以标准库和少量外部 SDK 组合为主，模块级函数承担主要业务步骤。"
+    },
+    {
+      "id": "function:sourcing_agent.py:run_skill",
+      "type": "function",
+      "name": "run_skill",
+      "filePath": "sourcing_agent.py",
+      "lineRange": [
+        36,
+        50
+      ],
+      "summary": "执行 1688 图搜 skill 并从 stdout 中解析 JSON 结果。",
+      "tags": [
+        "业务-逻辑",
+        "工具函数",
+        "python"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:sourcing_agent.py:localize",
+      "type": "function",
+      "name": "localize",
+      "filePath": "sourcing_agent.py",
+      "lineRange": [
+        53,
+        70
+      ],
+      "summary": "把远程 Ozon 图片下载到临时目录，提升 1688 网关图搜的稳定性。",
+      "tags": [
+        "业务-逻辑",
+        "工具函数",
+        "python"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:sourcing_agent.py:pick_suppliers",
+      "type": "function",
+      "name": "pick_suppliers",
+      "filePath": "sourcing_agent.py",
+      "lineRange": [
+        73,
+        93
+      ],
+      "summary": "按销量、相似度和价格字段筛选并排序 1688 供应商候选。",
+      "tags": [
+        "业务-逻辑",
+        "工具函数",
+        "python"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:sourcing_agent.py:search_one",
+      "type": "function",
+      "name": "search_one",
+      "filePath": "sourcing_agent.py",
+      "lineRange": [
+        96,
+        107
+      ],
+      "summary": "对单张图片运行 1688 图搜并返回标准化结果。",
+      "tags": [
+        "业务-逻辑",
+        "工具函数",
+        "python"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:sourcing_agent.py:vl_same_product",
+      "type": "function",
+      "name": "vl_same_product",
+      "filePath": "sourcing_agent.py",
+      "lineRange": [
+        110,
+        139
+      ],
+      "summary": "用 VL 对拍 Ozon 原图与 1688 候选图，判断是否为同一商品。",
+      "tags": [
+        "业务-逻辑",
+        "工具函数",
+        "python"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:sourcing_agent.py:identity_gate",
+      "type": "function",
+      "name": "identity_gate",
+      "filePath": "sourcing_agent.py",
+      "lineRange": [
+        142,
+        154
+      ],
+      "summary": "按销量顺序检查供应商图片，只保留通过同一性闸的候选。",
+      "tags": [
+        "校验",
+        "闸门",
+        "业务-规则"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:sourcing_agent.py:search_text",
+      "type": "function",
+      "name": "search_text",
+      "filePath": "sourcing_agent.py",
+      "lineRange": [
+        157,
+        186
+      ],
+      "summary": "使用中文关键词执行文字找货，作为图搜失败或相似度不足时的降级路径。",
+      "tags": [
+        "业务-逻辑",
+        "工具函数",
+        "python"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:sourcing_agent.py:vl_describe",
+      "type": "function",
+      "name": "vl_describe",
+      "filePath": "sourcing_agent.py",
+      "lineRange": [
+        189,
+        226
+      ],
+      "summary": "用 VL 从 Ozon 图片生成中文商品描述和采购关键词。",
+      "tags": [
+        "业务-逻辑",
+        "工具函数",
+        "python"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:sourcing_agent.py:search_with_fallback",
+      "type": "function",
+      "name": "search_with_fallback",
+      "filePath": "sourcing_agent.py",
+      "lineRange": [
+        229,
+        242
+      ],
+      "summary": "优先图搜并在相似度不足时自动降级到文字搜索。",
+      "tags": [
+        "业务-逻辑",
+        "工具函数",
+        "python"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:sourcing_agent.py:search_vl",
+      "type": "function",
+      "name": "search_vl",
+      "filePath": "sourcing_agent.py",
+      "lineRange": [
+        245,
+        294
+      ],
+      "summary": "结合 VL 描述、图搜和文字搜索生成找货结果，是默认混合模式。",
+      "tags": [
+        "业务-逻辑",
+        "工具函数",
+        "python"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:sourcing_agent.py:main",
+      "type": "function",
+      "name": "main",
+      "filePath": "sourcing_agent.py",
+      "lineRange": [
+        297,
+        336
+      ],
+      "summary": "解析命令行参数并串联本文件的主要流程。",
+      "tags": [
+        "入口点",
+        "cli",
+        "编排"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:tests/test_identity_gate.py",
+      "type": "file",
+      "name": "test_identity_gate.py",
+      "filePath": "tests/test_identity_gate.py",
+      "summary": "覆盖 1688 货源同一性闸、slot2 供应商图文字闸和 slot7 数字溯源闸的回归测试。",
+      "tags": [
+        "测试",
+        "pytest",
+        "回归-闸门"
+      ],
+      "complexity": "moderate",
+      "languageNotes": "Python 脚本以标准库和少量外部 SDK 组合为主，模块级函数承担主要业务步骤。"
+    },
+    {
+      "id": "function:tests/test_identity_gate.py:_fake_text_search",
+      "type": "function",
+      "name": "_fake_text_search",
+      "filePath": "tests/test_identity_gate.py",
+      "lineRange": [
+        14,
+        16
+      ],
+      "summary": "_fake_text_search 是 tests/test_identity_gate.py 内部辅助函数，封装该模块主流程复用的局部逻辑。",
+      "tags": [
+        "测试",
+        "pytest",
+        "回归"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_identity_gate.py:_prod",
+      "type": "function",
+      "name": "_prod",
+      "filePath": "tests/test_identity_gate.py",
+      "lineRange": [
+        19,
+        22
+      ],
+      "summary": "_prod 是 tests/test_identity_gate.py 内部辅助函数，封装该模块主流程复用的局部逻辑。",
+      "tags": [
+        "测试",
+        "pytest",
+        "回归"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_identity_gate.py:test_identity_gate_skips_wrong_product",
+      "type": "function",
+      "name": "test_identity_gate_skips_wrong_product",
+      "filePath": "tests/test_identity_gate.py",
+      "lineRange": [
+        25,
+        33
+      ],
+      "summary": "验证 identity gate skips wrong product 场景，作为该流水线行为的回归保护。",
+      "tags": [
+        "测试",
+        "pytest",
+        "回归"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_identity_gate.py:test_identity_gate_all_rejected_means_no_source",
+      "type": "function",
+      "name": "test_identity_gate_all_rejected_means_no_source",
+      "filePath": "tests/test_identity_gate.py",
+      "lineRange": [
+        36,
+        41
+      ],
+      "summary": "验证 identity gate all rejected means no source 场景，作为该流水线行为的回归保护。",
+      "tags": [
+        "测试",
+        "pytest",
+        "回归"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_identity_gate.py:test_no_ozon_image_keeps_legacy_behavior",
+      "type": "function",
+      "name": "test_no_ozon_image_keeps_legacy_behavior",
+      "filePath": "tests/test_identity_gate.py",
+      "lineRange": [
+        44,
+        51
+      ],
+      "summary": "验证 no ozon image keeps legacy behavior 场景，作为该流水线行为的回归保护。",
+      "tags": [
+        "测试",
+        "pytest",
+        "回归"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_identity_gate.py:_minimal_spec",
+      "type": "function",
+      "name": "_minimal_spec",
+      "filePath": "tests/test_identity_gate.py",
+      "lineRange": [
+        54,
+        58
+      ],
+      "summary": "_minimal_spec 是 tests/test_identity_gate.py 内部辅助函数，封装该模块主流程复用的局部逻辑。",
+      "tags": [
+        "测试",
+        "pytest",
+        "回归"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_identity_gate.py:_mock_vl_dims",
+      "type": "function",
+      "name": "_mock_vl_dims",
+      "filePath": "tests/test_identity_gate.py",
+      "lineRange": [
+        62,
+        64
+      ],
+      "summary": "_mock_vl_dims 是 tests/test_identity_gate.py 内部辅助函数，封装该模块主流程复用的局部逻辑。",
+      "tags": [
+        "测试",
+        "pytest",
+        "回归"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_identity_gate.py:test_slot7_manual_source_bypasses_trace_gate",
+      "type": "function",
+      "name": "test_slot7_manual_source_bypasses_trace_gate",
+      "filePath": "tests/test_identity_gate.py",
+      "lineRange": [
+        67,
+        80
+      ],
+      "summary": "验证 slot7 manual source bypasses trace gate 场景，作为该流水线行为的回归保护。",
+      "tags": [
+        "测试",
+        "pytest",
+        "回归"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_identity_gate.py:test_slot7_without_source_still_gated",
+      "type": "function",
+      "name": "test_slot7_without_source_still_gated",
+      "filePath": "tests/test_identity_gate.py",
+      "lineRange": [
+        83,
+        90
+      ],
+      "summary": "验证 slot7 without source still gated 场景，作为该流水线行为的回归保护。",
+      "tags": [
+        "测试",
+        "pytest",
+        "回归"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_identity_gate.py:test_slot2_supplier_image_with_text_falls_back_to_ai",
+      "type": "function",
+      "name": "test_slot2_supplier_image_with_text_falls_back_to_ai",
+      "filePath": "tests/test_identity_gate.py",
+      "lineRange": [
+        93,
+        105
+      ],
+      "summary": "验证 slot2 supplier image with text falls back to ai 场景，作为该流水线行为的回归保护。",
+      "tags": [
+        "测试",
+        "pytest",
+        "回归"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_identity_gate.py:test_slot2_clean_supplier_image_used_directly",
+      "type": "function",
+      "name": "test_slot2_clean_supplier_image_used_directly",
+      "filePath": "tests/test_identity_gate.py",
+      "lineRange": [
+        108,
+        120
+      ],
+      "summary": "验证 slot2 clean supplier image used directly 场景，作为该流水线行为的回归保护。",
+      "tags": [
+        "测试",
+        "pytest",
+        "回归"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:text_overlay.py",
+      "type": "file",
+      "name": "text_overlay.py",
+      "filePath": "text_overlay.py",
+      "summary": "基于 PIL 在生成图上叠加俄语标题、徽章、芯片和场景标签，避免 AI 直接渲染西里尔文字。",
+      "tags": [
+        "图像-处理",
+        "pil",
+        "贴字",
+        "俄语-文案"
+      ],
+      "complexity": "complex",
+      "languageNotes": "Python 脚本以标准库和少量外部 SDK 组合为主，模块级函数承担主要业务步骤。"
+    },
+    {
+      "id": "function:text_overlay.py:_font",
+      "type": "function",
+      "name": "_font",
+      "filePath": "text_overlay.py",
+      "lineRange": [
+        23,
+        30
+      ],
+      "summary": "按候选路径加载字体并回退到 PIL 默认字体，保证贴字流程可运行。",
+      "tags": [
+        "内部-辅助",
+        "工具函数",
+        "实现-细节"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:text_overlay.py:_wrap",
+      "type": "function",
+      "name": "_wrap",
+      "filePath": "text_overlay.py",
+      "lineRange": [
+        33,
+        47
+      ],
+      "summary": "按像素宽度贪心折行，超过最大行数时交给更小字号重试。",
+      "tags": [
+        "内部-辅助",
+        "工具函数",
+        "实现-细节"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:text_overlay.py:_adaptive_color",
+      "type": "function",
+      "name": "_adaptive_color",
+      "filePath": "text_overlay.py",
+      "lineRange": [
+        50,
+        53
+      ],
+      "summary": "根据标题区域平均亮度选择深色或浅色文字，提高封面可读性。",
+      "tags": [
+        "内部-辅助",
+        "工具函数",
+        "实现-细节"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:text_overlay.py:overlay_title",
+      "type": "function",
+      "name": "overlay_title",
+      "filePath": "text_overlay.py",
+      "lineRange": [
+        56,
+        91
+      ],
+      "summary": "在图片顶部区域居中叠加自适应俄语大标题。",
+      "tags": [
+        "业务-逻辑",
+        "工具函数",
+        "python"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:text_overlay.py:_fit_single",
+      "type": "function",
+      "name": "_fit_single",
+      "filePath": "text_overlay.py",
+      "lineRange": [
+        94,
+        100
+      ],
+      "summary": "为单行文本寻找能放入限定宽度的最大字号。",
+      "tags": [
+        "内部-辅助",
+        "工具函数",
+        "实现-细节"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:text_overlay.py:overlay_badge",
+      "type": "function",
+      "name": "overlay_badge",
+      "filePath": "text_overlay.py",
+      "lineRange": [
+        103,
+        121
+      ],
+      "summary": "在底部区域绘制圆角数字徽章与粗体白字。",
+      "tags": [
+        "业务-逻辑",
+        "工具函数",
+        "python"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:text_overlay.py:_uniform_fit",
+      "type": "function",
+      "name": "_uniform_fit",
+      "filePath": "text_overlay.py",
+      "lineRange": [
+        124,
+        130
+      ],
+      "summary": "为多条芯片文本计算统一字号，保持视觉一致。",
+      "tags": [
+        "内部-辅助",
+        "工具函数",
+        "实现-细节"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:text_overlay.py:_draw_chip",
+      "type": "function",
+      "name": "_draw_chip",
+      "filePath": "text_overlay.py",
+      "lineRange": [
+        137,
+        146
+      ],
+      "summary": "绘制半透明圆角芯片并返回芯片高度。",
+      "tags": [
+        "内部-辅助",
+        "工具函数",
+        "实现-细节"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:text_overlay.py:_composite",
+      "type": "function",
+      "name": "_composite",
+      "filePath": "text_overlay.py",
+      "lineRange": [
+        149,
+        152
+      ],
+      "summary": "把透明叠加层合成回原图。",
+      "tags": [
+        "内部-辅助",
+        "工具函数",
+        "实现-细节"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:text_overlay.py:overlay_chips",
+      "type": "function",
+      "name": "overlay_chips",
+      "filePath": "text_overlay.py",
+      "lineRange": [
+        155,
+        175
+      ],
+      "summary": "在 slot1 左中区域竖排叠加利益点芯片。",
+      "tags": [
+        "业务-逻辑",
+        "工具函数",
+        "python"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:text_overlay.py:overlay_chips_bottom",
+      "type": "function",
+      "name": "overlay_chips_bottom",
+      "filePath": "text_overlay.py",
+      "lineRange": [
+        178,
+        194
+      ],
+      "summary": "在 slot3 底部预留区水平均分叠加论据芯片。",
+      "tags": [
+        "业务-逻辑",
+        "工具函数",
+        "python"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:text_overlay.py:overlay_icon_labels",
+      "type": "function",
+      "name": "overlay_icon_labels",
+      "filePath": "text_overlay.py",
+      "lineRange": [
+        197,
+        215
+      ],
+      "summary": "在 slot8 三列场景格下方叠加俄语标签。",
+      "tags": [
+        "业务-逻辑",
+        "工具函数",
+        "python"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:text_overlay.py:overlay_caption",
+      "type": "function",
+      "name": "overlay_caption",
+      "filePath": "text_overlay.py",
+      "lineRange": [
+        218,
+        231
+      ],
+      "summary": "在 slot8 底部叠加固定格式说明带。",
+      "tags": [
+        "业务-逻辑",
+        "工具函数",
+        "python"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:text_overlay.py:_selftest",
+      "type": "function",
+      "name": "_selftest",
+      "filePath": "text_overlay.py",
+      "lineRange": [
+        234,
+        257
+      ],
+      "summary": "生成本地自测图片以验证标题、徽章和芯片贴字效果。",
+      "tags": [
+        "内部-辅助",
+        "工具函数",
+        "实现-细节"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:listing_edit.py",
+      "type": "file",
+      "name": "listing_edit.py",
+      "filePath": "listing_edit.py",
+      "summary": "保存审核台中的上架编辑内容，校验标题、重量、价格和属性后写回 SQLite 与 spec 文件。",
+      "tags": [
+        "审核台",
+        "上架-编辑",
+        "校验",
+        "tested"
+      ],
+      "complexity": "moderate",
+      "languageNotes": "Python 脚本以标准库和少量外部 SDK 组合为主，模块级函数承担主要业务步骤。"
+    },
+    {
+      "id": "function:listing_edit.py:_validate",
+      "type": "function",
+      "name": "_validate",
+      "filePath": "listing_edit.py",
+      "lineRange": [
+        19,
+        35
+      ],
+      "summary": "校验审核台编辑内容中的标题长度、重量、定价和属性格式。",
+      "tags": [
+        "内部-辅助",
+        "工具函数",
+        "实现-细节"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:listing_edit.py:save",
+      "type": "function",
+      "name": "save",
+      "filePath": "listing_edit.py",
+      "lineRange": [
+        38,
+        75
+      ],
+      "summary": "保存上架编辑到 spec 与 pipeline metrics，并清除 need_confirm 标记。",
+      "tags": [
+        "业务-逻辑",
+        "工具函数",
+        "python"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:listing_edit.py:get_edits",
+      "type": "function",
+      "name": "get_edits",
+      "filePath": "listing_edit.py",
+      "lineRange": [
+        78,
+        87
+      ],
+      "summary": "从商品 metrics 中读取已保存的 listing_edits，缺失时返回空字典。",
+      "tags": [
+        "业务-逻辑",
+        "工具函数",
+        "python"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:pipeline.py",
+      "type": "file",
+      "name": "pipeline.py",
+      "filePath": "pipeline.py",
+      "summary": "定义 pipeline.db 的 SQLite 状态机、表结构和命令行操作，是选品到上架流水线的唯一事实源。",
+      "tags": [
+        "sqlite",
+        "状态机",
+        "事实源",
+        "cli"
+      ],
+      "complexity": "complex",
+      "languageNotes": "Python 脚本以标准库和少量外部 SDK 组合为主，模块级函数承担主要业务步骤。"
+    },
+    {
+      "id": "function:pipeline.py:conn",
+      "type": "function",
+      "name": "conn",
+      "filePath": "pipeline.py",
+      "lineRange": [
+        105,
+        109
+      ],
+      "summary": "创建带 Row 工厂的 SQLite 连接，并确保 data 目录存在。",
+      "tags": [
+        "业务-逻辑",
+        "工具函数",
+        "python"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:pipeline.py:_migrate",
+      "type": "function",
+      "name": "_migrate",
+      "filePath": "pipeline.py",
+      "lineRange": [
+        111,
+        131
+      ],
+      "summary": "为旧数据库补建新增列和表，保持 schema 增量兼容。",
+      "tags": [
+        "内部-辅助",
+        "工具函数",
+        "实现-细节"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:pipeline.py:now",
+      "type": "function",
+      "name": "now",
+      "filePath": "pipeline.py",
+      "lineRange": [
+        134,
+        135
+      ],
+      "summary": "返回秒级 ISO 时间戳，统一事件和记录更新时间格式。",
+      "tags": [
+        "业务-逻辑",
+        "工具函数",
+        "python"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:pipeline.py:cmd_init",
+      "type": "function",
+      "name": "cmd_init",
+      "filePath": "pipeline.py",
+      "lineRange": [
+        138,
+        142
+      ],
+      "summary": "初始化 SQLite schema，创建产品、事件、审核和关键词相关表。",
+      "tags": [
+        "业务-逻辑",
+        "工具函数",
+        "python"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:pipeline.py:_event",
+      "type": "function",
+      "name": "_event",
+      "filePath": "pipeline.py",
+      "lineRange": [
+        145,
+        147
+      ],
+      "summary": "向 events 表追加状态流转或同步说明记录。",
+      "tags": [
+        "内部-辅助",
+        "工具函数",
+        "实现-细节"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:pipeline.py:cmd_add",
+      "type": "function",
+      "name": "cmd_add",
+      "filePath": "pipeline.py",
+      "lineRange": [
+        150,
+        157
+      ],
+      "summary": "新增候选商品记录并写入 discovered 事件。",
+      "tags": [
+        "业务-逻辑",
+        "工具函数",
+        "python"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:pipeline.py:cmd_advance",
+      "type": "function",
+      "name": "cmd_advance",
+      "filePath": "pipeline.py",
+      "lineRange": [
+        160,
+        171
+      ],
+      "summary": "校验合法状态流转并推进产品状态。",
+      "tags": [
+        "业务-逻辑",
+        "工具函数",
+        "python"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:pipeline.py:cmd_kill",
+      "type": "function",
+      "name": "cmd_kill",
+      "filePath": "pipeline.py",
+      "lineRange": [
+        174,
+        182
+      ],
+      "summary": "将产品标记为 dead 并记录死亡原因。",
+      "tags": [
+        "业务-逻辑",
+        "工具函数",
+        "python"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:pipeline.py:cmd_list",
+      "type": "function",
+      "name": "cmd_list",
+      "filePath": "pipeline.py",
+      "lineRange": [
+        185,
+        193
+      ],
+      "summary": "按状态列出产品，用于 CLI 查看流水线队列。",
+      "tags": [
+        "业务-逻辑",
+        "工具函数",
+        "python"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:pipeline.py:record_review",
+      "type": "function",
+      "name": "record_review",
+      "filePath": "pipeline.py",
+      "lineRange": [
+        196,
+        211
+      ],
+      "summary": "记录图审决策并根据 approve、regenerate 或 kill 推进状态机。",
+      "tags": [
+        "业务-逻辑",
+        "工具函数",
+        "python"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:pricing.py",
+      "type": "file",
+      "name": "pricing.py",
+      "filePath": "pricing.py",
+      "summary": "实现 Ozon 跨境定价公式，按佣金档、物流档和利润率计算售价、划线价与费用拆分。",
+      "tags": [
+        "定价",
+        "佣金",
+        "物流",
+        "公式",
+        "tested"
+      ],
+      "complexity": "moderate",
+      "languageNotes": "Python 脚本以标准库和少量外部 SDK 组合为主，模块级函数承担主要业务步骤。"
+    },
+    {
+      "id": "function:pricing.py:logistics_class",
+      "type": "function",
+      "name": "logistics_class",
+      "filePath": "pricing.py",
+      "lineRange": [
+        26,
+        31
+      ],
+      "summary": "按采购价货值选择 extra_small、small 或 premium_small 物流档。",
+      "tags": [
+        "定价",
+        "计算",
+        "业务-规则"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:pricing.py:_load",
+      "type": "function",
+      "name": "_load",
+      "filePath": "pricing.py",
+      "lineRange": [
+        34,
+        35
+      ],
+      "summary": "_load 是 pricing.py 内部辅助函数，封装该模块主流程复用的局部逻辑。",
+      "tags": [
+        "内部-辅助",
+        "工具函数",
+        "实现-细节"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:pricing.py:commission_tiers",
+      "type": "function",
+      "name": "commission_tiers",
+      "filePath": "pricing.py",
+      "lineRange": [
+        38,
+        43
+      ],
+      "summary": "按类目 ID 从本地佣金库读取三档佣金率。",
+      "tags": [
+        "定价",
+        "计算",
+        "业务-规则"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:pricing.py:shipping_options",
+      "type": "function",
+      "name": "shipping_options",
+      "filePath": "pricing.py",
+      "lineRange": [
+        46,
+        52
+      ],
+      "summary": "按物流档和重量计算所有可用物流方案费用并排序。",
+      "tags": [
+        "定价",
+        "计算",
+        "业务-规则"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:pricing.py:_price_tier",
+      "type": "function",
+      "name": "_price_tier",
+      "filePath": "pricing.py",
+      "lineRange": [
+        55,
+        56
+      ],
+      "summary": "_price_tier 是 pricing.py 内部辅助函数，封装该模块主流程复用的局部逻辑。",
+      "tags": [
+        "内部-辅助",
+        "工具函数",
+        "实现-细节"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:pricing.py:calc",
+      "type": "function",
+      "name": "calc",
+      "filePath": "pricing.py",
+      "lineRange": [
+        59,
+        114
+      ],
+      "summary": "综合采购价、运费、佣金、广告和利润率迭代计算最终售价。",
+      "tags": [
+        "定价",
+        "计算",
+        "业务-规则"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:review_server.py",
+      "type": "file",
+      "name": "review_server.py",
+      "filePath": "review_server.py",
+      "summary": "提供本地图审台 Web 服务，展示流水线看板、图审队列、商品 trace 和上架编辑 API。",
+      "tags": [
+        "web-服务",
+        "审核台",
+        "http-server",
+        "人工-闸"
+      ],
+      "complexity": "complex",
+      "languageNotes": "Python 脚本以标准库和少量外部 SDK 组合为主，模块级函数承担主要业务步骤。"
+    },
+    {
+      "id": "function:review_server.py:load",
+      "type": "function",
+      "name": "load",
+      "filePath": "review_server.py",
+      "lineRange": [
+        325,
+        326
+      ],
+      "summary": "把数据库查询结果转为 dict 列表，简化页面渲染。",
+      "tags": [
+        "业务-逻辑",
+        "工具函数",
+        "python"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:review_server.py:topbar",
+      "type": "function",
+      "name": "topbar",
+      "filePath": "review_server.py",
+      "lineRange": [
+        329,
+        352
+      ],
+      "summary": "计算并渲染审核台顶栏保险丝指标和状态概览。",
+      "tags": [
+        "业务-逻辑",
+        "工具函数",
+        "python"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:review_server.py:page",
+      "type": "function",
+      "name": "page",
+      "filePath": "review_server.py",
+      "lineRange": [
+        355,
+        422
+      ],
+      "summary": "组合通用页面框架、tab 和主体 HTML。",
+      "tags": [
+        "业务-逻辑",
+        "工具函数",
+        "python"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:review_server.py:mini",
+      "type": "function",
+      "name": "mini",
+      "filePath": "review_server.py",
+      "lineRange": [
+        425,
+        436
+      ],
+      "summary": "渲染看板中的小型商品卡片。",
+      "tags": [
+        "业务-逻辑",
+        "工具函数",
+        "python"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:review_server.py:board",
+      "type": "function",
+      "name": "board",
+      "filePath": "review_server.py",
+      "lineRange": [
+        439,
+        461
+      ],
+      "summary": "渲染流水线各状态列与待处理商品概览。",
+      "tags": [
+        "业务-逻辑",
+        "工具函数",
+        "python"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:review_server.py:_spec",
+      "type": "function",
+      "name": "_spec",
+      "filePath": "review_server.py",
+      "lineRange": [
+        464,
+        474
+      ],
+      "summary": "按商品 metrics 读取对应 spec JSON。",
+      "tags": [
+        "内部-辅助",
+        "工具函数",
+        "实现-细节"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:review_server.py:_slots",
+      "type": "function",
+      "name": "_slots",
+      "filePath": "review_server.py",
+      "lineRange": [
+        477,
+        498
+      ],
+      "summary": "从生成目录读取 slot 图片并组织为审核展示数据。",
+      "tags": [
+        "内部-辅助",
+        "工具函数",
+        "实现-细节"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:review_server.py:_compose_measurements",
+      "type": "function",
+      "name": "_compose_measurements",
+      "filePath": "review_server.py",
+      "lineRange": [
+        501,
+        512
+      ],
+      "summary": "把结构化尺寸字段拼成固定俄语单位的尺寸描述。",
+      "tags": [
+        "内部-辅助",
+        "工具函数",
+        "实现-细节"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:review_server.py:gen_slot7",
+      "type": "function",
+      "name": "gen_slot7",
+      "filePath": "review_server.py",
+      "lineRange": [
+        515,
+        547
+      ],
+      "summary": "保存人工尺寸、重生 slot7 并更新数据库中的 spec 和 assets 信息。",
+      "tags": [
+        "业务-逻辑",
+        "工具函数",
+        "python"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:review_server.py:review",
+      "type": "function",
+      "name": "review",
+      "filePath": "review_server.py",
+      "lineRange": [
+        550,
+        681
+      ],
+      "summary": "渲染图审队列详情、8-slot 网格、决策表单和编辑入口。",
+      "tags": [
+        "业务-逻辑",
+        "工具函数",
+        "python"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:review_server.py:trace",
+      "type": "function",
+      "name": "trace",
+      "filePath": "review_server.py",
+      "lineRange": [
+        684,
+        711
+      ],
+      "summary": "渲染单品事件时间线、审核历史和关键 metrics。",
+      "tags": [
+        "业务-逻辑",
+        "工具函数",
+        "python"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:review_server.py:_spec_ids",
+      "type": "function",
+      "name": "_spec_ids",
+      "filePath": "review_server.py",
+      "lineRange": [
+        714,
+        715
+      ],
+      "summary": "从 spec 的 categoryId 中解析 Ozon description_category_id 与 type_id。",
+      "tags": [
+        "内部-辅助",
+        "工具函数",
+        "实现-细节"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:review_server.py:_editor_attrs",
+      "type": "function",
+      "name": "_editor_attrs",
+      "filePath": "review_server.py",
+      "lineRange": [
+        728,
+        731
+      ],
+      "summary": "按白名单过滤并排序审核台编辑器需要展示的 Ozon 属性。",
+      "tags": [
+        "内部-辅助",
+        "工具函数",
+        "实现-细节"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:review_server.py:_commission_options",
+      "type": "function",
+      "name": "_commission_options",
+      "filePath": "review_server.py",
+      "lineRange": [
+        734,
+        745
+      ],
+      "summary": "为编辑器生成当前类目的真实佣金档下拉选项。",
+      "tags": [
+        "内部-辅助",
+        "工具函数",
+        "实现-细节"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:review_server.py:editor_data",
+      "type": "function",
+      "name": "editor_data",
+      "filePath": "review_server.py",
+      "lineRange": [
+        748,
+        767
+      ],
+      "summary": "组装编辑器初始文案、成本、属性、佣金和历史编辑数据。",
+      "tags": [
+        "业务-逻辑",
+        "工具函数",
+        "python"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:review_server.py:attr_values",
+      "type": "function",
+      "name": "attr_values",
+      "filePath": "review_server.py",
+      "lineRange": [
+        770,
+        775
+      ],
+      "summary": "代理查询 Ozon 字典属性可选值。",
+      "tags": [
+        "业务-逻辑",
+        "工具函数",
+        "python"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:review_server.py:shipping",
+      "type": "function",
+      "name": "shipping",
+      "filePath": "review_server.py",
+      "lineRange": [
+        778,
+        780
+      ],
+      "summary": "返回指定成本和重量下的可用物流方案。",
+      "tags": [
+        "业务-逻辑",
+        "工具函数",
+        "python"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:review_server.py:api_price",
+      "type": "function",
+      "name": "api_price",
+      "filePath": "review_server.py",
+      "lineRange": [
+        783,
+        800
+      ],
+      "summary": "根据编辑器输入调用 pricing.calc，返回建议售价和费用拆分。",
+      "tags": [
+        "api",
+        "服务-调用",
+        "工具函数"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:review_server.py:api_edit",
+      "type": "function",
+      "name": "api_edit",
+      "filePath": "review_server.py",
+      "lineRange": [
+        803,
+        818
+      ],
+      "summary": "保存审核台编辑提交并返回校验结果。",
+      "tags": [
+        "api",
+        "服务-调用",
+        "工具函数"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "class:review_server.py:Handler",
+      "type": "class",
+      "name": "Handler",
+      "filePath": "review_server.py",
+      "lineRange": [
+        821,
+        924
+      ],
+      "summary": "处理本地审核台的 GET 与 POST 请求，负责静态媒体、防跳转、API 路由和日志抑制。",
+      "tags": [
+        "http-handler",
+        "web-服务",
+        "路由"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:sync_to_db.py",
+      "type": "file",
+      "name": "sync_to_db.py",
+      "filePath": "sync_to_db.py",
+      "summary": "把 candidates、sourcing、specs 和生成图等离线 artifacts 幂等同步回 pipeline.db。",
+      "tags": [
+        "数据-同步",
+        "幂等",
+        "artifact",
+        "sqlite"
+      ],
+      "complexity": "moderate",
+      "languageNotes": "Python 脚本以标准库和少量外部 SDK 组合为主，模块级函数承担主要业务步骤。"
+    },
+    {
+      "id": "function:sync_to_db.py:_offer_id",
+      "type": "function",
+      "name": "_offer_id",
+      "filePath": "sync_to_db.py",
+      "lineRange": [
+        32,
+        33
+      ],
+      "summary": "从 1688 offer URL 中提取稳定 offer_id。",
+      "tags": [
+        "内部-辅助",
+        "工具函数",
+        "实现-细节"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:sync_to_db.py:latest",
+      "type": "function",
+      "name": "latest",
+      "filePath": "sync_to_db.py",
+      "lineRange": [
+        36,
+        38
+      ],
+      "summary": "按 glob pattern 找到 data 目录中最新的 artifact 文件。",
+      "tags": [
+        "业务-逻辑",
+        "工具函数",
+        "python"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:sync_to_db.py:_advance",
+      "type": "function",
+      "name": "_advance",
+      "filePath": "sync_to_db.py",
+      "lineRange": [
+        41,
+        44
+      ],
+      "summary": "更新产品状态并写入一条状态流转事件。",
+      "tags": [
+        "内部-辅助",
+        "工具函数",
+        "实现-细节"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:sync_to_db.py:sync",
+      "type": "function",
+      "name": "sync",
+      "filePath": "sync_to_db.py",
+      "lineRange": [
+        47,
+        185
+      ],
+      "summary": "读取最新候选、找货、spec 和生成图信息并幂等回填 pipeline.db。",
+      "tags": [
+        "业务-逻辑",
+        "工具函数",
+        "python"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:tests/test_listing_edit.py",
+      "type": "file",
+      "name": "test_listing_edit.py",
+      "filePath": "tests/test_listing_edit.py",
+      "summary": "验证审核台上架编辑保存、字段校验和读取 roundtrip 行为。",
+      "tags": [
+        "测试",
+        "pytest",
+        "编辑器"
+      ],
+      "complexity": "moderate",
+      "languageNotes": "Python 脚本以标准库和少量外部 SDK 组合为主，模块级函数承担主要业务步骤。"
+    },
+    {
+      "id": "function:tests/test_listing_edit.py:env",
+      "type": "function",
+      "name": "env",
+      "filePath": "tests/test_listing_edit.py",
+      "lineRange": [
+        15,
+        31
+      ],
+      "summary": "env 实现 tests/test_listing_edit.py 中对外可复用的业务步骤，支撑该模块的主流程。",
+      "tags": [
+        "测试",
+        "pytest",
+        "回归"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_listing_edit.py:_edits",
+      "type": "function",
+      "name": "_edits",
+      "filePath": "tests/test_listing_edit.py",
+      "lineRange": [
+        34,
+        41
+      ],
+      "summary": "_edits 是 tests/test_listing_edit.py 内部辅助函数，封装该模块主流程复用的局部逻辑。",
+      "tags": [
+        "测试",
+        "pytest",
+        "回归"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_listing_edit.py:test_save_writes_spec_and_clears_need_confirm",
+      "type": "function",
+      "name": "test_save_writes_spec_and_clears_need_confirm",
+      "filePath": "tests/test_listing_edit.py",
+      "lineRange": [
+        44,
+        60
+      ],
+      "summary": "验证 save writes spec and clears need confirm 场景，作为该流水线行为的回归保护。",
+      "tags": [
+        "测试",
+        "pytest",
+        "回归"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_listing_edit.py:test_title_required",
+      "type": "function",
+      "name": "test_title_required",
+      "filePath": "tests/test_listing_edit.py",
+      "lineRange": [
+        63,
+        66
+      ],
+      "summary": "验证 title required 场景，作为该流水线行为的回归保护。",
+      "tags": [
+        "测试",
+        "pytest",
+        "回归"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_listing_edit.py:test_title_too_long",
+      "type": "function",
+      "name": "test_title_too_long",
+      "filePath": "tests/test_listing_edit.py",
+      "lineRange": [
+        69,
+        72
+      ],
+      "summary": "验证 title too long 场景，作为该流水线行为的回归保护。",
+      "tags": [
+        "测试",
+        "pytest",
+        "回归"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_listing_edit.py:test_negative_weight_rejected",
+      "type": "function",
+      "name": "test_negative_weight_rejected",
+      "filePath": "tests/test_listing_edit.py",
+      "lineRange": [
+        75,
+        78
+      ],
+      "summary": "验证 negative weight rejected 场景，作为该流水线行为的回归保护。",
+      "tags": [
+        "测试",
+        "pytest",
+        "回归"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_listing_edit.py:test_get_edits_roundtrip",
+      "type": "function",
+      "name": "test_get_edits_roundtrip",
+      "filePath": "tests/test_listing_edit.py",
+      "lineRange": [
+        81,
+        88
+      ],
+      "summary": "验证 get edits roundtrip 场景，作为该流水线行为的回归保护。",
+      "tags": [
+        "测试",
+        "pytest",
+        "回归"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:tests/test_pricing.py",
+      "type": "file",
+      "name": "test_pricing.py",
+      "filePath": "tests/test_pricing.py",
+      "summary": "验证跨境定价公式、佣金档迭代、物流档阈值和编辑器属性白名单。",
+      "tags": [
+        "测试",
+        "pytest",
+        "定价"
+      ],
+      "complexity": "moderate",
+      "languageNotes": "Python 脚本以标准库和少量外部 SDK 组合为主，模块级函数承担主要业务步骤。"
+    },
+    {
+      "id": "function:tests/test_pricing.py:test_maozi_reference_case",
+      "type": "function",
+      "name": "test_maozi_reference_case",
+      "filePath": "tests/test_pricing.py",
+      "lineRange": [
+        12,
+        27
+      ],
+      "summary": "验证 maozi reference case 场景，作为该流水线行为的回归保护。",
+      "tags": [
+        "测试",
+        "pytest",
+        "回归"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_pricing.py:test_default_shipping_is_cheapest",
+      "type": "function",
+      "name": "test_default_shipping_is_cheapest",
+      "filePath": "tests/test_pricing.py",
+      "lineRange": [
+        30,
+        35
+      ],
+      "summary": "验证 default shipping is cheapest 场景，作为该流水线行为的回归保护。",
+      "tags": [
+        "测试",
+        "pytest",
+        "回归"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_pricing.py:test_commission_tier_iterates_up",
+      "type": "function",
+      "name": "test_commission_tier_iterates_up",
+      "filePath": "tests/test_pricing.py",
+      "lineRange": [
+        38,
+        45
+      ],
+      "summary": "验证 commission tier iterates up 场景，作为该流水线行为的回归保护。",
+      "tags": [
+        "测试",
+        "pytest",
+        "回归"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_pricing.py:test_commission_tier_manual_override",
+      "type": "function",
+      "name": "test_commission_tier_manual_override",
+      "filePath": "tests/test_pricing.py",
+      "lineRange": [
+        48,
+        56
+      ],
+      "summary": "验证 commission tier manual override 场景，作为该流水线行为的回归保护。",
+      "tags": [
+        "测试",
+        "pytest",
+        "回归"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_pricing.py:test_commission_tier_invalid_raises",
+      "type": "function",
+      "name": "test_commission_tier_invalid_raises",
+      "filePath": "tests/test_pricing.py",
+      "lineRange": [
+        59,
+        61
+      ],
+      "summary": "验证 commission tier invalid raises 场景，作为该流水线行为的回归保护。",
+      "tags": [
+        "测试",
+        "pytest",
+        "回归"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_pricing.py:test_editor_attrs_whitelist",
+      "type": "function",
+      "name": "test_editor_attrs_whitelist",
+      "filePath": "tests/test_pricing.py",
+      "lineRange": [
+        64,
+        79
+      ],
+      "summary": "验证 editor attrs whitelist 场景，作为该流水线行为的回归保护。",
+      "tags": [
+        "测试",
+        "pytest",
+        "回归"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_pricing.py:test_logistics_class_thresholds",
+      "type": "function",
+      "name": "test_logistics_class_thresholds",
+      "filePath": "tests/test_pricing.py",
+      "lineRange": [
+        82,
+        85
+      ],
+      "summary": "验证 logistics class thresholds 场景，作为该流水线行为的回归保护。",
+      "tags": [
+        "测试",
+        "pytest",
+        "回归"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_pricing.py:test_unknown_category_raises",
+      "type": "function",
+      "name": "test_unknown_category_raises",
+      "filePath": "tests/test_pricing.py",
+      "lineRange": [
+        88,
+        90
+      ],
+      "summary": "验证 unknown category raises 场景，作为该流水线行为的回归保护。",
+      "tags": [
+        "测试",
+        "pytest",
+        "回归"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_pricing.py:test_negative_denominator_raises",
+      "type": "function",
+      "name": "test_negative_denominator_raises",
+      "filePath": "tests/test_pricing.py",
+      "lineRange": [
+        93,
+        97
+      ],
+      "summary": "验证 negative denominator raises 场景，作为该流水线行为的回归保护。",
+      "tags": [
+        "测试",
+        "pytest",
+        "回归"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:keyword_library.py",
+      "type": "file",
+      "name": "keyword_library.py",
+      "filePath": "keyword_library.py",
+      "summary": "把 Nexscope 词级指标资产化到本地 SQLite，支持类目 harvest、合格词消费、刷新和统计。",
+      "tags": [
+        "关键词-库",
+        "nexscope",
+        "sqlite",
+        "选品"
+      ],
+      "complexity": "moderate",
+      "languageNotes": "Python 脚本以标准库和少量外部 SDK 组合为主，模块级函数承担主要业务步骤。"
+    },
+    {
+      "id": "function:keyword_library.py:whitelist",
+      "type": "function",
+      "name": "whitelist",
+      "filePath": "keyword_library.py",
+      "lineRange": [
+        49,
+        53
+      ],
+      "summary": "从 Ozon 末级类目表中过滤禁用和黑名单一级类目，生成可 harvest 的叶类目名。",
+      "tags": [
+        "业务-逻辑",
+        "工具函数",
+        "python"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:keyword_library.py:_harvested_seeds",
+      "type": "function",
+      "name": "_harvested_seeds",
+      "filePath": "keyword_library.py",
+      "lineRange": [
+        56,
+        57
+      ],
+      "summary": "读取已经 harvest 过的类目种子集合，用作轮换游标。",
+      "tags": [
+        "内部-辅助",
+        "工具函数",
+        "实现-细节"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:keyword_library.py:_upsert",
+      "type": "function",
+      "name": "_upsert",
+      "filePath": "keyword_library.py",
+      "lineRange": [
+        60,
+        87
+      ],
+      "summary": "把 Nexscope 返回的关键词指标和 top 商品写入 keywords 表。",
+      "tags": [
+        "内部-辅助",
+        "工具函数",
+        "实现-细节"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:keyword_library.py:build",
+      "type": "function",
+      "name": "build",
+      "filePath": "keyword_library.py",
+      "lineRange": [
+        90,
+        112
+      ],
+      "summary": "按白名单或显式 seeds 调用 Nexscope 建库，并记录已 harvest 类目。",
+      "tags": [
+        "业务-逻辑",
+        "工具函数",
+        "python"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:keyword_library.py:passes",
+      "type": "function",
+      "name": "passes",
+      "filePath": "keyword_library.py",
+      "lineRange": [
+        115,
+        121
+      ],
+      "summary": "判断关键词是否满足搜索量、增长、竞争、价格和退货率漏斗阈值。",
+      "tags": [
+        "业务-逻辑",
+        "工具函数",
+        "python"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:keyword_library.py:consume",
+      "type": "function",
+      "name": "consume",
+      "filePath": "keyword_library.py",
+      "lineRange": [
+        124,
+        135
+      ],
+      "summary": "按月搜降序弹出合格未消费词并标记 consumed_at。",
+      "tags": [
+        "业务-逻辑",
+        "工具函数",
+        "python"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:keyword_library.py:refresh",
+      "type": "function",
+      "name": "refresh",
+      "filePath": "keyword_library.py",
+      "lineRange": [
+        138,
+        154
+      ],
+      "summary": "重查 TTL 过期关键词并更新本地指标。",
+      "tags": [
+        "业务-逻辑",
+        "工具函数",
+        "python"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:keyword_library.py:stats",
+      "type": "function",
+      "name": "stats",
+      "filePath": "keyword_library.py",
+      "lineRange": [
+        157,
+        164
+      ],
+      "summary": "统计总词数、合格未消费词、已消费词和今日估算积分。",
+      "tags": [
+        "业务-逻辑",
+        "工具函数",
+        "python"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:nexscope_client.py",
+      "type": "file",
+      "name": "nexscope_client.py",
+      "filePath": "nexscope_client.py",
+      "summary": "封装 Nexscope API 调用、积分记账与日熔断，避免批量循环误烧额度。",
+      "tags": [
+        "api-client",
+        "积分-熔断",
+        "nexscope"
+      ],
+      "complexity": "moderate",
+      "languageNotes": "Python 脚本以标准库和少量外部 SDK 组合为主，模块级函数承担主要业务步骤。"
+    },
+    {
+      "id": "function:nexscope_client.py:spent_today",
+      "type": "function",
+      "name": "spent_today",
+      "filePath": "nexscope_client.py",
+      "lineRange": [
+        30,
+        35
+      ],
+      "summary": "汇总当天 credit_log 中的估算积分消耗。",
+      "tags": [
+        "api",
+        "服务-调用",
+        "工具函数"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:nexscope_client.py:call",
+      "type": "function",
+      "name": "call",
+      "filePath": "nexscope_client.py",
+      "lineRange": [
+        38,
+        57
+      ],
+      "summary": "在日熔断保护下 POST Nexscope endpoint，并把估算积分写入 credit_log。",
+      "tags": [
+        "api",
+        "服务-调用",
+        "工具函数"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:nexscope_client.py:market_keyword_search",
+      "type": "function",
+      "name": "market_keyword_search",
+      "filePath": "nexscope_client.py",
+      "lineRange": [
+        60,
+        63
+      ],
+      "summary": "调用 marketKeywordSearch 查询单个关键词并返回相关词级指标。",
+      "tags": [
+        "api",
+        "服务-调用",
+        "工具函数"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "class:nexscope_client.py:CreditFuseError",
+      "type": "class",
+      "name": "CreditFuseError",
+      "filePath": "nexscope_client.py",
+      "lineRange": [
+        26,
+        27
+      ],
+      "summary": "表示 Nexscope 日积分预算被熔断的运行时错误，阻止继续调用付费 API。",
+      "tags": [
+        "异常",
+        "熔断",
+        "错误-处理"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:select_products.py",
+      "type": "file",
+      "name": "select_products.py",
+      "filePath": "select_products.py",
+      "summary": "从本地关键词库消费合格词，导出候选商品及 top Ozon 商品，驱动后续找货阶段。",
+      "tags": [
+        "选品",
+        "导出",
+        "候选-商品"
+      ],
+      "complexity": "moderate",
+      "languageNotes": "Python 脚本以标准库和少量外部 SDK 组合为主，模块级函数承担主要业务步骤。"
+    },
+    {
+      "id": "function:select_products.py:main",
+      "type": "function",
+      "name": "main",
+      "filePath": "select_products.py",
+      "lineRange": [
+        29,
+        65
+      ],
+      "summary": "从关键词库消费候选词并导出 candidates JSON。",
+      "tags": [
+        "入口点",
+        "cli",
+        "编排"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:tests/test_nexscope_flow.py",
+      "type": "file",
+      "name": "test_nexscope_flow.py",
+      "filePath": "tests/test_nexscope_flow.py",
+      "summary": "覆盖 Nexscope 关键词库构建、消费、防重复、趋势检查和积分熔断的端到端流程。",
+      "tags": [
+        "测试",
+        "pytest",
+        "nexscope-流程"
+      ],
+      "complexity": "moderate",
+      "languageNotes": "Python 脚本以标准库和少量外部 SDK 组合为主，模块级函数承担主要业务步骤。"
+    },
+    {
+      "id": "function:tests/test_nexscope_flow.py:api_row",
+      "type": "function",
+      "name": "api_row",
+      "filePath": "tests/test_nexscope_flow.py",
+      "lineRange": [
+        20,
+        29
+      ],
+      "summary": "api_row 实现 tests/test_nexscope_flow.py 中对外可复用的业务步骤，支撑该模块的主流程。",
+      "tags": [
+        "测试",
+        "pytest",
+        "回归"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_nexscope_flow.py:db",
+      "type": "function",
+      "name": "db",
+      "filePath": "tests/test_nexscope_flow.py",
+      "lineRange": [
+        33,
+        38
+      ],
+      "summary": "db 实现 tests/test_nexscope_flow.py 中对外可复用的业务步骤，支撑该模块的主流程。",
+      "tags": [
+        "测试",
+        "pytest",
+        "回归"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_nexscope_flow.py:test_build_and_cursor",
+      "type": "function",
+      "name": "test_build_and_cursor",
+      "filePath": "tests/test_nexscope_flow.py",
+      "lineRange": [
+        41,
+        54
+      ],
+      "summary": "验证 build and cursor 场景，作为该流水线行为的回归保护。",
+      "tags": [
+        "测试",
+        "pytest",
+        "回归"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_nexscope_flow.py:test_consume_funnel_and_no_double_emit",
+      "type": "function",
+      "name": "test_consume_funnel_and_no_double_emit",
+      "filePath": "tests/test_nexscope_flow.py",
+      "lineRange": [
+        57,
+        69
+      ],
+      "summary": "验证 consume funnel and no double emit 场景，作为该流水线行为的回归保护。",
+      "tags": [
+        "测试",
+        "pytest",
+        "回归"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_nexscope_flow.py:test_select_products_schema",
+      "type": "function",
+      "name": "test_select_products_schema",
+      "filePath": "tests/test_nexscope_flow.py",
+      "lineRange": [
+        72,
+        88
+      ],
+      "summary": "验证 select products schema 场景，作为该流水线行为的回归保护。",
+      "tags": [
+        "测试",
+        "pytest",
+        "回归"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_nexscope_flow.py:test_trend_check_alerts_collapse",
+      "type": "function",
+      "name": "test_trend_check_alerts_collapse",
+      "filePath": "tests/test_nexscope_flow.py",
+      "lineRange": [
+        91,
+        105
+      ],
+      "summary": "验证 trend check alerts collapse 场景，作为该流水线行为的回归保护。",
+      "tags": [
+        "测试",
+        "pytest",
+        "回归"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_nexscope_flow.py:test_trend_check_healthy_no_alert",
+      "type": "function",
+      "name": "test_trend_check_healthy_no_alert",
+      "filePath": "tests/test_nexscope_flow.py",
+      "lineRange": [
+        108,
+        116
+      ],
+      "summary": "验证 trend check healthy no alert 场景，作为该流水线行为的回归保护。",
+      "tags": [
+        "测试",
+        "pytest",
+        "回归"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_nexscope_flow.py:test_credit_fuse",
+      "type": "function",
+      "name": "test_credit_fuse",
+      "filePath": "tests/test_nexscope_flow.py",
+      "lineRange": [
+        119,
+        122
+      ],
+      "summary": "验证 credit fuse 场景，作为该流水线行为的回归保护。",
+      "tags": [
+        "测试",
+        "pytest",
+        "回归"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:trend_check.py",
+      "type": "file",
+      "name": "trend_check.py",
+      "filePath": "trend_check.py",
+      "summary": "对在监商品重新查询 Nexscope 词级指标，发现搜索量或均价剧烈变化时输出告警。",
+      "tags": [
+        "趋势-检查",
+        "监控",
+        "告警"
+      ],
+      "complexity": "moderate",
+      "languageNotes": "Python 脚本以标准库和少量外部 SDK 组合为主，模块级函数承担主要业务步骤。"
+    },
+    {
+      "id": "function:trend_check.py:watch_list",
+      "type": "function",
+      "name": "watch_list",
+      "filePath": "trend_check.py",
+      "lineRange": [
+        26,
+        35
+      ],
+      "summary": "读取在监商品及其关键词基线，供趋势检查使用。",
+      "tags": [
+        "业务-逻辑",
+        "工具函数",
+        "python"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:trend_check.py:check",
+      "type": "function",
+      "name": "check",
+      "filePath": "trend_check.py",
+      "lineRange": [
+        38,
+        72
+      ],
+      "summary": "重查关键词指标并根据搜索量或均价变化生成趋势告警。",
+      "tags": [
+        "业务-逻辑",
+        "工具函数",
+        "python"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:listing_worker.py",
+      "type": "file",
+      "name": "listing_worker.py",
+      "filePath": "listing_worker.py",
+      "summary": "把审核通过的商品组装成 Ozon /v3/product/import payload，上传本地套图到 OSS 后发起上架。",
+      "tags": [
+        "上架-worker",
+        "ozon-api",
+        "oss",
+        "payload",
+        "tested"
+      ],
+      "complexity": "moderate",
+      "languageNotes": "Python 脚本以标准库和少量外部 SDK 组合为主，模块级函数承担主要业务步骤。"
+    },
+    {
+      "id": "function:listing_worker.py:build_item",
+      "type": "function",
+      "name": "build_item",
+      "filePath": "listing_worker.py",
+      "lineRange": [
+        32,
+        66
+      ],
+      "summary": "把产品、spec、审核编辑和图片 URL 组装为 Ozon import item。",
+      "tags": [
+        "业务-逻辑",
+        "工具函数",
+        "python"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:listing_worker.py:upload_images",
+      "type": "function",
+      "name": "upload_images",
+      "filePath": "listing_worker.py",
+      "lineRange": [
+        69,
+        85
+      ],
+      "summary": "把本地 slot 图片上传到 OSS，并返回 Ozon 可拉取的公网 URL。",
+      "tags": [
+        "业务-逻辑",
+        "工具函数",
+        "python"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:listing_worker.py:list_product",
+      "type": "function",
+      "name": "list_product",
+      "filePath": "listing_worker.py",
+      "lineRange": [
+        88,
+        134
+      ],
+      "summary": "校验产品状态和编辑数据后上传图片、调用 Ozon import 并轮询任务结果。",
+      "tags": [
+        "业务-逻辑",
+        "工具函数",
+        "python"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:ozon_client.py",
+      "type": "file",
+      "name": "ozon_client.py",
+      "filePath": "ozon_client.py",
+      "summary": "封装 Ozon Seller API 中审核台需要的类目属性、字典值和类目 ID 解析能力，并维护属性缓存。",
+      "tags": [
+        "api-client",
+        "ozon",
+        "属性-缓存",
+        "tested"
+      ],
+      "complexity": "moderate",
+      "languageNotes": "Python 脚本以标准库和少量外部 SDK 组合为主，模块级函数承担主要业务步骤。"
+    },
+    {
+      "id": "function:ozon_client.py:_post",
+      "type": "function",
+      "name": "_post",
+      "filePath": "ozon_client.py",
+      "lineRange": [
+        25,
+        32
+      ],
+      "summary": "向 Ozon Seller API 发送 POST 请求，并把 HTTP 错误包装为 RuntimeError。",
+      "tags": [
+        "内部-辅助",
+        "工具函数",
+        "实现-细节"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:ozon_client.py:parse_category_ids",
+      "type": "function",
+      "name": "parse_category_ids",
+      "filePath": "ozon_client.py",
+      "lineRange": [
+        35,
+        41
+      ],
+      "summary": "把下划线 categoryId 路径解析为 Ozon description_category_id 和 type_id。",
+      "tags": [
+        "api",
+        "服务-调用",
+        "工具函数"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:ozon_client.py:get_attributes",
+      "type": "function",
+      "name": "get_attributes",
+      "filePath": "ozon_client.py",
+      "lineRange": [
+        44,
+        76
+      ],
+      "summary": "获取并缓存类目属性全量定义，同时合并中文属性名供审核台展示。",
+      "tags": [
+        "api",
+        "服务-调用",
+        "工具函数"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:ozon_client.py:get_attr_values",
+      "type": "function",
+      "name": "get_attr_values",
+      "filePath": "ozon_client.py",
+      "lineRange": [
+        79,
+        88
+      ],
+      "summary": "查询字典属性可选值，支持品牌等大字典按 query 过滤。",
+      "tags": [
+        "api",
+        "服务-调用",
+        "工具函数"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:tests/test_listing_worker.py",
+      "type": "file",
+      "name": "test_listing_worker.py",
+      "filePath": "tests/test_listing_worker.py",
+      "summary": "验证 Ozon 上架 payload 的核心字段、尺寸单位换算、品牌默认值、主图顺序和必填校验。",
+      "tags": [
+        "测试",
+        "pytest",
+        "上架-payload"
+      ],
+      "complexity": "moderate",
+      "languageNotes": "Python 脚本以标准库和少量外部 SDK 组合为主，模块级函数承担主要业务步骤。"
+    },
+    {
+      "id": "function:tests/test_listing_worker.py:test_build_item_core_fields",
+      "type": "function",
+      "name": "test_build_item_core_fields",
+      "filePath": "tests/test_listing_worker.py",
+      "lineRange": [
+        26,
+        36
+      ],
+      "summary": "验证 build item core fields 场景，作为该流水线行为的回归保护。",
+      "tags": [
+        "测试",
+        "pytest",
+        "回归"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_listing_worker.py:test_dimensions_cm_to_mm_and_weight",
+      "type": "function",
+      "name": "test_dimensions_cm_to_mm_and_weight",
+      "filePath": "tests/test_listing_worker.py",
+      "lineRange": [
+        39,
+        43
+      ],
+      "summary": "验证 dimensions cm to mm and weight 场景，作为该流水线行为的回归保护。",
+      "tags": [
+        "测试",
+        "pytest",
+        "回归"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_listing_worker.py:test_brand_defaults_to_no_brand",
+      "type": "function",
+      "name": "test_brand_defaults_to_no_brand",
+      "filePath": "tests/test_listing_worker.py",
+      "lineRange": [
+        46,
+        50
+      ],
+      "summary": "验证 brand defaults to no brand 场景，作为该流水线行为的回归保护。",
+      "tags": [
+        "测试",
+        "pytest",
+        "回归"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_listing_worker.py:test_existing_brand_not_overwritten",
+      "type": "function",
+      "name": "test_existing_brand_not_overwritten",
+      "filePath": "tests/test_listing_worker.py",
+      "lineRange": [
+        53,
+        60
+      ],
+      "summary": "验证 existing brand not overwritten 场景，作为该流水线行为的回归保护。",
+      "tags": [
+        "测试",
+        "pytest",
+        "回归"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_listing_worker.py:test_first_image_is_primary",
+      "type": "function",
+      "name": "test_first_image_is_primary",
+      "filePath": "tests/test_listing_worker.py",
+      "lineRange": [
+        63,
+        65
+      ],
+      "summary": "验证 first image is primary 场景，作为该流水线行为的回归保护。",
+      "tags": [
+        "测试",
+        "pytest",
+        "回归"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_listing_worker.py:test_missing_required_raises",
+      "type": "function",
+      "name": "test_missing_required_raises",
+      "filePath": "tests/test_listing_worker.py",
+      "lineRange": [
+        68,
+        72
+      ],
+      "summary": "验证 missing required raises 场景，作为该流水线行为的回归保护。",
+      "tags": [
+        "测试",
+        "pytest",
+        "回归"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:tests/test_ozon_client.py",
+      "type": "file",
+      "name": "test_ozon_client.py",
+      "filePath": "tests/test_ozon_client.py",
+      "summary": "验证 Ozon 类目属性缓存保留可选属性、多值属性并按必填与筛选字段排序。",
+      "tags": [
+        "测试",
+        "pytest",
+        "ozon-client"
+      ],
+      "complexity": "simple",
+      "languageNotes": "Python 脚本以标准库和少量外部 SDK 组合为主，模块级函数承担主要业务步骤。"
+    },
+    {
+      "id": "function:tests/test_ozon_client.py:test_get_attributes_includes_optional_and_collection",
+      "type": "function",
+      "name": "test_get_attributes_includes_optional_and_collection",
+      "filePath": "tests/test_ozon_client.py",
+      "lineRange": [
+        24,
+        34
+      ],
+      "summary": "验证 get attributes includes optional and collection 场景，作为该流水线行为的回归保护。",
+      "tags": [
+        "测试",
+        "pytest",
+        "回归"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "document:GLOSSARY.md",
+      "type": "document",
+      "name": "GLOSSARY.md",
+      "filePath": "GLOSSARY.md",
+      "summary": "维护 Ozon Pipeline 的核心术语与语言约定，帮助后续协作者理解业务缩写和状态词。",
+      "tags": [
+        "文档",
+        "项目-说明",
+        "知识-库"
+      ],
+      "complexity": "simple",
+      "languageNotes": "Markdown 文档以研究结论和执行约束为主，服务后续实现决策。"
+    },
+    {
+      "id": "document:README.md",
+      "type": "document",
+      "name": "README.md",
+      "filePath": "README.md",
+      "summary": "项目入口说明，仅保留项目名称标题，作为仓库的最小概览文档。",
+      "tags": [
+        "文档",
+        "项目-说明",
+        "知识-库"
+      ],
+      "complexity": "simple",
+      "languageNotes": "Markdown 文档以研究结论和执行约束为主，服务后续实现决策。"
+    },
+    {
+      "id": "document:ROADMAP.md",
+      "type": "document",
+      "name": "ROADMAP.md",
+      "filePath": "ROADMAP.md",
+      "summary": "记录 Ozon 自动化工具从 V0 到 V1 的产品路线、任务拆分和必须关闭的红色缺口。",
+      "tags": [
+        "文档",
+        "项目-说明",
+        "知识-库"
+      ],
+      "complexity": "moderate",
+      "languageNotes": "Markdown 文档以研究结论和执行约束为主，服务后续实现决策。"
+    },
+    {
+      "id": "file:pipeline.html",
+      "type": "file",
+      "name": "pipeline.html",
+      "filePath": "pipeline.html",
+      "summary": "用静态 HTML 展示选品到上架的自动化流程蓝图，包含阶段、状态和人工闸点。",
+      "tags": [
+        "静态-页面",
+        "原型",
+        "html"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "document:seeds.txt",
+      "type": "document",
+      "name": "seeds.txt",
+      "filePath": "seeds.txt",
+      "summary": "保存首批 Ozon 俄语种子词，供关键词库 harvest 和选品 PoC 使用。",
+      "tags": [
+        "文档",
+        "项目-说明",
+        "知识-库"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:ui-sketch.html",
+      "type": "file",
+      "name": "ui-sketch.html",
+      "filePath": "ui-sketch.html",
+      "summary": "用静态 HTML 描绘审核台操作界面草图，覆盖看板、图审队列和编辑区布局。",
+      "tags": [
+        "静态-页面",
+        "原型",
+        "html"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "config:data/candidates-2026-11-10.json",
+      "type": "config",
+      "name": "candidates-2026-11-10.json",
+      "filePath": "data/candidates-2026-11-10.json",
+      "summary": "保存由关键词库生成的候选词与 Ozon top 商品快照，是选品阶段的输入数据。",
+      "tags": [
+        "数据-缓存",
+        "配置",
+        "业务-规则"
+      ],
+      "complexity": "moderate",
+      "languageNotes": "JSON 文件作为本地事实缓存或配置输入，由对应 worker 直接读取。"
+    },
+    {
+      "id": "config:data/categories-leaf.json",
+      "type": "config",
+      "name": "categories-leaf.json",
+      "filePath": "data/categories-leaf.json",
+      "summary": "保存 Ozon 末级类目展开表，供 content_agent 查类目路径和 keyword_library 生成白名单。",
+      "tags": [
+        "数据-缓存",
+        "配置",
+        "业务-规则"
+      ],
+      "complexity": "complex",
+      "languageNotes": "JSON 文件作为本地事实缓存或配置输入，由对应 worker 直接读取。"
+    },
+    {
+      "id": "config:data/category-tree-ru.json",
+      "type": "config",
+      "name": "category-tree-ru.json",
+      "filePath": "data/category-tree-ru.json",
+      "summary": "保存 Ozon Seller API 返回的俄语原始类目树，是末级类目表的上游缓存。",
+      "tags": [
+        "数据-缓存",
+        "配置",
+        "业务-规则"
+      ],
+      "complexity": "simple",
+      "languageNotes": "JSON 文件作为本地事实缓存或配置输入，由对应 worker 直接读取。"
+    },
+    {
+      "id": "config:data/image-search-tasks-2026-11-10.json",
+      "type": "config",
+      "name": "image-search-tasks-2026-11-10.json",
+      "filePath": "data/image-search-tasks-2026-11-10.json",
+      "summary": "保存待执行 1688 图搜的 Ozon 图片任务列表，连接选品结果与找货 worker。",
+      "tags": [
+        "数据-缓存",
+        "配置",
+        "业务-规则"
+      ],
+      "complexity": "moderate",
+      "languageNotes": "JSON 文件作为本地事实缓存或配置输入，由对应 worker 直接读取。"
+    },
+    {
+      "id": "config:data/ozon-commission.json",
+      "type": "config",
+      "name": "ozon-commission.json",
+      "filePath": "data/ozon-commission.json",
+      "summary": "保存 Ozon 类目佣金三档费率数据，pricing.py 用它按售价档计算佣金。",
+      "tags": [
+        "数据-缓存",
+        "配置",
+        "业务-规则"
+      ],
+      "complexity": "complex",
+      "languageNotes": "JSON 文件作为本地事实缓存或配置输入，由对应 worker 直接读取。"
+    },
+    {
+      "id": "config:data/ozon-logistics.json",
+      "type": "config",
+      "name": "ozon-logistics.json",
+      "filePath": "data/ozon-logistics.json",
+      "summary": "保存 Ozon 跨境物流方案、费用公式和尺寸档元数据，支撑 pricing.py 的运费计算。",
+      "tags": [
+        "数据-缓存",
+        "配置",
+        "业务-规则"
+      ],
+      "complexity": "complex",
+      "languageNotes": "JSON 文件作为本地事实缓存或配置输入，由对应 worker 直接读取。"
+    },
+    {
+      "id": "config:data/sourcing-2026-11-10.json",
+      "type": "config",
+      "name": "sourcing-2026-11-10.json",
+      "filePath": "data/sourcing-2026-11-10.json",
+      "summary": "保存 1688 找货结果、供应商价格、销量和同一性筛选信息，是成本核算与生图的输入。",
+      "tags": [
+        "数据-缓存",
+        "配置",
+        "业务-规则"
+      ],
+      "complexity": "complex",
+      "languageNotes": "JSON 文件作为本地事实缓存或配置输入，由对应 worker 直接读取。"
+    },
+    {
+      "id": "document:docs/research/1688-real-dimensions.md",
+      "type": "document",
+      "name": "1688-real-dimensions.md",
+      "filePath": "docs/research/1688-real-dimensions.md",
+      "summary": "调研 1688 商品真实尺寸数据来源与备选方案，为 slot7 尺寸图溯源闸提供依据。",
+      "tags": [
+        "调研",
+        "业务-规则",
+        "文档"
+      ],
+      "complexity": "moderate",
+      "languageNotes": "Markdown 文档以研究结论和执行约束为主，服务后续实现决策。"
+    },
+    {
+      "id": "document:docs/research/nexscope-free-alternatives.md",
+      "type": "document",
+      "name": "nexscope-free-alternatives.md",
+      "filePath": "docs/research/nexscope-free-alternatives.md",
+      "summary": "调研 Nexscope 余额耗尽后的免费选品与热词替代来源，并给出字段映射。",
+      "tags": [
+        "调研",
+        "业务-规则",
+        "文档"
+      ],
+      "complexity": "simple",
+      "languageNotes": "Markdown 文档以研究结论和执行约束为主，服务后续实现决策。"
+    },
+    {
+      "id": "document:docs/research/ozon-commission-rules.md",
+      "type": "document",
+      "name": "ozon-commission-rules.md",
+      "filePath": "docs/research/ozon-commission-rules.md",
+      "summary": "梳理 Ozon 佣金按类目与售价档计算的规则，并指向 pricing.py 的实现落点。",
+      "tags": [
+        "调研",
+        "业务-规则",
+        "文档"
+      ],
+      "complexity": "simple",
+      "languageNotes": "Markdown 文档以研究结论和执行约束为主，服务后续实现决策。"
+    },
+    {
+      "id": "document:docs/research/ozon-cover-emotion-v4.md",
+      "type": "document",
+      "name": "ozon-cover-emotion-v4.md",
+      "filePath": "docs/research/ozon-cover-emotion-v4.md",
+      "summary": "研究 Ozon 封面图的情绪价值与 slot1 v4 优化方向，用于提高 CTR 和加购率。",
+      "tags": [
+        "调研",
+        "业务-规则",
+        "文档"
+      ],
+      "complexity": "moderate",
+      "languageNotes": "Markdown 文档以研究结论和执行约束为主，服务后续实现决策。"
+    },
+    {
+      "id": "document:docs/research/ozon-image-set-hot-logic.md",
+      "type": "document",
+      "name": "ozon-image-set-hot-logic.md",
+      "filePath": "docs/research/ozon-image-set-hot-logic.md",
+      "summary": "总结 Ozon 热卖商品 8 张套图的漏斗逻辑和 qwen-image I2I 提示词实践。",
+      "tags": [
+        "调研",
+        "业务-规则",
+        "文档"
+      ],
+      "complexity": "moderate",
+      "languageNotes": "Markdown 文档以研究结论和执行约束为主，服务后续实现决策。"
+    },
+    {
+      "id": "document:docs/research/ozon-listing-api.md",
+      "type": "document",
+      "name": "ozon-listing-api.md",
+      "filePath": "docs/research/ozon-listing-api.md",
+      "summary": "调研 Ozon Seller API 上架链路、类目属性、价格库存接口与限流注意点。",
+      "tags": [
+        "调研",
+        "业务-规则",
+        "文档"
+      ],
+      "complexity": "simple",
+      "languageNotes": "Markdown 文档以研究结论和执行约束为主，服务后续实现决策。"
+    },
+    {
+      "id": "document:docs/research/ozon-pricing-formula.md",
+      "type": "document",
+      "name": "ozon-pricing-formula.md",
+      "filePath": "docs/research/ozon-pricing-formula.md",
+      "summary": "记录跨境定价公式、佣金迭代和物流尺寸档规则，是 pricing.py 的业务依据。",
+      "tags": [
+        "调研",
+        "业务-规则",
+        "文档"
+      ],
+      "complexity": "simple",
+      "languageNotes": "Markdown 文档以研究结论和执行约束为主，服务后续实现决策。"
+    },
+    {
+      "id": "document:docs/research/ozon-seller-form-alignment.md",
+      "type": "document",
+      "name": "ozon-seller-form-alignment.md",
+      "filePath": "docs/research/ozon-seller-form-alignment.md",
+      "summary": "对齐 Ozon 后台上架表单字段与本地审核台编辑器需要展示的属性。",
+      "tags": [
+        "调研",
+        "业务-规则",
+        "文档"
+      ],
+      "complexity": "simple",
+      "languageNotes": "Markdown 文档以研究结论和执行约束为主，服务后续实现决策。"
+    },
+    {
+      "id": "document:prompts/slot1_cover_hook_v3.txt",
+      "type": "document",
+      "name": "slot1_cover_hook_v3.txt",
+      "filePath": "prompts/slot1_cover_hook_v3.txt",
+      "summary": "定义 slot1 封面钩子图 v3 的 I2I 提示词，约束产品不变、构图留白和平台角标区。",
+      "tags": [
+        "提示词",
+        "套图-生成",
+        "文档"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "document:prompts/slot1_payoff_v4.txt",
+      "type": "document",
+      "name": "slot1_payoff_v4.txt",
+      "filePath": "prompts/slot1_payoff_v4.txt",
+      "summary": "定义 slot1 payoff moment v4 提示词，强调产品交付核心价值瞬间与情绪化场景。",
+      "tags": [
+        "提示词",
+        "套图-生成",
+        "文档"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "document:prompts/slot2_white_bg_v1.txt",
+      "type": "document",
+      "name": "slot2_white_bg_v1.txt",
+      "filePath": "prompts/slot2_white_bg_v1.txt",
+      "summary": "定义 Ozon 白底主图提示词，要求去除文字水印并保持商品居中和形态不变。",
+      "tags": [
+        "提示词",
+        "套图-生成",
+        "文档"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "document:prompts/slot3_arguments_v3.txt",
+      "type": "document",
+      "name": "slot3_arguments_v3.txt",
+      "filePath": "prompts/slot3_arguments_v3.txt",
+      "summary": "定义 slot3 数字化论据图提示词，让 AI 只生成产品英雄照，论据芯片交给 text_overlay。",
+      "tags": [
+        "提示词",
+        "套图-生成",
+        "文档"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "document:prompts/slot4_usage_v3.txt",
+      "type": "document",
+      "name": "slot4_usage_v3.txt",
+      "filePath": "prompts/slot4_usage_v3.txt",
+      "summary": "定义 slot4 使用演示图提示词，强调真实使用动作、尺度感和无包装无文字场景。",
+      "tags": [
+        "提示词",
+        "套图-生成",
+        "文档"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "document:prompts/slot5_scene_v3.txt",
+      "type": "document",
+      "name": "slot5_scene_v3.txt",
+      "filePath": "prompts/slot5_scene_v3.txt",
+      "summary": "定义 slot5 第二使用场景图提示词，要求与封面不同的生活方式场景和稳定产品外观。",
+      "tags": [
+        "提示词",
+        "套图-生成",
+        "文档"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "document:prompts/slot6_detail_v3.txt",
+      "type": "document",
+      "name": "slot6_detail_v3.txt",
+      "filePath": "prompts/slot6_detail_v3.txt",
+      "summary": "定义 slot6 材质细节特写提示词，预留底部贴字带并突出质感、缝线和结构。",
+      "tags": [
+        "提示词",
+        "套图-生成",
+        "文档"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "document:prompts/slot7_size_v3.txt",
+      "type": "document",
+      "name": "slot7_size_v3.txt",
+      "filePath": "prompts/slot7_size_v3.txt",
+      "summary": "定义 slot7 规格尺寸标注图提示词，配合数字溯源闸生成带俄语尺寸标签的白底图。",
+      "tags": [
+        "提示词",
+        "套图-生成",
+        "文档"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "document:prompts/slot8_scenarios_v3.txt",
+      "type": "document",
+      "name": "slot8_scenarios_v3.txt",
+      "filePath": "prompts/slot8_scenarios_v3.txt",
+      "summary": "定义 slot8 适用场景三列网格提示词，AI 负责无字场景图，标签由 PIL 后贴。",
+      "tags": [
+        "提示词",
+        "套图-生成",
+        "文档"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:.DS_Store",
+      "type": "file",
+      "name": ".DS_Store",
+      "filePath": ".DS_Store",
+      "summary": "macOS Finder 元数据文件，不承载项目业务逻辑，仅作为扫描到的二进制杂项文件保留节点。",
+      "tags": [
+        "元数据",
+        "macos",
+        "杂项"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "config:.ua/config.json",
+      "type": "config",
+      "name": "config.json",
+      "filePath": ".ua/config.json",
+      "summary": "Understand-Anything 本项目配置，声明图谱输出语言为中文。",
+      "tags": [
+        "配置",
+        "项目-设置",
+        "json"
+      ],
+      "complexity": "simple",
+      "languageNotes": "JSON 文件作为本地事实缓存或配置输入，由对应 worker 直接读取。"
+    },
+    {
+      "id": "file:category_tree.py",
+      "type": "file",
+      "name": "category_tree.py",
+      "filePath": "category_tree.py",
+      "summary": "拉取 Ozon Seller 类目树并展开为末级类目表，供类目匹配和关键词 harvest 使用。",
+      "tags": [
+        "类目-树",
+        "ozon-api",
+        "数据-导出"
+      ],
+      "complexity": "moderate",
+      "languageNotes": "Python 脚本以标准库和少量外部 SDK 组合为主，模块级函数承担主要业务步骤。"
+    },
+    {
+      "id": "function:category_tree.py:fetch_tree",
+      "type": "function",
+      "name": "fetch_tree",
+      "filePath": "category_tree.py",
+      "lineRange": [
+        22,
+        26
+      ],
+      "summary": "调用 Ozon Seller API 拉取俄语类目树。",
+      "tags": [
+        "业务-逻辑",
+        "工具函数",
+        "python"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:category_tree.py:flatten",
+      "type": "function",
+      "name": "flatten",
+      "filePath": "category_tree.py",
+      "lineRange": [
+        29,
+        46
+      ],
+      "summary": "递归展开类目树叶子节点，生成 categoryId、typeId 和俄语路径。",
+      "tags": [
+        "业务-逻辑",
+        "工具函数",
+        "python"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:category_tree.py:main",
+      "type": "function",
+      "name": "main",
+      "filePath": "category_tree.py",
+      "lineRange": [
+        49,
+        63
+      ],
+      "summary": "解析命令行参数并串联本文件的主要流程。",
+      "tags": [
+        "入口点",
+        "cli",
+        "编排"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:data/.DS_Store",
+      "type": "file",
+      "name": ".DS_Store",
+      "filePath": "data/.DS_Store",
+      "summary": "data 目录下的 macOS Finder 元数据文件，不参与流水线运行。",
+      "tags": [
+        "元数据",
+        "macos",
+        "杂项"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "config:data/attr-cache/17028714_594158428.json",
+      "type": "config",
+      "name": "17028714_594158428.json",
+      "filePath": "data/attr-cache/17028714_594158428.json",
+      "summary": "缓存 Ozon 指定类目的属性定义，供审核台编辑器展示必填、筛选和多值字段。",
+      "tags": [
+        "数据-缓存",
+        "配置",
+        "业务-规则"
+      ],
+      "complexity": "complex",
+      "languageNotes": "JSON 文件作为本地事实缓存或配置输入，由对应 worker 直接读取。"
+    },
+    {
+      "id": "config:data/specs/дозатор_для_жидкого_мыла.json",
+      "type": "config",
+      "name": "дозатор_для_жидкого_мыла.json",
+      "filePath": "data/specs/дозатор_для_жидкого_мыла.json",
+      "summary": "保存皂液器商品的俄语标题、详情、8-slot 套图规格和元数据校验结果。",
+      "tags": [
+        "数据-缓存",
+        "配置",
+        "业务-规则"
+      ],
+      "complexity": "moderate",
+      "languageNotes": "JSON 文件作为本地事实缓存或配置输入，由对应 worker 直接读取。"
+    },
+    {
+      "id": "config:data/specs/органайзер_для_столовых_приборов_в_ящик.json",
+      "type": "config",
+      "name": "органайзер_для_столовых_приборов_в_ящик.json",
+      "filePath": "data/specs/органайзер_для_столовых_приборов_в_ящик.json",
+      "summary": "保存抽屉餐具收纳商品的俄语文案、套图规格和可编辑上架字段基础数据。",
+      "tags": [
+        "数据-缓存",
+        "配置",
+        "业务-规则"
+      ],
+      "complexity": "moderate",
+      "languageNotes": "JSON 文件作为本地事实缓存或配置输入，由对应 worker 直接读取。"
+    },
+    {
+      "id": "document:docs/handoffs/2026-11-11-ozon-listing-editor.md",
+      "type": "document",
+      "name": "2026-11-11-ozon-listing-editor.md",
+      "filePath": "docs/handoffs/2026-11-11-ozon-listing-editor.md",
+      "summary": "记录上架链路调研、OSS 图床、定价公式、slot1 v4 和审核台编辑器的交接状态。",
+      "tags": [
+        "文档",
+        "项目-说明",
+        "知识-库"
+      ],
+      "complexity": "moderate",
+      "languageNotes": "Markdown 文档以研究结论和执行约束为主，服务后续实现决策。"
+    },
+    {
+      "id": "file:prompts/style_ref/detail_strips_v1.webp",
+      "type": "file",
+      "name": "detail_strips_v1.webp",
+      "filePath": "prompts/style_ref/detail_strips_v1.webp",
+      "summary": "slot6 细节条带风格参考 WebP 素材，曾用于提示图像构图与视觉方向。",
+      "tags": [
+        "视觉-参考",
+        "webp",
+        "素材"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:prompts/style_ref/main_headline_v1.webp",
+      "type": "file",
+      "name": "main_headline_v1.webp",
+      "filePath": "prompts/style_ref/main_headline_v1.webp",
+      "summary": "slot1 主标题风格参考 WebP 素材，记录封面标题构图的视觉样例。",
+      "tags": [
+        "视觉-参考",
+        "webp",
+        "素材"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:prompts/style_ref/scenarios_circle_v1.webp",
+      "type": "file",
+      "name": "scenarios_circle_v1.webp",
+      "filePath": "prompts/style_ref/scenarios_circle_v1.webp",
+      "summary": "slot8 场景圆形布局风格参考 WebP 素材，记录适用场景图的视觉样例。",
+      "tags": [
+        "视觉-参考",
+        "webp",
+        "素材"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:prompts/style_ref/selling_point_v1.webp",
+      "type": "file",
+      "name": "selling_point_v1.webp",
+      "filePath": "prompts/style_ref/selling_point_v1.webp",
+      "summary": "卖点图风格参考 WebP 素材，记录商品利益点表达的视觉样例。",
+      "tags": [
+        "视觉-参考",
+        "webp",
+        "素材"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:prompts/style_ref/size_arrows_v1.webp",
+      "type": "file",
+      "name": "size_arrows_v1.webp",
+      "filePath": "prompts/style_ref/size_arrows_v1.webp",
+      "summary": "slot7 尺寸箭头风格参考 WebP 素材，记录规格标注图的视觉样例。",
+      "tags": [
+        "视觉-参考",
+        "webp",
+        "素材"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:prompts/style_ref/usage_grid_v1.webp",
+      "type": "file",
+      "name": "usage_grid_v1.webp",
+      "filePath": "prompts/style_ref/usage_grid_v1.webp",
+      "summary": "slot4 使用网格风格参考 WebP 素材，记录使用演示图的视觉样例。",
+      "tags": [
+        "视觉-参考",
+        "webp",
+        "素材"
+      ],
+      "complexity": "complex"
+    }
+  ],
+  "edges": [
+    {
+      "source": "file:config.py",
+      "target": "function:config.py:_load",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:config.py",
+      "target": "function:config.py:_load",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:content_agent.py",
+      "target": "function:content_agent.py:lookup_category",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:content_agent.py",
+      "target": "function:content_agent.py:lookup_category",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:content_agent.py",
+      "target": "function:content_agent.py:llm_spec",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:content_agent.py",
+      "target": "function:content_agent.py:llm_spec",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:content_agent.py",
+      "target": "function:content_agent.py:validate",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:content_agent.py",
+      "target": "function:content_agent.py:validate",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:content_agent.py",
+      "target": "function:content_agent.py:main",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:content_agent.py",
+      "target": "function:content_agent.py:main",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:dimensions.py",
+      "target": "function:dimensions.py:extract_dimensions",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:dimensions.py",
+      "target": "function:dimensions.py:extract_dimensions",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:image_worker.py",
+      "target": "function:image_worker.py:_as_image",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:image_worker.py",
+      "target": "function:image_worker.py:_as_image",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:image_worker.py",
+      "target": "function:image_worker.py:call_api",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:image_worker.py",
+      "target": "function:image_worker.py:call_api",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:image_worker.py",
+      "target": "function:image_worker.py:_vl_has_text",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:image_worker.py",
+      "target": "function:image_worker.py:_vl_has_text",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:image_worker.py",
+      "target": "function:image_worker.py:_supplier_white_bg",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:image_worker.py",
+      "target": "function:image_worker.py:_supplier_white_bg",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:image_worker.py",
+      "target": "function:image_worker.py:render",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:image_worker.py",
+      "target": "function:image_worker.py:render",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:image_worker.py",
+      "target": "function:image_worker.py:_slot_spec",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:image_worker.py",
+      "target": "function:image_worker.py:_slot_spec",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:image_worker.py",
+      "target": "function:image_worker.py:_measurements_traceable",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:image_worker.py",
+      "target": "function:image_worker.py:_measurements_traceable",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:image_worker.py",
+      "target": "function:image_worker.py:generate_slots",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:image_worker.py",
+      "target": "function:image_worker.py:generate_slots",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:image_worker.py",
+      "target": "function:image_worker.py:main",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:image_worker.py",
+      "target": "function:image_worker.py:main",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:sourcing_agent.py",
+      "target": "function:sourcing_agent.py:run_skill",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:sourcing_agent.py",
+      "target": "function:sourcing_agent.py:run_skill",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:sourcing_agent.py",
+      "target": "function:sourcing_agent.py:localize",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:sourcing_agent.py",
+      "target": "function:sourcing_agent.py:localize",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:sourcing_agent.py",
+      "target": "function:sourcing_agent.py:pick_suppliers",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:sourcing_agent.py",
+      "target": "function:sourcing_agent.py:pick_suppliers",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:sourcing_agent.py",
+      "target": "function:sourcing_agent.py:search_one",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:sourcing_agent.py",
+      "target": "function:sourcing_agent.py:search_one",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:sourcing_agent.py",
+      "target": "function:sourcing_agent.py:vl_same_product",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:sourcing_agent.py",
+      "target": "function:sourcing_agent.py:vl_same_product",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:sourcing_agent.py",
+      "target": "function:sourcing_agent.py:identity_gate",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:sourcing_agent.py",
+      "target": "function:sourcing_agent.py:identity_gate",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:sourcing_agent.py",
+      "target": "function:sourcing_agent.py:search_text",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:sourcing_agent.py",
+      "target": "function:sourcing_agent.py:search_text",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:sourcing_agent.py",
+      "target": "function:sourcing_agent.py:vl_describe",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:sourcing_agent.py",
+      "target": "function:sourcing_agent.py:vl_describe",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:sourcing_agent.py",
+      "target": "function:sourcing_agent.py:search_with_fallback",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:sourcing_agent.py",
+      "target": "function:sourcing_agent.py:search_with_fallback",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:sourcing_agent.py",
+      "target": "function:sourcing_agent.py:search_vl",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:sourcing_agent.py",
+      "target": "function:sourcing_agent.py:search_vl",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:sourcing_agent.py",
+      "target": "function:sourcing_agent.py:main",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:sourcing_agent.py",
+      "target": "function:sourcing_agent.py:main",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_identity_gate.py",
+      "target": "function:tests/test_identity_gate.py:_fake_text_search",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_identity_gate.py",
+      "target": "function:tests/test_identity_gate.py:_fake_text_search",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_identity_gate.py",
+      "target": "function:tests/test_identity_gate.py:_prod",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_identity_gate.py",
+      "target": "function:tests/test_identity_gate.py:_prod",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_identity_gate.py",
+      "target": "function:tests/test_identity_gate.py:test_identity_gate_skips_wrong_product",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_identity_gate.py",
+      "target": "function:tests/test_identity_gate.py:test_identity_gate_skips_wrong_product",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_identity_gate.py",
+      "target": "function:tests/test_identity_gate.py:test_identity_gate_all_rejected_means_no_source",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_identity_gate.py",
+      "target": "function:tests/test_identity_gate.py:test_identity_gate_all_rejected_means_no_source",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_identity_gate.py",
+      "target": "function:tests/test_identity_gate.py:test_no_ozon_image_keeps_legacy_behavior",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_identity_gate.py",
+      "target": "function:tests/test_identity_gate.py:test_no_ozon_image_keeps_legacy_behavior",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_identity_gate.py",
+      "target": "function:tests/test_identity_gate.py:_minimal_spec",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_identity_gate.py",
+      "target": "function:tests/test_identity_gate.py:_minimal_spec",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_identity_gate.py",
+      "target": "function:tests/test_identity_gate.py:_mock_vl_dims",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_identity_gate.py",
+      "target": "function:tests/test_identity_gate.py:_mock_vl_dims",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_identity_gate.py",
+      "target": "function:tests/test_identity_gate.py:test_slot7_manual_source_bypasses_trace_gate",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_identity_gate.py",
+      "target": "function:tests/test_identity_gate.py:test_slot7_manual_source_bypasses_trace_gate",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_identity_gate.py",
+      "target": "function:tests/test_identity_gate.py:test_slot7_without_source_still_gated",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_identity_gate.py",
+      "target": "function:tests/test_identity_gate.py:test_slot7_without_source_still_gated",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_identity_gate.py",
+      "target": "function:tests/test_identity_gate.py:test_slot2_supplier_image_with_text_falls_back_to_ai",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_identity_gate.py",
+      "target": "function:tests/test_identity_gate.py:test_slot2_supplier_image_with_text_falls_back_to_ai",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_identity_gate.py",
+      "target": "function:tests/test_identity_gate.py:test_slot2_clean_supplier_image_used_directly",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_identity_gate.py",
+      "target": "function:tests/test_identity_gate.py:test_slot2_clean_supplier_image_used_directly",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:text_overlay.py",
+      "target": "function:text_overlay.py:_font",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:text_overlay.py",
+      "target": "function:text_overlay.py:_font",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:text_overlay.py",
+      "target": "function:text_overlay.py:_wrap",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:text_overlay.py",
+      "target": "function:text_overlay.py:_wrap",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:text_overlay.py",
+      "target": "function:text_overlay.py:_adaptive_color",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:text_overlay.py",
+      "target": "function:text_overlay.py:_adaptive_color",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:text_overlay.py",
+      "target": "function:text_overlay.py:overlay_title",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:text_overlay.py",
+      "target": "function:text_overlay.py:overlay_title",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:text_overlay.py",
+      "target": "function:text_overlay.py:_fit_single",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:text_overlay.py",
+      "target": "function:text_overlay.py:_fit_single",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:text_overlay.py",
+      "target": "function:text_overlay.py:overlay_badge",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:text_overlay.py",
+      "target": "function:text_overlay.py:overlay_badge",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:text_overlay.py",
+      "target": "function:text_overlay.py:_uniform_fit",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:text_overlay.py",
+      "target": "function:text_overlay.py:_uniform_fit",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:text_overlay.py",
+      "target": "function:text_overlay.py:_draw_chip",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:text_overlay.py",
+      "target": "function:text_overlay.py:_draw_chip",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:text_overlay.py",
+      "target": "function:text_overlay.py:_composite",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:text_overlay.py",
+      "target": "function:text_overlay.py:_composite",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:text_overlay.py",
+      "target": "function:text_overlay.py:overlay_chips",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:text_overlay.py",
+      "target": "function:text_overlay.py:overlay_chips",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:text_overlay.py",
+      "target": "function:text_overlay.py:overlay_chips_bottom",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:text_overlay.py",
+      "target": "function:text_overlay.py:overlay_chips_bottom",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:text_overlay.py",
+      "target": "function:text_overlay.py:overlay_icon_labels",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:text_overlay.py",
+      "target": "function:text_overlay.py:overlay_icon_labels",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:text_overlay.py",
+      "target": "function:text_overlay.py:overlay_caption",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:text_overlay.py",
+      "target": "function:text_overlay.py:overlay_caption",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:text_overlay.py",
+      "target": "function:text_overlay.py:_selftest",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:text_overlay.py",
+      "target": "function:text_overlay.py:_selftest",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:content_agent.py",
+      "target": "file:config.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:dimensions.py",
+      "target": "file:config.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:image_worker.py",
+      "target": "file:config.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:image_worker.py",
+      "target": "file:text_overlay.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:sourcing_agent.py",
+      "target": "file:config.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:tests/test_identity_gate.py",
+      "target": "file:image_worker.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:tests/test_identity_gate.py",
+      "target": "file:sourcing_agent.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:listing_edit.py",
+      "target": "function:listing_edit.py:_validate",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:listing_edit.py",
+      "target": "function:listing_edit.py:_validate",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:listing_edit.py",
+      "target": "function:listing_edit.py:save",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:listing_edit.py",
+      "target": "function:listing_edit.py:save",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:listing_edit.py",
+      "target": "function:listing_edit.py:get_edits",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:listing_edit.py",
+      "target": "function:listing_edit.py:get_edits",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:pipeline.py",
+      "target": "function:pipeline.py:conn",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:pipeline.py",
+      "target": "function:pipeline.py:conn",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:pipeline.py",
+      "target": "function:pipeline.py:_migrate",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:pipeline.py",
+      "target": "function:pipeline.py:_migrate",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:pipeline.py",
+      "target": "function:pipeline.py:now",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:pipeline.py",
+      "target": "function:pipeline.py:now",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:pipeline.py",
+      "target": "function:pipeline.py:cmd_init",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:pipeline.py",
+      "target": "function:pipeline.py:cmd_init",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:pipeline.py",
+      "target": "function:pipeline.py:_event",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:pipeline.py",
+      "target": "function:pipeline.py:_event",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:pipeline.py",
+      "target": "function:pipeline.py:cmd_add",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:pipeline.py",
+      "target": "function:pipeline.py:cmd_add",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:pipeline.py",
+      "target": "function:pipeline.py:cmd_advance",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:pipeline.py",
+      "target": "function:pipeline.py:cmd_advance",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:pipeline.py",
+      "target": "function:pipeline.py:cmd_kill",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:pipeline.py",
+      "target": "function:pipeline.py:cmd_kill",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:pipeline.py",
+      "target": "function:pipeline.py:cmd_list",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:pipeline.py",
+      "target": "function:pipeline.py:cmd_list",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:pipeline.py",
+      "target": "function:pipeline.py:record_review",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:pipeline.py",
+      "target": "function:pipeline.py:record_review",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:pricing.py",
+      "target": "function:pricing.py:logistics_class",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:pricing.py",
+      "target": "function:pricing.py:logistics_class",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:pricing.py",
+      "target": "function:pricing.py:_load",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:pricing.py",
+      "target": "function:pricing.py:_load",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:pricing.py",
+      "target": "function:pricing.py:commission_tiers",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:pricing.py",
+      "target": "function:pricing.py:commission_tiers",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:pricing.py",
+      "target": "function:pricing.py:shipping_options",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:pricing.py",
+      "target": "function:pricing.py:shipping_options",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:pricing.py",
+      "target": "function:pricing.py:_price_tier",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:pricing.py",
+      "target": "function:pricing.py:_price_tier",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:pricing.py",
+      "target": "function:pricing.py:calc",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:pricing.py",
+      "target": "function:pricing.py:calc",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:review_server.py",
+      "target": "function:review_server.py:load",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:review_server.py",
+      "target": "function:review_server.py:load",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:review_server.py",
+      "target": "function:review_server.py:topbar",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:review_server.py",
+      "target": "function:review_server.py:topbar",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:review_server.py",
+      "target": "function:review_server.py:page",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:review_server.py",
+      "target": "function:review_server.py:page",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:review_server.py",
+      "target": "function:review_server.py:mini",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:review_server.py",
+      "target": "function:review_server.py:mini",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:review_server.py",
+      "target": "function:review_server.py:board",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:review_server.py",
+      "target": "function:review_server.py:board",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:review_server.py",
+      "target": "function:review_server.py:_spec",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:review_server.py",
+      "target": "function:review_server.py:_spec",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:review_server.py",
+      "target": "function:review_server.py:_slots",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:review_server.py",
+      "target": "function:review_server.py:_slots",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:review_server.py",
+      "target": "function:review_server.py:_compose_measurements",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:review_server.py",
+      "target": "function:review_server.py:_compose_measurements",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:review_server.py",
+      "target": "function:review_server.py:gen_slot7",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:review_server.py",
+      "target": "function:review_server.py:gen_slot7",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:review_server.py",
+      "target": "function:review_server.py:review",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:review_server.py",
+      "target": "function:review_server.py:review",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:review_server.py",
+      "target": "function:review_server.py:trace",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:review_server.py",
+      "target": "function:review_server.py:trace",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:review_server.py",
+      "target": "function:review_server.py:_spec_ids",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:review_server.py",
+      "target": "function:review_server.py:_spec_ids",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:review_server.py",
+      "target": "function:review_server.py:_editor_attrs",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:review_server.py",
+      "target": "function:review_server.py:_editor_attrs",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:review_server.py",
+      "target": "function:review_server.py:_commission_options",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:review_server.py",
+      "target": "function:review_server.py:_commission_options",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:review_server.py",
+      "target": "function:review_server.py:editor_data",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:review_server.py",
+      "target": "function:review_server.py:editor_data",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:review_server.py",
+      "target": "function:review_server.py:attr_values",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:review_server.py",
+      "target": "function:review_server.py:attr_values",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:review_server.py",
+      "target": "function:review_server.py:shipping",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:review_server.py",
+      "target": "function:review_server.py:shipping",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:review_server.py",
+      "target": "function:review_server.py:api_price",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:review_server.py",
+      "target": "function:review_server.py:api_price",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:review_server.py",
+      "target": "function:review_server.py:api_edit",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:review_server.py",
+      "target": "function:review_server.py:api_edit",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:review_server.py",
+      "target": "class:review_server.py:Handler",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:review_server.py",
+      "target": "class:review_server.py:Handler",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:listing_edit.py",
+      "target": "file:pipeline.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:review_server.py",
+      "target": "file:listing_edit.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:review_server.py",
+      "target": "file:ozon_client.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:review_server.py",
+      "target": "file:pipeline.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:review_server.py",
+      "target": "file:pricing.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:sync_to_db.py",
+      "target": "function:sync_to_db.py:_offer_id",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:sync_to_db.py",
+      "target": "function:sync_to_db.py:_offer_id",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:sync_to_db.py",
+      "target": "function:sync_to_db.py:latest",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:sync_to_db.py",
+      "target": "function:sync_to_db.py:latest",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:sync_to_db.py",
+      "target": "function:sync_to_db.py:_advance",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:sync_to_db.py",
+      "target": "function:sync_to_db.py:_advance",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:sync_to_db.py",
+      "target": "function:sync_to_db.py:sync",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:sync_to_db.py",
+      "target": "function:sync_to_db.py:sync",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_listing_edit.py",
+      "target": "function:tests/test_listing_edit.py:env",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_listing_edit.py",
+      "target": "function:tests/test_listing_edit.py:env",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_listing_edit.py",
+      "target": "function:tests/test_listing_edit.py:_edits",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_listing_edit.py",
+      "target": "function:tests/test_listing_edit.py:_edits",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_listing_edit.py",
+      "target": "function:tests/test_listing_edit.py:test_save_writes_spec_and_clears_need_confirm",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_listing_edit.py",
+      "target": "function:tests/test_listing_edit.py:test_save_writes_spec_and_clears_need_confirm",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_listing_edit.py",
+      "target": "function:tests/test_listing_edit.py:test_title_required",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_listing_edit.py",
+      "target": "function:tests/test_listing_edit.py:test_title_required",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_listing_edit.py",
+      "target": "function:tests/test_listing_edit.py:test_title_too_long",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_listing_edit.py",
+      "target": "function:tests/test_listing_edit.py:test_title_too_long",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_listing_edit.py",
+      "target": "function:tests/test_listing_edit.py:test_negative_weight_rejected",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_listing_edit.py",
+      "target": "function:tests/test_listing_edit.py:test_negative_weight_rejected",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_listing_edit.py",
+      "target": "function:tests/test_listing_edit.py:test_get_edits_roundtrip",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_listing_edit.py",
+      "target": "function:tests/test_listing_edit.py:test_get_edits_roundtrip",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_pricing.py",
+      "target": "function:tests/test_pricing.py:test_maozi_reference_case",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_pricing.py",
+      "target": "function:tests/test_pricing.py:test_maozi_reference_case",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_pricing.py",
+      "target": "function:tests/test_pricing.py:test_default_shipping_is_cheapest",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_pricing.py",
+      "target": "function:tests/test_pricing.py:test_default_shipping_is_cheapest",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_pricing.py",
+      "target": "function:tests/test_pricing.py:test_commission_tier_iterates_up",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_pricing.py",
+      "target": "function:tests/test_pricing.py:test_commission_tier_iterates_up",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_pricing.py",
+      "target": "function:tests/test_pricing.py:test_commission_tier_manual_override",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_pricing.py",
+      "target": "function:tests/test_pricing.py:test_commission_tier_manual_override",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_pricing.py",
+      "target": "function:tests/test_pricing.py:test_commission_tier_invalid_raises",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_pricing.py",
+      "target": "function:tests/test_pricing.py:test_commission_tier_invalid_raises",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_pricing.py",
+      "target": "function:tests/test_pricing.py:test_editor_attrs_whitelist",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_pricing.py",
+      "target": "function:tests/test_pricing.py:test_editor_attrs_whitelist",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_pricing.py",
+      "target": "function:tests/test_pricing.py:test_logistics_class_thresholds",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_pricing.py",
+      "target": "function:tests/test_pricing.py:test_logistics_class_thresholds",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_pricing.py",
+      "target": "function:tests/test_pricing.py:test_unknown_category_raises",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_pricing.py",
+      "target": "function:tests/test_pricing.py:test_unknown_category_raises",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_pricing.py",
+      "target": "function:tests/test_pricing.py:test_negative_denominator_raises",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_pricing.py",
+      "target": "function:tests/test_pricing.py:test_negative_denominator_raises",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:sync_to_db.py",
+      "target": "file:pipeline.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:tests/test_listing_edit.py",
+      "target": "file:listing_edit.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:tests/test_listing_edit.py",
+      "target": "file:pipeline.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:tests/test_pricing.py",
+      "target": "file:pricing.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:keyword_library.py",
+      "target": "function:keyword_library.py:whitelist",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:keyword_library.py",
+      "target": "function:keyword_library.py:whitelist",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:keyword_library.py",
+      "target": "function:keyword_library.py:_harvested_seeds",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:keyword_library.py",
+      "target": "function:keyword_library.py:_harvested_seeds",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:keyword_library.py",
+      "target": "function:keyword_library.py:_upsert",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:keyword_library.py",
+      "target": "function:keyword_library.py:_upsert",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:keyword_library.py",
+      "target": "function:keyword_library.py:build",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:keyword_library.py",
+      "target": "function:keyword_library.py:build",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:keyword_library.py",
+      "target": "function:keyword_library.py:passes",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:keyword_library.py",
+      "target": "function:keyword_library.py:passes",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:keyword_library.py",
+      "target": "function:keyword_library.py:consume",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:keyword_library.py",
+      "target": "function:keyword_library.py:consume",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:keyword_library.py",
+      "target": "function:keyword_library.py:refresh",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:keyword_library.py",
+      "target": "function:keyword_library.py:refresh",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:keyword_library.py",
+      "target": "function:keyword_library.py:stats",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:keyword_library.py",
+      "target": "function:keyword_library.py:stats",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:nexscope_client.py",
+      "target": "function:nexscope_client.py:spent_today",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:nexscope_client.py",
+      "target": "function:nexscope_client.py:spent_today",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:nexscope_client.py",
+      "target": "function:nexscope_client.py:call",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:nexscope_client.py",
+      "target": "function:nexscope_client.py:call",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:nexscope_client.py",
+      "target": "function:nexscope_client.py:market_keyword_search",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:nexscope_client.py",
+      "target": "function:nexscope_client.py:market_keyword_search",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:nexscope_client.py",
+      "target": "class:nexscope_client.py:CreditFuseError",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:nexscope_client.py",
+      "target": "class:nexscope_client.py:CreditFuseError",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:select_products.py",
+      "target": "function:select_products.py:main",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:select_products.py",
+      "target": "function:select_products.py:main",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_nexscope_flow.py",
+      "target": "function:tests/test_nexscope_flow.py:api_row",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_nexscope_flow.py",
+      "target": "function:tests/test_nexscope_flow.py:api_row",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_nexscope_flow.py",
+      "target": "function:tests/test_nexscope_flow.py:db",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_nexscope_flow.py",
+      "target": "function:tests/test_nexscope_flow.py:db",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_nexscope_flow.py",
+      "target": "function:tests/test_nexscope_flow.py:test_build_and_cursor",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_nexscope_flow.py",
+      "target": "function:tests/test_nexscope_flow.py:test_build_and_cursor",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_nexscope_flow.py",
+      "target": "function:tests/test_nexscope_flow.py:test_consume_funnel_and_no_double_emit",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_nexscope_flow.py",
+      "target": "function:tests/test_nexscope_flow.py:test_consume_funnel_and_no_double_emit",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_nexscope_flow.py",
+      "target": "function:tests/test_nexscope_flow.py:test_select_products_schema",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_nexscope_flow.py",
+      "target": "function:tests/test_nexscope_flow.py:test_select_products_schema",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_nexscope_flow.py",
+      "target": "function:tests/test_nexscope_flow.py:test_trend_check_alerts_collapse",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_nexscope_flow.py",
+      "target": "function:tests/test_nexscope_flow.py:test_trend_check_alerts_collapse",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_nexscope_flow.py",
+      "target": "function:tests/test_nexscope_flow.py:test_trend_check_healthy_no_alert",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_nexscope_flow.py",
+      "target": "function:tests/test_nexscope_flow.py:test_trend_check_healthy_no_alert",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_nexscope_flow.py",
+      "target": "function:tests/test_nexscope_flow.py:test_credit_fuse",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_nexscope_flow.py",
+      "target": "function:tests/test_nexscope_flow.py:test_credit_fuse",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:trend_check.py",
+      "target": "function:trend_check.py:watch_list",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:trend_check.py",
+      "target": "function:trend_check.py:watch_list",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:trend_check.py",
+      "target": "function:trend_check.py:check",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:trend_check.py",
+      "target": "function:trend_check.py:check",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:keyword_library.py",
+      "target": "file:nexscope_client.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:keyword_library.py",
+      "target": "file:pipeline.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:nexscope_client.py",
+      "target": "file:config.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:nexscope_client.py",
+      "target": "file:pipeline.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:select_products.py",
+      "target": "file:keyword_library.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:tests/test_nexscope_flow.py",
+      "target": "file:keyword_library.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:tests/test_nexscope_flow.py",
+      "target": "file:nexscope_client.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:tests/test_nexscope_flow.py",
+      "target": "file:pipeline.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:tests/test_nexscope_flow.py",
+      "target": "file:select_products.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:tests/test_nexscope_flow.py",
+      "target": "file:trend_check.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:trend_check.py",
+      "target": "file:nexscope_client.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:trend_check.py",
+      "target": "file:pipeline.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:listing_worker.py",
+      "target": "function:listing_worker.py:build_item",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:listing_worker.py",
+      "target": "function:listing_worker.py:build_item",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:listing_worker.py",
+      "target": "function:listing_worker.py:upload_images",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:listing_worker.py",
+      "target": "function:listing_worker.py:upload_images",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:listing_worker.py",
+      "target": "function:listing_worker.py:list_product",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:listing_worker.py",
+      "target": "function:listing_worker.py:list_product",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:ozon_client.py",
+      "target": "function:ozon_client.py:_post",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:ozon_client.py",
+      "target": "function:ozon_client.py:_post",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:ozon_client.py",
+      "target": "function:ozon_client.py:parse_category_ids",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:ozon_client.py",
+      "target": "function:ozon_client.py:parse_category_ids",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:ozon_client.py",
+      "target": "function:ozon_client.py:get_attributes",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:ozon_client.py",
+      "target": "function:ozon_client.py:get_attributes",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:ozon_client.py",
+      "target": "function:ozon_client.py:get_attr_values",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:ozon_client.py",
+      "target": "function:ozon_client.py:get_attr_values",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_listing_worker.py",
+      "target": "function:tests/test_listing_worker.py:test_build_item_core_fields",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_listing_worker.py",
+      "target": "function:tests/test_listing_worker.py:test_build_item_core_fields",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_listing_worker.py",
+      "target": "function:tests/test_listing_worker.py:test_dimensions_cm_to_mm_and_weight",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_listing_worker.py",
+      "target": "function:tests/test_listing_worker.py:test_dimensions_cm_to_mm_and_weight",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_listing_worker.py",
+      "target": "function:tests/test_listing_worker.py:test_brand_defaults_to_no_brand",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_listing_worker.py",
+      "target": "function:tests/test_listing_worker.py:test_brand_defaults_to_no_brand",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_listing_worker.py",
+      "target": "function:tests/test_listing_worker.py:test_existing_brand_not_overwritten",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_listing_worker.py",
+      "target": "function:tests/test_listing_worker.py:test_existing_brand_not_overwritten",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_listing_worker.py",
+      "target": "function:tests/test_listing_worker.py:test_first_image_is_primary",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_listing_worker.py",
+      "target": "function:tests/test_listing_worker.py:test_first_image_is_primary",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_listing_worker.py",
+      "target": "function:tests/test_listing_worker.py:test_missing_required_raises",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_listing_worker.py",
+      "target": "function:tests/test_listing_worker.py:test_missing_required_raises",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_ozon_client.py",
+      "target": "function:tests/test_ozon_client.py:test_get_attributes_includes_optional_and_collection",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_ozon_client.py",
+      "target": "function:tests/test_ozon_client.py:test_get_attributes_includes_optional_and_collection",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:listing_worker.py",
+      "target": "file:config.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:listing_worker.py",
+      "target": "file:listing_edit.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:listing_worker.py",
+      "target": "file:ozon_client.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:listing_worker.py",
+      "target": "file:pipeline.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:ozon_client.py",
+      "target": "file:config.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:tests/test_listing_worker.py",
+      "target": "file:listing_worker.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:tests/test_ozon_client.py",
+      "target": "file:ozon_client.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:category_tree.py",
+      "target": "function:category_tree.py:fetch_tree",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:category_tree.py",
+      "target": "function:category_tree.py:fetch_tree",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:category_tree.py",
+      "target": "function:category_tree.py:flatten",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:category_tree.py",
+      "target": "function:category_tree.py:flatten",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:category_tree.py",
+      "target": "function:category_tree.py:main",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:category_tree.py",
+      "target": "function:category_tree.py:main",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:listing_edit.py",
+      "target": "file:tests/test_listing_edit.py",
+      "type": "tested_by",
+      "direction": "forward",
+      "weight": 0.5,
+      "description": "Path-based pairing (deterministic)"
+    },
+    {
+      "source": "file:pricing.py",
+      "target": "file:tests/test_pricing.py",
+      "type": "tested_by",
+      "direction": "forward",
+      "weight": 0.5,
+      "description": "Path-based pairing (deterministic)"
+    },
+    {
+      "source": "file:listing_worker.py",
+      "target": "file:tests/test_listing_worker.py",
+      "type": "tested_by",
+      "direction": "forward",
+      "weight": 0.5,
+      "description": "Path-based pairing (deterministic)"
+    },
+    {
+      "source": "file:ozon_client.py",
+      "target": "file:tests/test_ozon_client.py",
+      "type": "tested_by",
+      "direction": "forward",
+      "weight": 0.5,
+      "description": "Path-based pairing (deterministic)"
+    }
+  ],
+  "layers": [
+    {
+      "id": "layer:sourcing",
+      "name": "选品与找货层",
+      "description": "负责从 Ozon/Nexscope 关键词与类目数据中筛选候选商品，并驱动 1688 图搜和同一性筛选。",
+      "nodeIds": [
+        "file:sourcing_agent.py",
+        "file:keyword_library.py",
+        "file:nexscope_client.py",
+        "file:select_products.py",
+        "file:trend_check.py",
+        "file:category_tree.py",
+        "document:seeds.txt"
+      ]
+    },
+    {
+      "id": "layer:listing-generation",
+      "name": "内容与套图生成层",
+      "description": "负责生成 Ozon listing 文案、8-slot 套图规格、图像处理提示词和视觉参考素材。",
+      "nodeIds": [
+        "file:content_agent.py",
+        "file:dimensions.py",
+        "file:image_worker.py",
+        "file:text_overlay.py",
+        "document:prompts/slot1_cover_hook_v3.txt",
+        "document:prompts/slot1_payoff_v4.txt",
+        "document:prompts/slot2_white_bg_v1.txt",
+        "document:prompts/slot3_arguments_v3.txt",
+        "document:prompts/slot4_usage_v3.txt",
+        "document:prompts/slot5_scene_v3.txt",
+        "document:prompts/slot6_detail_v3.txt",
+        "document:prompts/slot7_size_v3.txt",
+        "document:prompts/slot8_scenarios_v3.txt",
+        "file:prompts/style_ref/detail_strips_v1.webp",
+        "file:prompts/style_ref/main_headline_v1.webp",
+        "file:prompts/style_ref/scenarios_circle_v1.webp",
+        "file:prompts/style_ref/selling_point_v1.webp",
+        "file:prompts/style_ref/size_arrows_v1.webp",
+        "file:prompts/style_ref/usage_grid_v1.webp"
+      ]
+    },
+    {
+      "id": "layer:data",
+      "name": "数据与定价层",
+      "description": "维护 SQLite 事实源、离线 artifact 同步、Ozon 佣金物流规则、类目缓存和商品 spec 数据。",
+      "nodeIds": [
+        "file:pipeline.py",
+        "file:pricing.py",
+        "file:sync_to_db.py",
+        "config:data/candidates-2026-11-10.json",
+        "config:data/categories-leaf.json",
+        "config:data/category-tree-ru.json",
+        "config:data/image-search-tasks-2026-11-10.json",
+        "config:data/ozon-commission.json",
+        "config:data/ozon-logistics.json",
+        "config:data/sourcing-2026-11-10.json",
+        "file:data/.DS_Store",
+        "config:data/attr-cache/17028714_594158428.json",
+        "config:data/specs/дозатор_для_жидкого_мыла.json",
+        "config:data/specs/органайзер_для_столовых_приборов_в_ящик.json"
+      ]
+    },
+    {
+      "id": "layer:review-publish",
+      "name": "审核台与发布层",
+      "description": "提供本地图审台、上架编辑校验、Ozon Seller API 属性能力和最终 listing 发布链路。",
+      "nodeIds": [
+        "file:listing_edit.py",
+        "file:review_server.py",
+        "file:listing_worker.py",
+        "file:ozon_client.py",
+        "file:pipeline.html",
+        "file:ui-sketch.html"
+      ]
+    },
+    {
+      "id": "layer:config",
+      "name": "配置与项目支持层",
+      "description": "集中保存外部服务凭据入口、Understand-Anything 项目配置和扫描到的仓库级元数据。",
+      "nodeIds": [
+        "file:config.py",
+        "config:.ua/config.json",
+        "file:.DS_Store"
+      ]
+    },
+    {
+      "id": "layer:documentation",
+      "name": "文档与调研层",
+      "description": "记录项目路线、术语、业务规则调研和阶段性交接，为 Ozon Pipeline 的人工决策提供依据。",
+      "nodeIds": [
+        "document:GLOSSARY.md",
+        "document:README.md",
+        "document:ROADMAP.md",
+        "document:docs/research/1688-real-dimensions.md",
+        "document:docs/research/nexscope-free-alternatives.md",
+        "document:docs/research/ozon-commission-rules.md",
+        "document:docs/research/ozon-cover-emotion-v4.md",
+        "document:docs/research/ozon-image-set-hot-logic.md",
+        "document:docs/research/ozon-listing-api.md",
+        "document:docs/research/ozon-pricing-formula.md",
+        "document:docs/research/ozon-seller-form-alignment.md",
+        "document:docs/handoffs/2026-11-11-ozon-listing-editor.md"
+      ]
+    },
+    {
+      "id": "layer:test",
+      "name": "测试层",
+      "description": "用 pytest 覆盖选品、同一性闸、定价、审核编辑、Ozon 客户端和上架 payload 的关键回归路径。",
+      "nodeIds": [
+        "file:tests/test_identity_gate.py",
+        "file:tests/test_listing_edit.py",
+        "file:tests/test_pricing.py",
+        "file:tests/test_nexscope_flow.py",
+        "file:tests/test_listing_worker.py",
+        "file:tests/test_ozon_client.py"
+      ]
+    }
+  ],
+  "tour": [
+    {
+      "order": 1,
+      "title": "项目地图与术语",
+      "description": "先从 README、ROADMAP 和 GLOSSARY 建立整体语境：这个仓库围绕 Ozon 跨境电商，把选品、定价、listing 生成、图审和发布串成一条流水线。pipeline.html 补上静态流程蓝图，帮助你看到哪些阶段是自动化、哪些位置保留人工闸点。读完这一步，再进入真正承载状态的核心代码会更容易。",
+      "nodeIds": [
+        "document:README.md",
+        "document:ROADMAP.md",
+        "document:GLOSSARY.md",
+        "file:pipeline.html"
+      ]
+    },
+    {
+      "order": 2,
+      "title": "SQLite 事实源",
+      "description": "pipeline.py 是整条 Pipeline 的状态机和 SQLite 表结构入口，也是其他阶段共同依赖最多的文件。pricing.py 在这个事实源之上计算 Ozon 售价、划线价、佣金、物流和利润拆分，而佣金与物流 JSON 是这些规则的数据来源。这里先看清数据如何落库、流转和定价，后面的选品与上架才有统一坐标。",
+      "nodeIds": [
+        "file:pipeline.py",
+        "file:pricing.py",
+        "config:data/ozon-commission.json",
+        "config:data/ozon-logistics.json"
+      ],
+      "languageLesson": "SQLite 在这里不是临时缓存，而是唯一事实源；Python 模块用显式函数和命令行操作维护状态，比引入额外服务更轻。"
+    },
+    {
+      "order": 3,
+      "title": "关键词选品入口",
+      "description": "选品从种子词和 Nexscope 指标开始：keyword_library.py 把词级数据资产化到本地 SQLite，nexscope_client.py 负责 API 调用、积分记账和日熔断。select_products.py 再消费合格词，导出候选商品和 Ozon top 商品快照。这个阶段决定流水线后面要为哪些商品投入找货、算价和生成内容。",
+      "nodeIds": [
+        "document:seeds.txt",
+        "file:keyword_library.py",
+        "file:nexscope_client.py",
+        "file:select_products.py",
+        "config:data/candidates-2026-11-10.json"
+      ]
+    },
+    {
+      "order": 4,
+      "title": "1688 找货闸门",
+      "description": "在有候选 Ozon 商品后，sourcing_agent.py 把爆款图交给 1688 图搜，并用 VL 同一性闸过滤掉不像同款的货源。image-search-tasks JSON 连接选品结果和图搜任务，sourcing JSON 保存供应商价格、销量和筛选信息。这个闸门很关键，因为错误货源会污染成本核算和后续套图生成。",
+      "nodeIds": [
+        "file:sourcing_agent.py",
+        "config:data/image-search-tasks-2026-11-10.json",
+        "config:data/sourcing-2026-11-10.json",
+        "document:docs/research/1688-real-dimensions.md"
+      ]
+    },
+    {
+      "order": 5,
+      "title": "类目与文案规格",
+      "description": "content_agent.py 把 Ozon 关键词、1688 标题和类目约束交给 LLM，生成可校验的俄语 listing 文案与 8-slot 套图规格。category_tree.py 和本地类目缓存让模型按真实 Ozon 类目工作，而不是凭空猜测。spec JSON 是这一步的产物，也会继续喂给生图、审核和发布链路。",
+      "nodeIds": [
+        "file:content_agent.py",
+        "file:category_tree.py",
+        "config:data/categories-leaf.json",
+        "config:data/category-tree-ru.json",
+        "config:data/specs/органайзер_для_столовых_приборов_в_ящик.json"
+      ],
+      "languageLesson": "这里的 LLM 输出先被约束成 JSON spec，再进入后续步骤；把生成内容结构化，是让自动化 Pipeline 可审核、可重跑的关键。"
+    },
+    {
+      "order": 6,
+      "title": "8-slot 套图生成",
+      "description": "image_worker.py 消费 content spec 和货源图，调用 qwen-image I2I 生成 Ozon 8-slot 图片。text_overlay.py 用 PIL 后贴俄语标题、徽章、论据芯片和场景标签，避免让模型直接渲染不稳定的西里尔文字。各 slot prompt 文档定义了封面、白底图、尺寸图等视觉职责，使套图不是随机出图，而是按销售漏斗组织。",
+      "nodeIds": [
+        "file:image_worker.py",
+        "file:text_overlay.py",
+        "document:prompts/slot1_payoff_v4.txt",
+        "document:prompts/slot2_white_bg_v1.txt",
+        "document:prompts/slot7_size_v3.txt"
+      ],
+      "languageLesson": "Pillow 负责确定性文字叠加，生成模型负责无字视觉底图；这个分工比让 AI 一次性生成带文案图片更可控。"
+    },
+    {
+      "order": 7,
+      "title": "尺寸溯源与视觉证据",
+      "description": "dimensions.py 从商品图中读取尺寸标注，为 slot7 尺寸图提供可溯源的数字来源。相关研究文档解释为什么真实尺寸不能只靠模型猜测，风格参考 WebP 则记录尺寸箭头和细节图的视觉方向。这个步骤展示了项目如何把视觉生成和业务可信度连接起来。",
+      "nodeIds": [
+        "file:dimensions.py",
+        "document:docs/research/ozon-image-set-hot-logic.md",
+        "file:prompts/style_ref/size_arrows_v1.webp",
+        "file:prompts/style_ref/detail_strips_v1.webp"
+      ]
+    },
+    {
+      "order": 8,
+      "title": "本地图审台",
+      "description": "review_server.py 提供本地 Web 图审台，展示看板、图审队列、商品 trace 和编辑 API。listing_edit.py 把人工修改后的标题、重量、价格和属性校验后写回 SQLite 与 spec 文件，ui-sketch.html 则说明界面如何承载这些操作。Ozon 表单对齐文档和属性缓存让审核台尽量贴近 Seller 后台真实字段。",
+      "nodeIds": [
+        "file:review_server.py",
+        "file:listing_edit.py",
+        "file:ui-sketch.html",
+        "document:docs/research/ozon-seller-form-alignment.md",
+        "config:data/attr-cache/17028714_594158428.json"
+      ]
+    },
+    {
+      "order": 9,
+      "title": "发布到 Ozon",
+      "description": "listing_worker.py 把审核通过的商品组装成 Ozon /v3/product/import payload，并把本地套图上传到 OSS 后发起上架。ozon_client.py 封装类目属性、字典值和类目 ID 解析能力，是审核台与发布 worker 共用的 API 边界。Ozon listing API 调研文档说明了上架接口、价格库存和限流注意点，是理解发布风险的补充材料。",
+      "nodeIds": [
+        "file:listing_worker.py",
+        "file:ozon_client.py",
+        "document:docs/research/ozon-listing-api.md",
+        "document:docs/handoffs/2026-11-11-ozon-listing-editor.md"
+      ]
+    },
+    {
+      "order": 10,
+      "title": "离线产物回灌",
+      "description": "sync_to_db.py 把 candidates、sourcing、specs 和生成图等离线 artifacts 幂等同步回 pipeline.db。它把前面多个松散 JSON 产物重新收束到 SQLite 事实源，让图审和发布看到同一份状态。读这一步可以理解项目为什么允许离线探索，但最终仍要回到统一数据库。",
+      "nodeIds": [
+        "file:sync_to_db.py",
+        "config:data/specs/дозатор_для_жидкого_мыла.json",
+        "config:data/sourcing-2026-11-10.json",
+        "config:data/candidates-2026-11-10.json"
+      ]
+    },
+    {
+      "order": 11,
+      "title": "测试护栏",
+      "description": "最后看测试，了解哪些行为被认为不能退化：Nexscope 流程、同一性闸、定价公式、审核台编辑和 Ozon payload 都有回归覆盖。test_identity_gate.py 与 test_nexscope_flow.py 保护选品和找货入口，test_pricing.py、test_listing_edit.py、test_listing_worker.py 保护后半段商业规则。它们也是新人修改 Pipeline 前最该先跑的安全网。",
+      "nodeIds": [
+        "file:tests/test_nexscope_flow.py",
+        "file:tests/test_identity_gate.py",
+        "file:tests/test_pricing.py",
+        "file:tests/test_listing_edit.py",
+        "file:tests/test_listing_worker.py"
+      ],
+      "languageLesson": "pytest 测试按业务闸点命名，比按实现细节命名更适合这种流水线项目；失败时能直接定位是哪段业务规则破了。"
+    }
+  ]
+}

@@ -1,0 +1,1309 @@
+{
+  "nodes": [
+    {
+      "id": "file:listing_edit.py",
+      "type": "file",
+      "name": "listing_edit.py",
+      "filePath": "listing_edit.py",
+      "summary": "保存审核台中的上架编辑内容，校验标题、重量、价格和属性后写回 SQLite 与 spec 文件。",
+      "tags": [
+        "审核台",
+        "上架-编辑",
+        "校验"
+      ],
+      "complexity": "moderate",
+      "languageNotes": "Python 脚本以标准库和少量外部 SDK 组合为主，模块级函数承担主要业务步骤。"
+    },
+    {
+      "id": "function:listing_edit.py:_validate",
+      "type": "function",
+      "name": "_validate",
+      "filePath": "listing_edit.py",
+      "lineRange": [
+        19,
+        35
+      ],
+      "summary": "校验审核台编辑内容中的标题长度、重量、定价和属性格式。",
+      "tags": [
+        "内部-辅助",
+        "工具函数",
+        "实现-细节"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:listing_edit.py:save",
+      "type": "function",
+      "name": "save",
+      "filePath": "listing_edit.py",
+      "lineRange": [
+        38,
+        75
+      ],
+      "summary": "保存上架编辑到 spec 与 pipeline metrics，并清除 need_confirm 标记。",
+      "tags": [
+        "业务-逻辑",
+        "工具函数",
+        "python"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:listing_edit.py:get_edits",
+      "type": "function",
+      "name": "get_edits",
+      "filePath": "listing_edit.py",
+      "lineRange": [
+        78,
+        87
+      ],
+      "summary": "从商品 metrics 中读取已保存的 listing_edits，缺失时返回空字典。",
+      "tags": [
+        "业务-逻辑",
+        "工具函数",
+        "python"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:pipeline.py",
+      "type": "file",
+      "name": "pipeline.py",
+      "filePath": "pipeline.py",
+      "summary": "定义 pipeline.db 的 SQLite 状态机、表结构和命令行操作，是选品到上架流水线的唯一事实源。",
+      "tags": [
+        "sqlite",
+        "状态机",
+        "事实源",
+        "cli"
+      ],
+      "complexity": "complex",
+      "languageNotes": "Python 脚本以标准库和少量外部 SDK 组合为主，模块级函数承担主要业务步骤。"
+    },
+    {
+      "id": "function:pipeline.py:conn",
+      "type": "function",
+      "name": "conn",
+      "filePath": "pipeline.py",
+      "lineRange": [
+        105,
+        109
+      ],
+      "summary": "创建带 Row 工厂的 SQLite 连接，并确保 data 目录存在。",
+      "tags": [
+        "业务-逻辑",
+        "工具函数",
+        "python"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:pipeline.py:_migrate",
+      "type": "function",
+      "name": "_migrate",
+      "filePath": "pipeline.py",
+      "lineRange": [
+        111,
+        131
+      ],
+      "summary": "为旧数据库补建新增列和表，保持 schema 增量兼容。",
+      "tags": [
+        "内部-辅助",
+        "工具函数",
+        "实现-细节"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:pipeline.py:now",
+      "type": "function",
+      "name": "now",
+      "filePath": "pipeline.py",
+      "lineRange": [
+        134,
+        135
+      ],
+      "summary": "返回秒级 ISO 时间戳，统一事件和记录更新时间格式。",
+      "tags": [
+        "业务-逻辑",
+        "工具函数",
+        "python"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:pipeline.py:cmd_init",
+      "type": "function",
+      "name": "cmd_init",
+      "filePath": "pipeline.py",
+      "lineRange": [
+        138,
+        142
+      ],
+      "summary": "初始化 SQLite schema，创建产品、事件、审核和关键词相关表。",
+      "tags": [
+        "业务-逻辑",
+        "工具函数",
+        "python"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:pipeline.py:_event",
+      "type": "function",
+      "name": "_event",
+      "filePath": "pipeline.py",
+      "lineRange": [
+        145,
+        147
+      ],
+      "summary": "向 events 表追加状态流转或同步说明记录。",
+      "tags": [
+        "内部-辅助",
+        "工具函数",
+        "实现-细节"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:pipeline.py:cmd_add",
+      "type": "function",
+      "name": "cmd_add",
+      "filePath": "pipeline.py",
+      "lineRange": [
+        150,
+        157
+      ],
+      "summary": "新增候选商品记录并写入 discovered 事件。",
+      "tags": [
+        "业务-逻辑",
+        "工具函数",
+        "python"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:pipeline.py:cmd_advance",
+      "type": "function",
+      "name": "cmd_advance",
+      "filePath": "pipeline.py",
+      "lineRange": [
+        160,
+        171
+      ],
+      "summary": "校验合法状态流转并推进产品状态。",
+      "tags": [
+        "业务-逻辑",
+        "工具函数",
+        "python"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:pipeline.py:cmd_kill",
+      "type": "function",
+      "name": "cmd_kill",
+      "filePath": "pipeline.py",
+      "lineRange": [
+        174,
+        182
+      ],
+      "summary": "将产品标记为 dead 并记录死亡原因。",
+      "tags": [
+        "业务-逻辑",
+        "工具函数",
+        "python"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:pipeline.py:cmd_list",
+      "type": "function",
+      "name": "cmd_list",
+      "filePath": "pipeline.py",
+      "lineRange": [
+        185,
+        193
+      ],
+      "summary": "按状态列出产品，用于 CLI 查看流水线队列。",
+      "tags": [
+        "业务-逻辑",
+        "工具函数",
+        "python"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:pipeline.py:record_review",
+      "type": "function",
+      "name": "record_review",
+      "filePath": "pipeline.py",
+      "lineRange": [
+        196,
+        211
+      ],
+      "summary": "记录图审决策并根据 approve、regenerate 或 kill 推进状态机。",
+      "tags": [
+        "业务-逻辑",
+        "工具函数",
+        "python"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:pricing.py",
+      "type": "file",
+      "name": "pricing.py",
+      "filePath": "pricing.py",
+      "summary": "实现 Ozon 跨境定价公式，按佣金档、物流档和利润率计算售价、划线价与费用拆分。",
+      "tags": [
+        "定价",
+        "佣金",
+        "物流",
+        "公式"
+      ],
+      "complexity": "moderate",
+      "languageNotes": "Python 脚本以标准库和少量外部 SDK 组合为主，模块级函数承担主要业务步骤。"
+    },
+    {
+      "id": "function:pricing.py:logistics_class",
+      "type": "function",
+      "name": "logistics_class",
+      "filePath": "pricing.py",
+      "lineRange": [
+        26,
+        31
+      ],
+      "summary": "按采购价货值选择 extra_small、small 或 premium_small 物流档。",
+      "tags": [
+        "定价",
+        "计算",
+        "业务-规则"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:pricing.py:_load",
+      "type": "function",
+      "name": "_load",
+      "filePath": "pricing.py",
+      "lineRange": [
+        34,
+        35
+      ],
+      "summary": "_load 是 pricing.py 内部辅助函数，封装该模块主流程复用的局部逻辑。",
+      "tags": [
+        "内部-辅助",
+        "工具函数",
+        "实现-细节"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:pricing.py:commission_tiers",
+      "type": "function",
+      "name": "commission_tiers",
+      "filePath": "pricing.py",
+      "lineRange": [
+        38,
+        43
+      ],
+      "summary": "按类目 ID 从本地佣金库读取三档佣金率。",
+      "tags": [
+        "定价",
+        "计算",
+        "业务-规则"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:pricing.py:shipping_options",
+      "type": "function",
+      "name": "shipping_options",
+      "filePath": "pricing.py",
+      "lineRange": [
+        46,
+        52
+      ],
+      "summary": "按物流档和重量计算所有可用物流方案费用并排序。",
+      "tags": [
+        "定价",
+        "计算",
+        "业务-规则"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:pricing.py:_price_tier",
+      "type": "function",
+      "name": "_price_tier",
+      "filePath": "pricing.py",
+      "lineRange": [
+        55,
+        56
+      ],
+      "summary": "_price_tier 是 pricing.py 内部辅助函数，封装该模块主流程复用的局部逻辑。",
+      "tags": [
+        "内部-辅助",
+        "工具函数",
+        "实现-细节"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:pricing.py:calc",
+      "type": "function",
+      "name": "calc",
+      "filePath": "pricing.py",
+      "lineRange": [
+        59,
+        114
+      ],
+      "summary": "综合采购价、运费、佣金、广告和利润率迭代计算最终售价。",
+      "tags": [
+        "定价",
+        "计算",
+        "业务-规则"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:review_server.py",
+      "type": "file",
+      "name": "review_server.py",
+      "filePath": "review_server.py",
+      "summary": "提供本地图审台 Web 服务，展示流水线看板、图审队列、商品 trace 和上架编辑 API。",
+      "tags": [
+        "web-服务",
+        "审核台",
+        "http-server",
+        "人工-闸"
+      ],
+      "complexity": "complex",
+      "languageNotes": "Python 脚本以标准库和少量外部 SDK 组合为主，模块级函数承担主要业务步骤。"
+    },
+    {
+      "id": "function:review_server.py:load",
+      "type": "function",
+      "name": "load",
+      "filePath": "review_server.py",
+      "lineRange": [
+        325,
+        326
+      ],
+      "summary": "把数据库查询结果转为 dict 列表，简化页面渲染。",
+      "tags": [
+        "业务-逻辑",
+        "工具函数",
+        "python"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:review_server.py:topbar",
+      "type": "function",
+      "name": "topbar",
+      "filePath": "review_server.py",
+      "lineRange": [
+        329,
+        352
+      ],
+      "summary": "计算并渲染审核台顶栏保险丝指标和状态概览。",
+      "tags": [
+        "业务-逻辑",
+        "工具函数",
+        "python"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:review_server.py:page",
+      "type": "function",
+      "name": "page",
+      "filePath": "review_server.py",
+      "lineRange": [
+        355,
+        422
+      ],
+      "summary": "组合通用页面框架、tab 和主体 HTML。",
+      "tags": [
+        "业务-逻辑",
+        "工具函数",
+        "python"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:review_server.py:mini",
+      "type": "function",
+      "name": "mini",
+      "filePath": "review_server.py",
+      "lineRange": [
+        425,
+        436
+      ],
+      "summary": "渲染看板中的小型商品卡片。",
+      "tags": [
+        "业务-逻辑",
+        "工具函数",
+        "python"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:review_server.py:board",
+      "type": "function",
+      "name": "board",
+      "filePath": "review_server.py",
+      "lineRange": [
+        439,
+        461
+      ],
+      "summary": "渲染流水线各状态列与待处理商品概览。",
+      "tags": [
+        "业务-逻辑",
+        "工具函数",
+        "python"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:review_server.py:_spec",
+      "type": "function",
+      "name": "_spec",
+      "filePath": "review_server.py",
+      "lineRange": [
+        464,
+        474
+      ],
+      "summary": "按商品 metrics 读取对应 spec JSON。",
+      "tags": [
+        "内部-辅助",
+        "工具函数",
+        "实现-细节"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:review_server.py:_slots",
+      "type": "function",
+      "name": "_slots",
+      "filePath": "review_server.py",
+      "lineRange": [
+        477,
+        498
+      ],
+      "summary": "从生成目录读取 slot 图片并组织为审核展示数据。",
+      "tags": [
+        "内部-辅助",
+        "工具函数",
+        "实现-细节"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:review_server.py:_compose_measurements",
+      "type": "function",
+      "name": "_compose_measurements",
+      "filePath": "review_server.py",
+      "lineRange": [
+        501,
+        512
+      ],
+      "summary": "把结构化尺寸字段拼成固定俄语单位的尺寸描述。",
+      "tags": [
+        "内部-辅助",
+        "工具函数",
+        "实现-细节"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:review_server.py:gen_slot7",
+      "type": "function",
+      "name": "gen_slot7",
+      "filePath": "review_server.py",
+      "lineRange": [
+        515,
+        547
+      ],
+      "summary": "保存人工尺寸、重生 slot7 并更新数据库中的 spec 和 assets 信息。",
+      "tags": [
+        "业务-逻辑",
+        "工具函数",
+        "python"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:review_server.py:review",
+      "type": "function",
+      "name": "review",
+      "filePath": "review_server.py",
+      "lineRange": [
+        550,
+        681
+      ],
+      "summary": "渲染图审队列详情、8-slot 网格、决策表单和编辑入口。",
+      "tags": [
+        "业务-逻辑",
+        "工具函数",
+        "python"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:review_server.py:trace",
+      "type": "function",
+      "name": "trace",
+      "filePath": "review_server.py",
+      "lineRange": [
+        684,
+        711
+      ],
+      "summary": "渲染单品事件时间线、审核历史和关键 metrics。",
+      "tags": [
+        "业务-逻辑",
+        "工具函数",
+        "python"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:review_server.py:_spec_ids",
+      "type": "function",
+      "name": "_spec_ids",
+      "filePath": "review_server.py",
+      "lineRange": [
+        714,
+        715
+      ],
+      "summary": "从 spec 的 categoryId 中解析 Ozon description_category_id 与 type_id。",
+      "tags": [
+        "内部-辅助",
+        "工具函数",
+        "实现-细节"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:review_server.py:_editor_attrs",
+      "type": "function",
+      "name": "_editor_attrs",
+      "filePath": "review_server.py",
+      "lineRange": [
+        728,
+        731
+      ],
+      "summary": "按白名单过滤并排序审核台编辑器需要展示的 Ozon 属性。",
+      "tags": [
+        "内部-辅助",
+        "工具函数",
+        "实现-细节"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:review_server.py:_commission_options",
+      "type": "function",
+      "name": "_commission_options",
+      "filePath": "review_server.py",
+      "lineRange": [
+        734,
+        745
+      ],
+      "summary": "为编辑器生成当前类目的真实佣金档下拉选项。",
+      "tags": [
+        "内部-辅助",
+        "工具函数",
+        "实现-细节"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:review_server.py:editor_data",
+      "type": "function",
+      "name": "editor_data",
+      "filePath": "review_server.py",
+      "lineRange": [
+        748,
+        767
+      ],
+      "summary": "组装编辑器初始文案、成本、属性、佣金和历史编辑数据。",
+      "tags": [
+        "业务-逻辑",
+        "工具函数",
+        "python"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:review_server.py:attr_values",
+      "type": "function",
+      "name": "attr_values",
+      "filePath": "review_server.py",
+      "lineRange": [
+        770,
+        775
+      ],
+      "summary": "代理查询 Ozon 字典属性可选值。",
+      "tags": [
+        "业务-逻辑",
+        "工具函数",
+        "python"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:review_server.py:shipping",
+      "type": "function",
+      "name": "shipping",
+      "filePath": "review_server.py",
+      "lineRange": [
+        778,
+        780
+      ],
+      "summary": "返回指定成本和重量下的可用物流方案。",
+      "tags": [
+        "业务-逻辑",
+        "工具函数",
+        "python"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:review_server.py:api_price",
+      "type": "function",
+      "name": "api_price",
+      "filePath": "review_server.py",
+      "lineRange": [
+        783,
+        800
+      ],
+      "summary": "根据编辑器输入调用 pricing.calc，返回建议售价和费用拆分。",
+      "tags": [
+        "api",
+        "服务-调用",
+        "工具函数"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:review_server.py:api_edit",
+      "type": "function",
+      "name": "api_edit",
+      "filePath": "review_server.py",
+      "lineRange": [
+        803,
+        818
+      ],
+      "summary": "保存审核台编辑提交并返回校验结果。",
+      "tags": [
+        "api",
+        "服务-调用",
+        "工具函数"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "class:review_server.py:Handler",
+      "type": "class",
+      "name": "Handler",
+      "filePath": "review_server.py",
+      "lineRange": [
+        821,
+        924
+      ],
+      "summary": "处理本地审核台的 GET 与 POST 请求，负责静态媒体、防跳转、API 路由和日志抑制。",
+      "tags": [
+        "http-handler",
+        "web-服务",
+        "路由"
+      ],
+      "complexity": "complex"
+    }
+  ],
+  "edges": [
+    {
+      "source": "file:listing_edit.py",
+      "target": "function:listing_edit.py:_validate",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:listing_edit.py",
+      "target": "function:listing_edit.py:_validate",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:listing_edit.py",
+      "target": "function:listing_edit.py:save",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:listing_edit.py",
+      "target": "function:listing_edit.py:save",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:listing_edit.py",
+      "target": "function:listing_edit.py:get_edits",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:listing_edit.py",
+      "target": "function:listing_edit.py:get_edits",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:pipeline.py",
+      "target": "function:pipeline.py:conn",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:pipeline.py",
+      "target": "function:pipeline.py:conn",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:pipeline.py",
+      "target": "function:pipeline.py:_migrate",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:pipeline.py",
+      "target": "function:pipeline.py:_migrate",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:pipeline.py",
+      "target": "function:pipeline.py:now",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:pipeline.py",
+      "target": "function:pipeline.py:now",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:pipeline.py",
+      "target": "function:pipeline.py:cmd_init",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:pipeline.py",
+      "target": "function:pipeline.py:cmd_init",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:pipeline.py",
+      "target": "function:pipeline.py:_event",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:pipeline.py",
+      "target": "function:pipeline.py:_event",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:pipeline.py",
+      "target": "function:pipeline.py:cmd_add",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:pipeline.py",
+      "target": "function:pipeline.py:cmd_add",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:pipeline.py",
+      "target": "function:pipeline.py:cmd_advance",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:pipeline.py",
+      "target": "function:pipeline.py:cmd_advance",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:pipeline.py",
+      "target": "function:pipeline.py:cmd_kill",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:pipeline.py",
+      "target": "function:pipeline.py:cmd_kill",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:pipeline.py",
+      "target": "function:pipeline.py:cmd_list",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:pipeline.py",
+      "target": "function:pipeline.py:cmd_list",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:pipeline.py",
+      "target": "function:pipeline.py:record_review",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:pipeline.py",
+      "target": "function:pipeline.py:record_review",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:pricing.py",
+      "target": "function:pricing.py:logistics_class",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:pricing.py",
+      "target": "function:pricing.py:logistics_class",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:pricing.py",
+      "target": "function:pricing.py:_load",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:pricing.py",
+      "target": "function:pricing.py:_load",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:pricing.py",
+      "target": "function:pricing.py:commission_tiers",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:pricing.py",
+      "target": "function:pricing.py:commission_tiers",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:pricing.py",
+      "target": "function:pricing.py:shipping_options",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:pricing.py",
+      "target": "function:pricing.py:shipping_options",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:pricing.py",
+      "target": "function:pricing.py:_price_tier",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:pricing.py",
+      "target": "function:pricing.py:_price_tier",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:pricing.py",
+      "target": "function:pricing.py:calc",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:pricing.py",
+      "target": "function:pricing.py:calc",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:review_server.py",
+      "target": "function:review_server.py:load",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:review_server.py",
+      "target": "function:review_server.py:load",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:review_server.py",
+      "target": "function:review_server.py:topbar",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:review_server.py",
+      "target": "function:review_server.py:topbar",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:review_server.py",
+      "target": "function:review_server.py:page",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:review_server.py",
+      "target": "function:review_server.py:page",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:review_server.py",
+      "target": "function:review_server.py:mini",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:review_server.py",
+      "target": "function:review_server.py:mini",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:review_server.py",
+      "target": "function:review_server.py:board",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:review_server.py",
+      "target": "function:review_server.py:board",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:review_server.py",
+      "target": "function:review_server.py:_spec",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:review_server.py",
+      "target": "function:review_server.py:_spec",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:review_server.py",
+      "target": "function:review_server.py:_slots",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:review_server.py",
+      "target": "function:review_server.py:_slots",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:review_server.py",
+      "target": "function:review_server.py:_compose_measurements",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:review_server.py",
+      "target": "function:review_server.py:_compose_measurements",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:review_server.py",
+      "target": "function:review_server.py:gen_slot7",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:review_server.py",
+      "target": "function:review_server.py:gen_slot7",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:review_server.py",
+      "target": "function:review_server.py:review",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:review_server.py",
+      "target": "function:review_server.py:review",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:review_server.py",
+      "target": "function:review_server.py:trace",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:review_server.py",
+      "target": "function:review_server.py:trace",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:review_server.py",
+      "target": "function:review_server.py:_spec_ids",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:review_server.py",
+      "target": "function:review_server.py:_spec_ids",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:review_server.py",
+      "target": "function:review_server.py:_editor_attrs",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:review_server.py",
+      "target": "function:review_server.py:_editor_attrs",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:review_server.py",
+      "target": "function:review_server.py:_commission_options",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:review_server.py",
+      "target": "function:review_server.py:_commission_options",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:review_server.py",
+      "target": "function:review_server.py:editor_data",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:review_server.py",
+      "target": "function:review_server.py:editor_data",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:review_server.py",
+      "target": "function:review_server.py:attr_values",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:review_server.py",
+      "target": "function:review_server.py:attr_values",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:review_server.py",
+      "target": "function:review_server.py:shipping",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:review_server.py",
+      "target": "function:review_server.py:shipping",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:review_server.py",
+      "target": "function:review_server.py:api_price",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:review_server.py",
+      "target": "function:review_server.py:api_price",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:review_server.py",
+      "target": "function:review_server.py:api_edit",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:review_server.py",
+      "target": "function:review_server.py:api_edit",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:review_server.py",
+      "target": "class:review_server.py:Handler",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:review_server.py",
+      "target": "class:review_server.py:Handler",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:listing_edit.py",
+      "target": "file:pipeline.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:review_server.py",
+      "target": "file:listing_edit.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:review_server.py",
+      "target": "file:ozon_client.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:review_server.py",
+      "target": "file:pipeline.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:review_server.py",
+      "target": "file:pricing.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    }
+  ]
+}

@@ -47,3 +47,11 @@ _Avoid_: 待确认、有风险
 **文案（listing copy）**:
 上架用的俄语文字内容 = ozon_title（标题 ≤200 字符）+ description_ru（详情介绍 ≤1000 字符）+ 套图 slot 文案。由 content_agent 在生图前产出。
 _Avoid_: 描述、详情（单独说"详情"时指 description_ru）
+
+**上架属性（listing attributes）**:
+Ozon 类目要求填写的商品特征（характеристики，如颜色/材质/品牌），含必填（is_required）与筛选项（is_aspect）。字典值属性只能从官方字典选值（dictionary_value_id），禁止自由文本。由 LLM 预填、人工在图审阶段确认。
+_Avoid_: 商品标签、参数
+
+**类目佣金（category commission）**:
+Ozon 按类目与售价档（≤1500₽ / 1500–5000₽ / >5000₽）抽取的销售佣金百分比。本地维护在 `data/ozon-commission.json`（数据源：毛子ERP 定价工具，542 个叶子类目，cate_id 即 Ozon description_category_id）。
+_Avoid_: 平台扣点、抽成

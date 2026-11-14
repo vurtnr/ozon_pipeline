@@ -1,0 +1,49 @@
+{
+  "projectRoot": "/Users/jiaoyumin/rust_workspace/ozon-pipeline",
+  "batchFiles": [
+    {
+      "path": "GLOSSARY.md",
+      "language": "markdown",
+      "sizeLines": 57,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "README.md",
+      "language": "markdown",
+      "sizeLines": 1,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "ROADMAP.md",
+      "language": "markdown",
+      "sizeLines": 103,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "pipeline.html",
+      "language": "html",
+      "sizeLines": 395,
+      "fileCategory": "markup"
+    },
+    {
+      "path": "seeds.txt",
+      "language": "txt",
+      "sizeLines": 7,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "ui-sketch.html",
+      "language": "html",
+      "sizeLines": 316,
+      "fileCategory": "markup"
+    }
+  ],
+  "batchImportData": {
+    "GLOSSARY.md": [],
+    "README.md": [],
+    "ROADMAP.md": [],
+    "pipeline.html": [],
+    "seeds.txt": [],
+    "ui-sketch.html": []
+  }
+}

@@ -279,8 +279,13 @@ def generate_slots(spec_path: str, source_image: str, out_dir: Path,
                             "error": "spec 未编排该 slot"})
             continue
         if name == "slot1":
-            run(name, SLOT_TEMPLATES[name],
-                {"SCENE": s["scene"]},
+            # v4 兑现时刻：spec 带 cover_action_en 时启用（A/B 实验 B 版，v3 模板保留）
+            tpl = SLOT_TEMPLATES[name]
+            mapping = {"SCENE": s["scene"]}
+            if s.get("cover_action_en"):
+                tpl = "slot1_payoff_v4"
+                mapping["ACTION"] = s["cover_action_en"]
+            run(name, tpl, mapping,
                 [(overlay_title, s["copy_title"]),
                  (overlay_chips, s["copy_icons"])])
         elif name == "slot3":

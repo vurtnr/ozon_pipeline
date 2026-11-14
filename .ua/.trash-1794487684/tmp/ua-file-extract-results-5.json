@@ -1,0 +1,141 @@
+{
+  "scriptCompleted": true,
+  "filesAnalyzed": 3,
+  "filesSkipped": [
+    "pipeline.html",
+    "seeds.txt",
+    "ui-sketch.html"
+  ],
+  "filesUnreadable": [],
+  "analysisOutcomes": {
+    "structure": {
+      "succeeded": 3,
+      "failed": 0
+    },
+    "callGraph": {
+      "succeeded": 0,
+      "failed": 0,
+      "skipped": 3
+    }
+  },
+  "results": [
+    {
+      "path": "GLOSSARY.md",
+      "language": "markdown",
+      "fileCategory": "docs",
+      "totalLines": 57,
+      "nonEmptyLines": 42,
+      "sections": [
+        {
+          "heading": "Ozon Pipeline",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "Language",
+          "level": 2,
+          "line": 5
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 2
+      }
+    },
+    {
+      "path": "README.md",
+      "language": "markdown",
+      "fileCategory": "docs",
+      "totalLines": 1,
+      "nonEmptyLines": 1,
+      "sections": [
+        {
+          "heading": "ozon_pipeline",
+          "level": 1,
+          "line": 1
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 1
+      }
+    },
+    {
+      "path": "ROADMAP.md",
+      "language": "markdown",
+      "fileCategory": "docs",
+      "totalLines": 103,
+      "nonEmptyLines": 76,
+      "sections": [
+        {
+          "heading": "Ozon 自动化工具 · 产品框架迭代计划",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "V0 现状盘点（已完成）",
+          "level": 2,
+          "line": 10
+        },
+        {
+          "heading": "V1 —— 流程跑通（当前迭代）",
+          "level": 2,
+          "line": 25
+        },
+        {
+          "heading": "V1 任务分解",
+          "level": 3,
+          "line": 34
+        },
+        {
+          "heading": "V1 必须关闭的三个红色缺口（来自双视角评审）",
+          "level": 3,
+          "line": 47
+        },
+        {
+          "heading": "V1 明确不做",
+          "level": 3,
+          "line": 55
+        },
+        {
+          "heading": "V1 节奏",
+          "level": 3,
+          "line": 59
+        },
+        {
+          "heading": "V2 —— 无人值守",
+          "level": 2,
+          "line": 66
+        },
+        {
+          "heading": "V3 —— 自优化与规模化",
+          "level": 2,
+          "line": 76
+        },
+        {
+          "heading": "风险登记（跨版本）",
+          "level": 2,
+          "line": 87
+        },
+        {
+          "heading": "当前行动（本周）",
+          "level": 2,
+          "line": 99
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 11
+      }
+    }
+  ]
+}

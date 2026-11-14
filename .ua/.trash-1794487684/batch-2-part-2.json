@@ -1,0 +1,697 @@
+{
+  "nodes": [
+    {
+      "id": "file:sync_to_db.py",
+      "type": "file",
+      "name": "sync_to_db.py",
+      "filePath": "sync_to_db.py",
+      "summary": "把 candidates、sourcing、specs 和生成图等离线 artifacts 幂等同步回 pipeline.db。",
+      "tags": [
+        "数据-同步",
+        "幂等",
+        "artifact",
+        "sqlite"
+      ],
+      "complexity": "moderate",
+      "languageNotes": "Python 脚本以标准库和少量外部 SDK 组合为主，模块级函数承担主要业务步骤。"
+    },
+    {
+      "id": "function:sync_to_db.py:_offer_id",
+      "type": "function",
+      "name": "_offer_id",
+      "filePath": "sync_to_db.py",
+      "lineRange": [
+        32,
+        33
+      ],
+      "summary": "从 1688 offer URL 中提取稳定 offer_id。",
+      "tags": [
+        "内部-辅助",
+        "工具函数",
+        "实现-细节"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:sync_to_db.py:latest",
+      "type": "function",
+      "name": "latest",
+      "filePath": "sync_to_db.py",
+      "lineRange": [
+        36,
+        38
+      ],
+      "summary": "按 glob pattern 找到 data 目录中最新的 artifact 文件。",
+      "tags": [
+        "业务-逻辑",
+        "工具函数",
+        "python"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:sync_to_db.py:_advance",
+      "type": "function",
+      "name": "_advance",
+      "filePath": "sync_to_db.py",
+      "lineRange": [
+        41,
+        44
+      ],
+      "summary": "更新产品状态并写入一条状态流转事件。",
+      "tags": [
+        "内部-辅助",
+        "工具函数",
+        "实现-细节"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:sync_to_db.py:sync",
+      "type": "function",
+      "name": "sync",
+      "filePath": "sync_to_db.py",
+      "lineRange": [
+        47,
+        185
+      ],
+      "summary": "读取最新候选、找货、spec 和生成图信息并幂等回填 pipeline.db。",
+      "tags": [
+        "业务-逻辑",
+        "工具函数",
+        "python"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:tests/test_listing_edit.py",
+      "type": "file",
+      "name": "test_listing_edit.py",
+      "filePath": "tests/test_listing_edit.py",
+      "summary": "验证审核台上架编辑保存、字段校验和读取 roundtrip 行为。",
+      "tags": [
+        "测试",
+        "pytest",
+        "编辑器"
+      ],
+      "complexity": "moderate",
+      "languageNotes": "Python 脚本以标准库和少量外部 SDK 组合为主，模块级函数承担主要业务步骤。"
+    },
+    {
+      "id": "function:tests/test_listing_edit.py:env",
+      "type": "function",
+      "name": "env",
+      "filePath": "tests/test_listing_edit.py",
+      "lineRange": [
+        15,
+        31
+      ],
+      "summary": "env 实现 tests/test_listing_edit.py 中对外可复用的业务步骤，支撑该模块的主流程。",
+      "tags": [
+        "测试",
+        "pytest",
+        "回归"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_listing_edit.py:_edits",
+      "type": "function",
+      "name": "_edits",
+      "filePath": "tests/test_listing_edit.py",
+      "lineRange": [
+        34,
+        41
+      ],
+      "summary": "_edits 是 tests/test_listing_edit.py 内部辅助函数，封装该模块主流程复用的局部逻辑。",
+      "tags": [
+        "测试",
+        "pytest",
+        "回归"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_listing_edit.py:test_save_writes_spec_and_clears_need_confirm",
+      "type": "function",
+      "name": "test_save_writes_spec_and_clears_need_confirm",
+      "filePath": "tests/test_listing_edit.py",
+      "lineRange": [
+        44,
+        60
+      ],
+      "summary": "验证 save writes spec and clears need confirm 场景，作为该流水线行为的回归保护。",
+      "tags": [
+        "测试",
+        "pytest",
+        "回归"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_listing_edit.py:test_title_required",
+      "type": "function",
+      "name": "test_title_required",
+      "filePath": "tests/test_listing_edit.py",
+      "lineRange": [
+        63,
+        66
+      ],
+      "summary": "验证 title required 场景，作为该流水线行为的回归保护。",
+      "tags": [
+        "测试",
+        "pytest",
+        "回归"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_listing_edit.py:test_title_too_long",
+      "type": "function",
+      "name": "test_title_too_long",
+      "filePath": "tests/test_listing_edit.py",
+      "lineRange": [
+        69,
+        72
+      ],
+      "summary": "验证 title too long 场景，作为该流水线行为的回归保护。",
+      "tags": [
+        "测试",
+        "pytest",
+        "回归"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_listing_edit.py:test_negative_weight_rejected",
+      "type": "function",
+      "name": "test_negative_weight_rejected",
+      "filePath": "tests/test_listing_edit.py",
+      "lineRange": [
+        75,
+        78
+      ],
+      "summary": "验证 negative weight rejected 场景，作为该流水线行为的回归保护。",
+      "tags": [
+        "测试",
+        "pytest",
+        "回归"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_listing_edit.py:test_get_edits_roundtrip",
+      "type": "function",
+      "name": "test_get_edits_roundtrip",
+      "filePath": "tests/test_listing_edit.py",
+      "lineRange": [
+        81,
+        88
+      ],
+      "summary": "验证 get edits roundtrip 场景，作为该流水线行为的回归保护。",
+      "tags": [
+        "测试",
+        "pytest",
+        "回归"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:tests/test_pricing.py",
+      "type": "file",
+      "name": "test_pricing.py",
+      "filePath": "tests/test_pricing.py",
+      "summary": "验证跨境定价公式、佣金档迭代、物流档阈值和编辑器属性白名单。",
+      "tags": [
+        "测试",
+        "pytest",
+        "定价"
+      ],
+      "complexity": "moderate",
+      "languageNotes": "Python 脚本以标准库和少量外部 SDK 组合为主，模块级函数承担主要业务步骤。"
+    },
+    {
+      "id": "function:tests/test_pricing.py:test_maozi_reference_case",
+      "type": "function",
+      "name": "test_maozi_reference_case",
+      "filePath": "tests/test_pricing.py",
+      "lineRange": [
+        12,
+        27
+      ],
+      "summary": "验证 maozi reference case 场景，作为该流水线行为的回归保护。",
+      "tags": [
+        "测试",
+        "pytest",
+        "回归"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_pricing.py:test_default_shipping_is_cheapest",
+      "type": "function",
+      "name": "test_default_shipping_is_cheapest",
+      "filePath": "tests/test_pricing.py",
+      "lineRange": [
+        30,
+        35
+      ],
+      "summary": "验证 default shipping is cheapest 场景，作为该流水线行为的回归保护。",
+      "tags": [
+        "测试",
+        "pytest",
+        "回归"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_pricing.py:test_commission_tier_iterates_up",
+      "type": "function",
+      "name": "test_commission_tier_iterates_up",
+      "filePath": "tests/test_pricing.py",
+      "lineRange": [
+        38,
+        45
+      ],
+      "summary": "验证 commission tier iterates up 场景，作为该流水线行为的回归保护。",
+      "tags": [
+        "测试",
+        "pytest",
+        "回归"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_pricing.py:test_commission_tier_manual_override",
+      "type": "function",
+      "name": "test_commission_tier_manual_override",
+      "filePath": "tests/test_pricing.py",
+      "lineRange": [
+        48,
+        56
+      ],
+      "summary": "验证 commission tier manual override 场景，作为该流水线行为的回归保护。",
+      "tags": [
+        "测试",
+        "pytest",
+        "回归"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_pricing.py:test_commission_tier_invalid_raises",
+      "type": "function",
+      "name": "test_commission_tier_invalid_raises",
+      "filePath": "tests/test_pricing.py",
+      "lineRange": [
+        59,
+        61
+      ],
+      "summary": "验证 commission tier invalid raises 场景，作为该流水线行为的回归保护。",
+      "tags": [
+        "测试",
+        "pytest",
+        "回归"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_pricing.py:test_editor_attrs_whitelist",
+      "type": "function",
+      "name": "test_editor_attrs_whitelist",
+      "filePath": "tests/test_pricing.py",
+      "lineRange": [
+        64,
+        79
+      ],
+      "summary": "验证 editor attrs whitelist 场景，作为该流水线行为的回归保护。",
+      "tags": [
+        "测试",
+        "pytest",
+        "回归"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_pricing.py:test_logistics_class_thresholds",
+      "type": "function",
+      "name": "test_logistics_class_thresholds",
+      "filePath": "tests/test_pricing.py",
+      "lineRange": [
+        82,
+        85
+      ],
+      "summary": "验证 logistics class thresholds 场景，作为该流水线行为的回归保护。",
+      "tags": [
+        "测试",
+        "pytest",
+        "回归"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_pricing.py:test_unknown_category_raises",
+      "type": "function",
+      "name": "test_unknown_category_raises",
+      "filePath": "tests/test_pricing.py",
+      "lineRange": [
+        88,
+        90
+      ],
+      "summary": "验证 unknown category raises 场景，作为该流水线行为的回归保护。",
+      "tags": [
+        "测试",
+        "pytest",
+        "回归"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_pricing.py:test_negative_denominator_raises",
+      "type": "function",
+      "name": "test_negative_denominator_raises",
+      "filePath": "tests/test_pricing.py",
+      "lineRange": [
+        93,
+        97
+      ],
+      "summary": "验证 negative denominator raises 场景，作为该流水线行为的回归保护。",
+      "tags": [
+        "测试",
+        "pytest",
+        "回归"
+      ],
+      "complexity": "simple"
+    }
+  ],
+  "edges": [
+    {
+      "source": "file:sync_to_db.py",
+      "target": "function:sync_to_db.py:_offer_id",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:sync_to_db.py",
+      "target": "function:sync_to_db.py:_offer_id",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:sync_to_db.py",
+      "target": "function:sync_to_db.py:latest",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:sync_to_db.py",
+      "target": "function:sync_to_db.py:latest",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:sync_to_db.py",
+      "target": "function:sync_to_db.py:_advance",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:sync_to_db.py",
+      "target": "function:sync_to_db.py:_advance",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:sync_to_db.py",
+      "target": "function:sync_to_db.py:sync",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:sync_to_db.py",
+      "target": "function:sync_to_db.py:sync",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_listing_edit.py",
+      "target": "function:tests/test_listing_edit.py:env",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_listing_edit.py",
+      "target": "function:tests/test_listing_edit.py:env",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_listing_edit.py",
+      "target": "function:tests/test_listing_edit.py:_edits",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_listing_edit.py",
+      "target": "function:tests/test_listing_edit.py:_edits",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_listing_edit.py",
+      "target": "function:tests/test_listing_edit.py:test_save_writes_spec_and_clears_need_confirm",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_listing_edit.py",
+      "target": "function:tests/test_listing_edit.py:test_save_writes_spec_and_clears_need_confirm",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_listing_edit.py",
+      "target": "function:tests/test_listing_edit.py:test_title_required",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_listing_edit.py",
+      "target": "function:tests/test_listing_edit.py:test_title_required",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_listing_edit.py",
+      "target": "function:tests/test_listing_edit.py:test_title_too_long",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_listing_edit.py",
+      "target": "function:tests/test_listing_edit.py:test_title_too_long",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_listing_edit.py",
+      "target": "function:tests/test_listing_edit.py:test_negative_weight_rejected",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_listing_edit.py",
+      "target": "function:tests/test_listing_edit.py:test_negative_weight_rejected",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_listing_edit.py",
+      "target": "function:tests/test_listing_edit.py:test_get_edits_roundtrip",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_listing_edit.py",
+      "target": "function:tests/test_listing_edit.py:test_get_edits_roundtrip",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_pricing.py",
+      "target": "function:tests/test_pricing.py:test_maozi_reference_case",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_pricing.py",
+      "target": "function:tests/test_pricing.py:test_maozi_reference_case",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_pricing.py",
+      "target": "function:tests/test_pricing.py:test_default_shipping_is_cheapest",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_pricing.py",
+      "target": "function:tests/test_pricing.py:test_default_shipping_is_cheapest",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_pricing.py",
+      "target": "function:tests/test_pricing.py:test_commission_tier_iterates_up",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_pricing.py",
+      "target": "function:tests/test_pricing.py:test_commission_tier_iterates_up",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_pricing.py",
+      "target": "function:tests/test_pricing.py:test_commission_tier_manual_override",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_pricing.py",
+      "target": "function:tests/test_pricing.py:test_commission_tier_manual_override",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_pricing.py",
+      "target": "function:tests/test_pricing.py:test_commission_tier_invalid_raises",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_pricing.py",
+      "target": "function:tests/test_pricing.py:test_commission_tier_invalid_raises",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_pricing.py",
+      "target": "function:tests/test_pricing.py:test_editor_attrs_whitelist",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_pricing.py",
+      "target": "function:tests/test_pricing.py:test_editor_attrs_whitelist",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_pricing.py",
+      "target": "function:tests/test_pricing.py:test_logistics_class_thresholds",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_pricing.py",
+      "target": "function:tests/test_pricing.py:test_logistics_class_thresholds",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_pricing.py",
+      "target": "function:tests/test_pricing.py:test_unknown_category_raises",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_pricing.py",
+      "target": "function:tests/test_pricing.py:test_unknown_category_raises",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_pricing.py",
+      "target": "function:tests/test_pricing.py:test_negative_denominator_raises",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_pricing.py",
+      "target": "function:tests/test_pricing.py:test_negative_denominator_raises",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:sync_to_db.py",
+      "target": "file:pipeline.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:tests/test_listing_edit.py",
+      "target": "file:listing_edit.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:tests/test_listing_edit.py",
+      "target": "file:pipeline.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:tests/test_pricing.py",
+      "target": "file:pricing.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    }
+  ]
+}

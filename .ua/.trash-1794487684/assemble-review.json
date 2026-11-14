@@ -1,0 +1,13 @@
+{
+  "fixedSectionOk": true,
+  "nodesRecovered": 0,
+  "edgesRestored": 0,
+  "crossBatchEdgesAdded": 0,
+  "typesRemapped": 0,
+  "complexityRemapped": 0,
+  "notes": [
+    "No malformed nodes, unknown types, unknown complexity values, or dangling edges were present in assembled-graph.json.",
+    "All 35 importMap relationships already have corresponding imports edges; no cross-batch import edges were added.",
+    "Merge report shows 4 tested_by convention edges added and no reported unrecoverable issues."
+  ]
+}

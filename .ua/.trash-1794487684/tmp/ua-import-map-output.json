@@ -1,0 +1,132 @@
+{
+  "scriptCompleted": true,
+  "stats": {
+    "filesScanned": 67,
+    "filesWithImports": 19,
+    "totalEdges": 35
+  },
+  "failures": [],
+  "importMap": {
+    ".DS_Store": [],
+    ".ua/config.json": [],
+    "GLOSSARY.md": [],
+    "README.md": [],
+    "ROADMAP.md": [],
+    "category_tree.py": [],
+    "config.py": [],
+    "content_agent.py": [
+      "config.py"
+    ],
+    "data/.DS_Store": [],
+    "data/attr-cache/17028714_594158428.json": [],
+    "data/candidates-2026-11-10.json": [],
+    "data/categories-leaf.json": [],
+    "data/category-tree-ru.json": [],
+    "data/image-search-tasks-2026-11-10.json": [],
+    "data/ozon-commission.json": [],
+    "data/ozon-logistics.json": [],
+    "data/sourcing-2026-11-10.json": [],
+    "data/specs/дозатор_для_жидкого_мыла.json": [],
+    "data/specs/органайзер_для_столовых_приборов_в_ящик.json": [],
+    "dimensions.py": [
+      "config.py"
+    ],
+    "docs/handoffs/2026-11-11-ozon-listing-editor.md": [],
+    "docs/research/1688-real-dimensions.md": [],
+    "docs/research/nexscope-free-alternatives.md": [],
+    "docs/research/ozon-commission-rules.md": [],
+    "docs/research/ozon-cover-emotion-v4.md": [],
+    "docs/research/ozon-image-set-hot-logic.md": [],
+    "docs/research/ozon-listing-api.md": [],
+    "docs/research/ozon-pricing-formula.md": [],
+    "docs/research/ozon-seller-form-alignment.md": [],
+    "image_worker.py": [
+      "config.py",
+      "text_overlay.py"
+    ],
+    "keyword_library.py": [
+      "nexscope_client.py",
+      "pipeline.py"
+    ],
+    "listing_edit.py": [
+      "pipeline.py"
+    ],
+    "listing_worker.py": [
+      "config.py",
+      "listing_edit.py",
+      "ozon_client.py",
+      "pipeline.py"
+    ],
+    "nexscope_client.py": [
+      "config.py",
+      "pipeline.py"
+    ],
+    "ozon_client.py": [
+      "config.py"
+    ],
+    "pipeline.html": [],
+    "pipeline.py": [],
+    "pricing.py": [],
+    "prompts/slot1_cover_hook_v3.txt": [],
+    "prompts/slot1_payoff_v4.txt": [],
+    "prompts/slot2_white_bg_v1.txt": [],
+    "prompts/slot3_arguments_v3.txt": [],
+    "prompts/slot4_usage_v3.txt": [],
+    "prompts/slot5_scene_v3.txt": [],
+    "prompts/slot6_detail_v3.txt": [],
+    "prompts/slot7_size_v3.txt": [],
+    "prompts/slot8_scenarios_v3.txt": [],
+    "prompts/style_ref/detail_strips_v1.webp": [],
+    "prompts/style_ref/main_headline_v1.webp": [],
+    "prompts/style_ref/scenarios_circle_v1.webp": [],
+    "prompts/style_ref/selling_point_v1.webp": [],
+    "prompts/style_ref/size_arrows_v1.webp": [],
+    "prompts/style_ref/usage_grid_v1.webp": [],
+    "review_server.py": [
+      "listing_edit.py",
+      "ozon_client.py",
+      "pipeline.py",
+      "pricing.py"
+    ],
+    "seeds.txt": [],
+    "select_products.py": [
+      "keyword_library.py"
+    ],
+    "sourcing_agent.py": [
+      "config.py"
+    ],
+    "sync_to_db.py": [
+      "pipeline.py"
+    ],
+    "tests/test_identity_gate.py": [
+      "image_worker.py",
+      "sourcing_agent.py"
+    ],
+    "tests/test_listing_edit.py": [
+      "listing_edit.py",
+      "pipeline.py"
+    ],
+    "tests/test_listing_worker.py": [
+      "listing_worker.py"
+    ],
+    "tests/test_nexscope_flow.py": [
+      "keyword_library.py",
+      "nexscope_client.py",
+      "pipeline.py",
+      "select_products.py",
+      "trend_check.py"
+    ],
+    "tests/test_ozon_client.py": [
+      "ozon_client.py"
+    ],
+    "tests/test_pricing.py": [
+      "pricing.py"
+    ],
+    "text_overlay.py": [],
+    "trend_check.py": [
+      "nexscope_client.py",
+      "pipeline.py"
+    ],
+    "ui-sketch.html": []
+  }
+}

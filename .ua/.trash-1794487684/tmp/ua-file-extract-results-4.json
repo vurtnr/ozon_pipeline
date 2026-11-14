@@ -1,0 +1,924 @@
+{
+  "scriptCompleted": true,
+  "filesAnalyzed": 4,
+  "filesSkipped": [],
+  "filesUnreadable": [],
+  "analysisOutcomes": {
+    "structure": {
+      "succeeded": 4,
+      "failed": 0
+    },
+    "callGraph": {
+      "succeeded": 4,
+      "failed": 0,
+      "skipped": 0
+    }
+  },
+  "results": [
+    {
+      "path": "listing_worker.py",
+      "language": "python",
+      "fileCategory": "code",
+      "totalLines": 142,
+      "nonEmptyLines": 126,
+      "functions": [
+        {
+          "name": "build_item",
+          "startLine": 32,
+          "endLine": 66,
+          "params": [
+            "pid",
+            "metrics",
+            "spec",
+            "edits",
+            "image_urls"
+          ]
+        },
+        {
+          "name": "upload_images",
+          "startLine": 69,
+          "endLine": 85,
+          "params": [
+            "pid",
+            "metrics"
+          ]
+        },
+        {
+          "name": "list_product",
+          "startLine": 88,
+          "endLine": 134,
+          "params": [
+            "pid",
+            "dry_run"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "build_item",
+          "line": 32,
+          "isDefault": false
+        },
+        {
+          "name": "upload_images",
+          "line": 69,
+          "isDefault": false
+        },
+        {
+          "name": "list_product",
+          "line": 88,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "build_item",
+          "callee": "ValueError",
+          "lineNumber": 36
+        },
+        {
+          "caller": "build_item",
+          "callee": "edits.get",
+          "lineNumber": 37
+        },
+        {
+          "caller": "build_item",
+          "callee": "edits.get",
+          "lineNumber": 38
+        },
+        {
+          "caller": "build_item",
+          "callee": "all",
+          "lineNumber": 39
+        },
+        {
+          "caller": "build_item",
+          "callee": "dims.get",
+          "lineNumber": 39
+        },
+        {
+          "caller": "build_item",
+          "callee": "ValueError",
+          "lineNumber": 40
+        },
+        {
+          "caller": "build_item",
+          "callee": "edits.get",
+          "lineNumber": 41
+        },
+        {
+          "caller": "build_item",
+          "callee": "pricing.get",
+          "lineNumber": 42
+        },
+        {
+          "caller": "build_item",
+          "callee": "ValueError",
+          "lineNumber": 43
+        },
+        {
+          "caller": "build_item",
+          "callee": "OC.parse_category_ids",
+          "lineNumber": 44
+        },
+        {
+          "caller": "build_item",
+          "callee": "spec.get(\"_meta\", {}).get",
+          "lineNumber": 44
+        },
+        {
+          "caller": "build_item",
+          "callee": "spec.get",
+          "lineNumber": 44
+        },
+        {
+          "caller": "build_item",
+          "callee": "dict",
+          "lineNumber": 45
+        },
+        {
+          "caller": "build_item",
+          "callee": "edits.get",
+          "lineNumber": 45
+        },
+        {
+          "caller": "build_item",
+          "callee": "any",
+          "lineNumber": 46
+        },
+        {
+          "caller": "build_item",
+          "callee": "attrs.append",
+          "lineNumber": 47
+        },
+        {
+          "caller": "build_item",
+          "callee": "dict",
+          "lineNumber": 47
+        },
+        {
+          "caller": "build_item",
+          "callee": "edits.get",
+          "lineNumber": 51
+        },
+        {
+          "caller": "build_item",
+          "callee": "str",
+          "lineNumber": 56
+        },
+        {
+          "caller": "build_item",
+          "callee": "str",
+          "lineNumber": 57
+        },
+        {
+          "caller": "build_item",
+          "callee": "pricing.get",
+          "lineNumber": 57
+        },
+        {
+          "caller": "build_item",
+          "callee": "round",
+          "lineNumber": 58
+        },
+        {
+          "caller": "build_item",
+          "callee": "round",
+          "lineNumber": 59
+        },
+        {
+          "caller": "build_item",
+          "callee": "round",
+          "lineNumber": 60
+        },
+        {
+          "caller": "build_item",
+          "callee": "round",
+          "lineNumber": 62
+        },
+        {
+          "caller": "upload_images",
+          "callee": "metrics.get",
+          "lineNumber": 71
+        },
+        {
+          "caller": "upload_images",
+          "callee": "ValueError",
+          "lineNumber": 73
+        },
+        {
+          "caller": "upload_images",
+          "callee": "sorted",
+          "lineNumber": 74
+        },
+        {
+          "caller": "upload_images",
+          "callee": "(ROOT / assets).glob",
+          "lineNumber": 74
+        },
+        {
+          "caller": "upload_images",
+          "callee": "int",
+          "lineNumber": 75
+        },
+        {
+          "caller": "upload_images",
+          "callee": "ValueError",
+          "lineNumber": 77
+        },
+        {
+          "caller": "upload_images",
+          "callee": "oss2.Auth",
+          "lineNumber": 78
+        },
+        {
+          "caller": "upload_images",
+          "callee": "oss2.Bucket",
+          "lineNumber": 79
+        },
+        {
+          "caller": "upload_images",
+          "callee": "bucket.put_object_from_file",
+          "lineNumber": 83
+        },
+        {
+          "caller": "upload_images",
+          "callee": "str",
+          "lineNumber": 83
+        },
+        {
+          "caller": "upload_images",
+          "callee": "urls.append",
+          "lineNumber": 84
+        },
+        {
+          "caller": "list_product",
+          "callee": "P.conn",
+          "lineNumber": 89
+        },
+        {
+          "caller": "list_product",
+          "callee": "c.execute(\"SELECT state, metrics_json FROM products WHERE id=?\",\n                        (pid,)).fetchone",
+          "lineNumber": 90
+        },
+        {
+          "caller": "list_product",
+          "callee": "c.execute",
+          "lineNumber": 90
+        },
+        {
+          "caller": "list_product",
+          "callee": "ValueError",
+          "lineNumber": 93
+        },
+        {
+          "caller": "list_product",
+          "callee": "ValueError",
+          "lineNumber": 95
+        },
+        {
+          "caller": "list_product",
+          "callee": "json.loads",
+          "lineNumber": 96
+        },
+        {
+          "caller": "list_product",
+          "callee": "json.loads",
+          "lineNumber": 97
+        },
+        {
+          "caller": "list_product",
+          "callee": "(ROOT / m[\"spec_path\"]).read_text",
+          "lineNumber": 97
+        },
+        {
+          "caller": "list_product",
+          "callee": "LE.get_edits",
+          "lineNumber": 98
+        },
+        {
+          "caller": "list_product",
+          "callee": "ValueError",
+          "lineNumber": 100
+        },
+        {
+          "caller": "list_product",
+          "callee": "build_item",
+          "lineNumber": 103
+        },
+        {
+          "caller": "list_product",
+          "callee": "print",
+          "lineNumber": 105
+        },
+        {
+          "caller": "list_product",
+          "callee": "json.dumps",
+          "lineNumber": 105
+        },
+        {
+          "caller": "list_product",
+          "callee": "upload_images",
+          "lineNumber": 108
+        },
+        {
+          "caller": "list_product",
+          "callee": "build_item",
+          "lineNumber": 109
+        },
+        {
+          "caller": "list_product",
+          "callee": "OC._post",
+          "lineNumber": 110
+        },
+        {
+          "caller": "list_product",
+          "callee": "print",
+          "lineNumber": 112
+        },
+        {
+          "caller": "list_product",
+          "callee": "range",
+          "lineNumber": 113
+        },
+        {
+          "caller": "list_product",
+          "callee": "time.sleep",
+          "lineNumber": 114
+        },
+        {
+          "caller": "list_product",
+          "callee": "OC._post",
+          "lineNumber": 115
+        },
+        {
+          "caller": "list_product",
+          "callee": "it.get",
+          "lineNumber": 120
+        },
+        {
+          "caller": "list_product",
+          "callee": "P.conn",
+          "lineNumber": 123
+        },
+        {
+          "caller": "list_product",
+          "callee": "c.execute",
+          "lineNumber": 124
+        },
+        {
+          "caller": "list_product",
+          "callee": "json.dumps",
+          "lineNumber": 125
+        },
+        {
+          "caller": "list_product",
+          "callee": "P.now",
+          "lineNumber": 125
+        },
+        {
+          "caller": "list_product",
+          "callee": "P._event",
+          "lineNumber": 127
+        },
+        {
+          "caller": "list_product",
+          "callee": "c.execute",
+          "lineNumber": 129
+        },
+        {
+          "caller": "list_product",
+          "callee": "print",
+          "lineNumber": 130
+        },
+        {
+          "caller": "list_product",
+          "callee": "it.get",
+          "lineNumber": 132
+        },
+        {
+          "caller": "list_product",
+          "callee": "RuntimeError",
+          "lineNumber": 133
+        },
+        {
+          "caller": "list_product",
+          "callee": "json.dumps",
+          "lineNumber": 133
+        },
+        {
+          "caller": "list_product",
+          "callee": "it.get",
+          "lineNumber": 133
+        },
+        {
+          "caller": "list_product",
+          "callee": "TimeoutError",
+          "lineNumber": 134
+        },
+        {
+          "caller": "list_product",
+          "callee": "str",
+          "lineNumber": 134
+        }
+      ],
+      "metrics": {
+        "importCount": 4,
+        "exportCount": 3,
+        "functionCount": 3,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "ozon_client.py",
+      "language": "python",
+      "fileCategory": "code",
+      "totalLines": 88,
+      "nonEmptyLines": 77,
+      "functions": [
+        {
+          "name": "_post",
+          "startLine": 25,
+          "endLine": 32,
+          "params": [
+            "path",
+            "body"
+          ]
+        },
+        {
+          "name": "parse_category_ids",
+          "startLine": 35,
+          "endLine": 41,
+          "params": [
+            "category_id_path"
+          ]
+        },
+        {
+          "name": "get_attributes",
+          "startLine": 44,
+          "endLine": 76,
+          "params": [
+            "desc_id",
+            "type_id",
+            "refresh"
+          ]
+        },
+        {
+          "name": "get_attr_values",
+          "startLine": 79,
+          "endLine": 88,
+          "params": [
+            "desc_id",
+            "type_id",
+            "attr_id",
+            "query",
+            "limit"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "_post",
+          "line": 25,
+          "isDefault": false
+        },
+        {
+          "name": "parse_category_ids",
+          "line": 35,
+          "isDefault": false
+        },
+        {
+          "name": "get_attributes",
+          "line": 44,
+          "isDefault": false
+        },
+        {
+          "name": "get_attr_values",
+          "line": 79,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "_post",
+          "callee": "urllib.request.Request",
+          "lineNumber": 26
+        },
+        {
+          "caller": "_post",
+          "callee": "json.dumps(body).encode",
+          "lineNumber": 26
+        },
+        {
+          "caller": "_post",
+          "callee": "json.dumps",
+          "lineNumber": 26
+        },
+        {
+          "caller": "_post",
+          "callee": "urllib.request.urlopen",
+          "lineNumber": 29
+        },
+        {
+          "caller": "_post",
+          "callee": "json.load",
+          "lineNumber": 30
+        },
+        {
+          "caller": "_post",
+          "callee": "RuntimeError",
+          "lineNumber": 32
+        },
+        {
+          "caller": "_post",
+          "callee": "e.read().decode",
+          "lineNumber": 32
+        },
+        {
+          "caller": "_post",
+          "callee": "e.read",
+          "lineNumber": 32
+        },
+        {
+          "caller": "parse_category_ids",
+          "callee": "category_id_path.split",
+          "lineNumber": 38
+        },
+        {
+          "caller": "parse_category_ids",
+          "callee": "len",
+          "lineNumber": 39
+        },
+        {
+          "caller": "parse_category_ids",
+          "callee": "ValueError",
+          "lineNumber": 40
+        },
+        {
+          "caller": "parse_category_ids",
+          "callee": "int",
+          "lineNumber": 41
+        },
+        {
+          "caller": "parse_category_ids",
+          "callee": "int",
+          "lineNumber": 41
+        },
+        {
+          "caller": "get_attributes",
+          "callee": "CACHE.mkdir",
+          "lineNumber": 46
+        },
+        {
+          "caller": "get_attributes",
+          "callee": "cache_file.is_file",
+          "lineNumber": 48
+        },
+        {
+          "caller": "get_attributes",
+          "callee": "json.loads",
+          "lineNumber": 49
+        },
+        {
+          "caller": "get_attributes",
+          "callee": "cache_file.read_text",
+          "lineNumber": 49
+        },
+        {
+          "caller": "get_attributes",
+          "callee": "isinstance",
+          "lineNumber": 50
+        },
+        {
+          "caller": "get_attributes",
+          "callee": "cached.get",
+          "lineNumber": 50
+        },
+        {
+          "caller": "get_attributes",
+          "callee": "_post",
+          "lineNumber": 53
+        },
+        {
+          "caller": "get_attributes",
+          "callee": "_post",
+          "lineNumber": 56
+        },
+        {
+          "caller": "get_attributes",
+          "callee": "a.get",
+          "lineNumber": 59
+        },
+        {
+          "caller": "get_attributes",
+          "callee": "rz.get",
+          "lineNumber": 59
+        },
+        {
+          "caller": "get_attributes",
+          "callee": "r.get",
+          "lineNumber": 61
+        },
+        {
+          "caller": "get_attributes",
+          "callee": "attrs.append",
+          "lineNumber": 62
+        },
+        {
+          "caller": "get_attributes",
+          "callee": "a.get",
+          "lineNumber": 64
+        },
+        {
+          "caller": "get_attributes",
+          "callee": "zh.get",
+          "lineNumber": 65
+        },
+        {
+          "caller": "get_attributes",
+          "callee": "a.get",
+          "lineNumber": 66
+        },
+        {
+          "caller": "get_attributes",
+          "callee": "bool",
+          "lineNumber": 67
+        },
+        {
+          "caller": "get_attributes",
+          "callee": "a.get",
+          "lineNumber": 67
+        },
+        {
+          "caller": "get_attributes",
+          "callee": "bool",
+          "lineNumber": 68
+        },
+        {
+          "caller": "get_attributes",
+          "callee": "a.get",
+          "lineNumber": 68
+        },
+        {
+          "caller": "get_attributes",
+          "callee": "bool",
+          "lineNumber": 69
+        },
+        {
+          "caller": "get_attributes",
+          "callee": "a.get",
+          "lineNumber": 69
+        },
+        {
+          "caller": "get_attributes",
+          "callee": "a.get",
+          "lineNumber": 70
+        },
+        {
+          "caller": "get_attributes",
+          "callee": "attrs.sort",
+          "lineNumber": 72
+        },
+        {
+          "caller": "get_attributes",
+          "callee": "cache_file.write_text",
+          "lineNumber": 73
+        },
+        {
+          "caller": "get_attributes",
+          "callee": "json.dumps",
+          "lineNumber": 74
+        },
+        {
+          "caller": "get_attr_values",
+          "callee": "_post",
+          "lineNumber": 86
+        },
+        {
+          "caller": "get_attr_values",
+          "callee": "v.get",
+          "lineNumber": 87
+        },
+        {
+          "caller": "get_attr_values",
+          "callee": "r.get",
+          "lineNumber": 88
+        }
+      ],
+      "metrics": {
+        "importCount": 1,
+        "exportCount": 4,
+        "functionCount": 4,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "tests/test_listing_worker.py",
+      "language": "python",
+      "fileCategory": "code",
+      "totalLines": 72,
+      "nonEmptyLines": 57,
+      "functions": [
+        {
+          "name": "test_build_item_core_fields",
+          "startLine": 26,
+          "endLine": 36,
+          "params": []
+        },
+        {
+          "name": "test_dimensions_cm_to_mm_and_weight",
+          "startLine": 39,
+          "endLine": 43,
+          "params": []
+        },
+        {
+          "name": "test_brand_defaults_to_no_brand",
+          "startLine": 46,
+          "endLine": 50,
+          "params": []
+        },
+        {
+          "name": "test_existing_brand_not_overwritten",
+          "startLine": 53,
+          "endLine": 60,
+          "params": []
+        },
+        {
+          "name": "test_first_image_is_primary",
+          "startLine": 63,
+          "endLine": 65,
+          "params": []
+        },
+        {
+          "name": "test_missing_required_raises",
+          "startLine": 68,
+          "endLine": 72,
+          "params": []
+        }
+      ],
+      "exports": [
+        {
+          "name": "test_build_item_core_fields",
+          "line": 26,
+          "isDefault": false
+        },
+        {
+          "name": "test_dimensions_cm_to_mm_and_weight",
+          "line": 39,
+          "isDefault": false
+        },
+        {
+          "name": "test_brand_defaults_to_no_brand",
+          "line": 46,
+          "isDefault": false
+        },
+        {
+          "name": "test_existing_brand_not_overwritten",
+          "line": 53,
+          "isDefault": false
+        },
+        {
+          "name": "test_first_image_is_primary",
+          "line": 63,
+          "isDefault": false
+        },
+        {
+          "name": "test_missing_required_raises",
+          "line": 68,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "test_build_item_core_fields",
+          "callee": "LW.build_item",
+          "lineNumber": 27
+        },
+        {
+          "caller": "test_dimensions_cm_to_mm_and_weight",
+          "callee": "LW.build_item",
+          "lineNumber": 40
+        },
+        {
+          "caller": "test_brand_defaults_to_no_brand",
+          "callee": "LW.build_item",
+          "lineNumber": 47
+        },
+        {
+          "caller": "test_brand_defaults_to_no_brand",
+          "callee": "next",
+          "lineNumber": 48
+        },
+        {
+          "caller": "test_existing_brand_not_overwritten",
+          "callee": "LW.build_item",
+          "lineNumber": 57
+        },
+        {
+          "caller": "test_existing_brand_not_overwritten",
+          "callee": "len",
+          "lineNumber": 59
+        },
+        {
+          "caller": "test_first_image_is_primary",
+          "callee": "LW.build_item",
+          "lineNumber": 64
+        },
+        {
+          "caller": "test_first_image_is_primary",
+          "callee": "item[\"images\"][0].endswith",
+          "lineNumber": 65
+        },
+        {
+          "caller": "test_missing_required_raises",
+          "callee": "pytest.raises",
+          "lineNumber": 69
+        },
+        {
+          "caller": "test_missing_required_raises",
+          "callee": "LW.build_item",
+          "lineNumber": 70
+        },
+        {
+          "caller": "test_missing_required_raises",
+          "callee": "pytest.raises",
+          "lineNumber": 71
+        },
+        {
+          "caller": "test_missing_required_raises",
+          "callee": "LW.build_item",
+          "lineNumber": 72
+        }
+      ],
+      "metrics": {
+        "importCount": 1,
+        "exportCount": 6,
+        "functionCount": 6,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "tests/test_ozon_client.py",
+      "language": "python",
+      "fileCategory": "code",
+      "totalLines": 34,
+      "nonEmptyLines": 29,
+      "functions": [
+        {
+          "name": "test_get_attributes_includes_optional_and_collection",
+          "startLine": 24,
+          "endLine": 34,
+          "params": [
+            "monkeypatch",
+            "tmp_path"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "test_get_attributes_includes_optional_and_collection",
+          "line": 24,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "test_get_attributes_includes_optional_and_collection",
+          "callee": "monkeypatch.setattr",
+          "lineNumber": 26
+        },
+        {
+          "caller": "test_get_attributes_includes_optional_and_collection",
+          "callee": "monkeypatch.setattr",
+          "lineNumber": 27
+        },
+        {
+          "caller": "test_get_attributes_includes_optional_and_collection",
+          "callee": "OC.get_attributes",
+          "lineNumber": 28
+        },
+        {
+          "caller": "test_get_attributes_includes_optional_and_collection",
+          "callee": "monkeypatch.setattr",
+          "lineNumber": 32
+        },
+        {
+          "caller": "test_get_attributes_includes_optional_and_collection",
+          "callee": "pytest.fail",
+          "lineNumber": 33
+        },
+        {
+          "caller": "test_get_attributes_includes_optional_and_collection",
+          "callee": "OC.get_attributes",
+          "lineNumber": 34
+        }
+      ],
+      "metrics": {
+        "importCount": 1,
+        "exportCount": 1,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    }
+  ]
+}

@@ -76,7 +76,7 @@ def sync() -> None:
                 metrics["sourcing"] = {
                     "price_cny": sup["price"], "sold_count": sup["soldCount"],
                     "offer_id": _offer_id(sup["url"]),
-                    "image_url": sup["imageUrl"],
+                    "image_url": sup["imageUrl"], "url": sup["url"],
                 }
             if asset_q in specs:
                 spec = json.load(open(specs[asset_q], encoding="utf-8"))
@@ -100,6 +100,7 @@ def sync() -> None:
                 metrics["sourcing"] = {
                     "price_cny": sup["price"], "sold_count": sup["soldCount"],
                     "offer_id": gen_dir.name, "image_url": sup["imageUrl"],
+                    "url": sup["url"],
                 }
             if gen_dir:
                 metrics["assets_dir"] = str(gen_dir.relative_to(ROOT))

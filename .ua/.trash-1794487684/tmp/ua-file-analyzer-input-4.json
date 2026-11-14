@@ -1,0 +1,46 @@
+{
+  "projectRoot": "/Users/jiaoyumin/rust_workspace/ozon-pipeline",
+  "batchFiles": [
+    {
+      "path": "listing_worker.py",
+      "language": "python",
+      "sizeLines": 142,
+      "fileCategory": "code"
+    },
+    {
+      "path": "ozon_client.py",
+      "language": "python",
+      "sizeLines": 88,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/test_listing_worker.py",
+      "language": "python",
+      "sizeLines": 72,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/test_ozon_client.py",
+      "language": "python",
+      "sizeLines": 34,
+      "fileCategory": "code"
+    }
+  ],
+  "batchImportData": {
+    "listing_worker.py": [
+      "config.py",
+      "listing_edit.py",
+      "ozon_client.py",
+      "pipeline.py"
+    ],
+    "ozon_client.py": [
+      "config.py"
+    ],
+    "tests/test_listing_worker.py": [
+      "listing_worker.py"
+    ],
+    "tests/test_ozon_client.py": [
+      "ozon_client.py"
+    ]
+  }
+}

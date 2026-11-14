@@ -1,0 +1,18 @@
+# slot1 封面钩子图 v4｜兑现时刻（payoff moment）：产品交付核心价值的那一瞬间
+# 依据 docs/research/ozon-cover-emotion-v4.md：CTR/加购率进 Ozon 排序模型（官方实锤）；
+#   与 slot4 分工：slot1=情绪钩子特写（兑现瞬间），slot4=使用过程+尺度感（动作必须不同）。
+# 留白不变量：顶部/左侧为虚化干净背景（景深留白，深浅不限——PIL 按背景亮度自适应字色）；
+#   左下角留空（平台角标区）。手部畸形 → 换无手 ACTION 重试（运营手动）。
+# 占位符：{{SCENE}}=场景(英文)  {{ACTION}}=兑现动作(英文,如 a palm catching rich foam under the nozzle)
+The product in reference image 1 must stay pixel-identical: same shape, color, proportions, materials, buttons and finish. Do not redraw, restyle or reinterpret it; remove any text, labels, stickers or logos from its surface.
+Show the product in a photorealistic {{SCENE}} at the exact moment it delivers its core benefit: {{ACTION}}. The product stays the hero: fully visible, uncropped, occupying about 50-60% of the frame height, crisp focus, lit by warm directional daylight against a softly blurred background with real depth (not a flat gradient).
+The only body part allowed is a hand explicitly required by the action above: at most one natural hand with correct anatomy and relaxed pose, entering from the bottom edge of the frame with the wrist and a short section of forearm visibly connecting the hand to the frame edge — no floating or severed hand — staying entirely in the foreground below the product, never overlapping the product, never passing behind or through it, never entering the left-middle band of the frame. No person, no face, no arm, no body anywhere else; if the action does not explicitly mention a hand, render no hand at all.
+Composition rules (they will be checked):
+- The entire action (including any hand) happens on the right half of the frame, around the product.
+- The background is one continuous environment rendered as a soft, low-contrast blur (pale sky, smooth wall or gentle bokeh); the top area and the left side stay calm and empty of distinct objects and strong shadows.
+The whole frame is one continuous photograph with a single coherent environment and consistent lighting; never create panels, vertical seams, flat color zones, split areas or anything that looks like a collage.
+- The bottom 15% of the frame — especially the bottom-left corner — stays empty of objects and strong shadows.
+The scene must contain no packaging, boxes, books, papers, labels or signage of any kind.
+The output is one single candid photograph — not a poster, not a collage, not an infographic, not a split-screen layout.
+Style: bold high-contrast commercial lifestyle photo, crisp product edges, vivid but believable colors, advertising quality — the kind of cover that makes a shopper stop scrolling.
+Absolutely no text, letters, numbers, icons or logos anywhere in the image.

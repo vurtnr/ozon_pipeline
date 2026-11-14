@@ -1,0 +1,28 @@
+{
+  "scriptCompleted": true,
+  "filesAnalyzed": 0,
+  "filesSkipped": [
+    "prompts/slot1_cover_hook_v3.txt",
+    "prompts/slot1_payoff_v4.txt",
+    "prompts/slot2_white_bg_v1.txt",
+    "prompts/slot3_arguments_v3.txt",
+    "prompts/slot4_usage_v3.txt",
+    "prompts/slot5_scene_v3.txt",
+    "prompts/slot6_detail_v3.txt",
+    "prompts/slot7_size_v3.txt",
+    "prompts/slot8_scenarios_v3.txt"
+  ],
+  "filesUnreadable": [],
+  "analysisOutcomes": {
+    "structure": {
+      "succeeded": 0,
+      "failed": 0
+    },
+    "callGraph": {
+      "succeeded": 0,
+      "failed": 0,
+      "skipped": 0
+    }
+  },
+  "results": []
+}

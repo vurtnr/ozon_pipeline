@@ -25,6 +25,9 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent))
 import pipeline as P
+import listing_edit as LE
+import ozon_client as OC
+import pricing
 
 ROOT = Path(__file__).parent
 GEN = ROOT / "data/gen"
@@ -147,7 +150,162 @@ border:1px solid var(--accent);border-radius:6px;padding:3px 10px;position:relat
 .ev.human::before{background:var(--purple)}
 .ev.dead::before{background:var(--red)}
 h3{font-size:15px;margin:16px 0 8px}
+
+/* ---- 上架编辑器（大模态，分 section 可滚动） ---- */
+.modal .box.editbox{width:720px;max-width:94vw;max-height:88vh;overflow:auto}
+.editbox .sec{border-top:1px solid var(--border);padding:14px 0}
+.editbox .sec h5{font-size:13px;color:var(--accent);margin-bottom:8px;font-weight:700}
+.editbox textarea{width:100%;background:var(--card2);color:var(--text);border:1px solid var(--border);border-radius:6px;padding:7px 9px;font-size:13px;min-height:90px;font-family:inherit}
+.editbox input[type=text],.editbox input[type=number]{width:100%;background:var(--card2);color:var(--text);border:1px solid var(--border);border-radius:6px;padding:7px 9px;font-size:13px}
+.editbox select{width:100%;background:var(--card2);color:var(--text);border:1px solid var(--border);border-radius:6px;padding:6px 8px;font-size:12.5px;max-width:100%}
+.editbox .grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.editbox .grid4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.editbox .attr{display:flex;align-items:center;gap:8px;margin-bottom:6px;font-size:12.5px}
+.editbox .attr label{flex:0 0 220px;color:var(--text)}
+.editbox .attr .req{color:var(--red)}
+.editbox .attr .asp{color:var(--dim);font-size:10.5px}
+.editbox .attr .fld{flex:1}
+.editbox .priceout{background:var(--card2);border-radius:8px;padding:10px 14px;margin-top:8px;font-size:12.5px;display:none}
+.editbox .priceout .big{font-size:20px;font-weight:700;color:var(--green)}
+.editbox .priceout table{width:100%;font-size:11.5px;color:var(--dim);margin-top:6px}
+.editbox .priceout td{padding:1px 0}
+.editbox .save{background:var(--green);color:#06210f;border:none;border-radius:8px;padding:11px 18px;font-size:14px;font-weight:700;cursor:pointer;width:100%;margin-top:12px}
+.editbox .save:disabled{opacity:.5}
+.editbox .calcbtn{background:var(--accent);color:#fff;border:none;border-radius:6px;padding:7px 14px;font-size:12.5px;font-weight:700;cursor:pointer}
 @media(max-width:900px){.rl{grid-template-columns:1fr}.queue{border-right:none;border-bottom:1px solid var(--border)}.detail-grid{grid-template-columns:1fr}}
+"""
+
+# 上架编辑器（普通字符串，JS 大括号无需 f-string 转义；page() 以变量插入）
+EDITOR_HTML = """
+<div class="modal" id="editmodal" onclick="if(event.target.id==='editmodal')this.classList.remove('on')">
+<div class="box editbox">
+<h4>✏️ 上架编辑 · <span id="edpid"></span></h4>
+<div class="hint">编辑即人工确认：保存写回 spec（listing_edits），清除 need_confirm，落 event。
+图内文案不在此改（走打回重生）。保存后可继续过审进上架队列。</div>
+<div class="sec"><h5>① 文案</h5>
+<label>商品标题（俄语，≤200 字符）</label>
+<input type="text" id="ed_title" maxlength="200">
+<div style="margin-top:6px"><label>详情介绍（≤1000 字符）</label>
+<textarea id="ed_desc" maxlength="1000"></textarea></div></div>
+<div class="sec"><h5>② 尺寸重量（Ozon 非零必填，用于上架+物流）</h5>
+<div class="grid4">
+<div><label>长 cm</label><input type="number" id="ed_len" step="0.1" min="0"></div>
+<div><label>宽 cm</label><input type="number" id="ed_wid" step="0.1" min="0"></div>
+<div><label>高 cm</label><input type="number" id="ed_hei" step="0.1" min="0"></div>
+<div><label>重量 g</label><input type="number" id="ed_weight" step="1" min="0" onchange="loadShipping()"></div>
+</div></div>
+<div class="sec"><h5>③ 定价计算器（毛子ERP 公式 + 本地佣金/物流库）</h5>
+<div class="grid4">
+<div><label>采购价 ¥</label><input type="number" id="ed_cost" step="0.01" min="0" onchange="loadShipping()"></div>
+<div><label>汇率 CNYRUB</label><input type="number" id="ed_rate" step="0.0001" value="12.47"></div>
+<div><label>利润率 %</label><input type="number" id="ed_profit" value="20" step="1"></div>
+<div><label>划线折扣 %</label><input type="number" id="ed_oldrate" value="50" step="1"></div>
+</div>
+<div class="grid4" style="margin-top:6px">
+<div><label>广告费 %</label><input type="number" id="ed_ad" value="0" step="0.5"></div>
+<div><label title="提现/货损等">其他 %</label><input type="number" id="ed_other" value="1" step="0.1"></div>
+<div><label title="费率按当前类目实时取佣金库；自动=按折后售价₽选档">佣金档（按类目）</label><select id="ed_tier">
+<option value="">自动</option></select></div>
+<div><label>物流方案</label><select id="ed_ship"></select></div>
+</div>
+<button class="calcbtn" onclick="calcPrice()" style="margin-top:8px">计算建议价</button>
+<span class="dim" style="font-size:11px">佣金按售价₽自动选档迭代；固定扣点 0.33%(ITO)+2%(尾程)已含</span>
+<div class="priceout" id="ed_priceout"></div></div>
+<div class="sec"><h5>④ 上架属性（<span class="req">*</span>必填 + 筛选项；字典属性输入即搜索）</h5>
+<div id="ed_attrs" class="dim">加载中…</div></div>
+<button class="save" id="ed_save" onclick="saveEdit()">💾 保存上架编辑</button>
+<div class="err" id="ed_err"></div>
+</div></div>
+"""
+
+EDITOR_JS = """
+let edPid=null, edPricing=null, edAttrDefs=[], dictMap={};
+function val(id){return document.getElementById(id).value;}
+function esc(s){return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
+function val_set(id,v){document.getElementById(id).value=v;}
+function edErr(m){const e=document.getElementById('ed_err');e.textContent='⚠️ '+m;e.style.display='block';}
+async function openEditor(pid){
+  edPid=pid;edPricing=null;dictMap={85:{'Нет бренда':126745801}};  // 品牌默认无品牌（字典 id）
+  document.getElementById('editmodal').classList.add('on');
+  document.getElementById('edpid').textContent='#'+pid;
+  document.getElementById('ed_err').style.display='none';
+  document.getElementById('ed_priceout').style.display='none';
+  const d=await (await fetch('/api/editor-data?pid='+pid)).json();
+  if(d.error){edErr(d.error);return;}
+  val_set('ed_title',d.ozon_title||'');val_set('ed_desc',d.description_ru||'');
+  val_set('ed_cost',d.price_cny??'');
+  const le=d.listing_edits||{},dm=le.dimensions_cm||{};
+  val_set('ed_len',dm.length??'');val_set('ed_wid',dm.width??'');
+  val_set('ed_hei',dm.height??'');val_set('ed_weight',le.weight_g??'');
+  edAttrDefs=d.attributes||[];
+  renderAttrs(le.attributes||[]);
+  document.getElementById('ed_tier').innerHTML=d.commission_options||'<option value="">自动</option>';
+  if(le.pricing&&le.pricing.price_cny){edPricing=le.pricing;showPricing(le.pricing);}
+  loadShipping();
+}
+function renderAttrs(saved){
+  const box=document.getElementById('ed_attrs');
+  if(!edAttrDefs.length){box.innerHTML='<span class=dim>该类目属性拉取失败或为空</span>';return;}
+  const defaults={8513:'1',11650:'1',85:'Нет бренда'};  // 每包/原厂包装数量默认 1，品牌默认无品牌
+  box.innerHTML=edAttrDefs.map(a=>{
+    const sv=(saved.find(x=>x.id===a.id)||{}).values||[{}];const cur=sv[0]||{};
+    const tag=(a.is_required?'<span class=req>*</span>':'')+(a.is_aspect?' <span class=asp>筛选</span>':'')
+      // shortcut: 多值属性只支持单值输入，多变体场景再升级多选
+      +(a.is_collection?' <span class=asp>多值</span>':'');
+    const v=cur.value||defaults[a.id]||'';
+    const fld=a.dictionary_id
+      ?`<input type=text list="dl${a.id}" placeholder="输入搜索…" data-attr="${a.id}" data-dict="1" onfocus="loadDict(${a.id})" oninput="dictSearch(${a.id},this.value)" value="${esc(v)}"><datalist id="dl${a.id}"></datalist>`
+      :`<input type=text data-attr="${a.id}" data-dict="0" value="${esc(v)}">`;
+    const nm=a.name_cn&&a.name_cn!==a.name
+      ?`${esc(a.name_cn)} <span class=dim>${esc(a.name)}</span>`:esc(a.name);
+    return `<div class=attr><label>${tag} ${nm} <span class=dim>#${a.id}</span></label><div class=fld>${fld}</div></div>`;
+  }).join('');
+}
+async function loadDict(attr){if(dictMap[attr])return;dictSearch(attr,'');}
+async function dictSearch(attr,q){
+  const r=await (await fetch(`/api/attr-values?pid=${edPid}&attr=${attr}&q=${encodeURIComponent(q)}`)).json();
+  dictMap[attr]={};const dl=document.getElementById('dl'+attr);
+  dl.innerHTML=(r.values||[]).map(v=>{dictMap[attr][v.value]=v.id;return `<option value="${esc(v.value)}">`;}).join('');
+}
+async function loadShipping(){
+  const cost=val('ed_cost'),weight=val('ed_weight');if(!cost||!weight)return;
+  const r=await (await fetch(`/api/shipping?pid=${edPid}&purchase=${cost}&weight=${weight}`)).json();
+  document.getElementById('ed_ship').innerHTML=(r.options||[]).map(o=>
+    `<option value="${o.provider}|${o.mode}">${o.provider} ${o.mode} ¥${o.fee} (${o.delivery_days}天)</option>`).join('');
+}
+async function calcPrice(){
+  const fd=new URLSearchParams({pid:edPid,cost:val('ed_cost'),weight:val('ed_weight'),
+    rate:val('ed_rate'),profit:val('ed_profit'),oldrate:val('ed_oldrate'),
+    ad:val('ed_ad'),other:val('ed_other'),tier:val('ed_tier'),ship:val('ed_ship')});
+  const r=await (await fetch('/api/price',{method:'POST',body:fd})).json();
+  if(r.error){edErr(r.error);return;}edPricing=r;showPricing(r);
+}
+function showPricing(p){
+  const el=document.getElementById('ed_priceout');el.style.display='block';
+  const L=p.logistics||{};
+  el.innerHTML=`<div>建议售价 <span class=big>¥${p.price_cny}</span> ≈ ₽${p.price_rub}
+   · 划线价 ¥${p.old_price_cny} · 佣金档${p.commission_tier}(${p.commission_pct}%)</div>
+  <table><tr><td>采购成本</td><td>¥${p.purchase_cny}</td><td>跨境物流</td><td>¥${L.fee} (${esc(L.provider||'')} ${esc(L.mode||'')})</td></tr>
+  <tr><td>平台佣金</td><td>¥${p.cate_fee}</td><td>尾程2%</td><td>¥${p.wc_fee}</td></tr>
+  <tr><td>ITO 0.33%</td><td>¥${p.ito_fee}</td><td>其他</td><td>¥${p.other_fee}</td></tr>
+  <tr><td>广告</td><td>¥${p.ad_fee}</td><td><b>毛利</b></td><td><b>¥${p.profit_cny}</b></td></tr></table>`;
+}
+function collectAttrs(){
+  const out=[];
+  document.querySelectorAll('#ed_attrs [data-attr]').forEach(el=>{
+    const id=+el.dataset.attr,v=el.value.trim();if(!v)return;
+    if(el.dataset.dict==='1'){out.push({id,complex_id:0,values:[{dictionary_value_id:(dictMap[id]||{})[v],value:v}]});}
+    else{out.push({id,complex_id:0,values:[{value:v}]});}
+  });return out;
+}
+async function saveEdit(){
+  if(!edPricing){edErr('请先点「计算建议价」生成定价');return;}
+  const fd=new URLSearchParams({pid:edPid,ozon_title:val('ed_title'),description_ru:val('ed_desc'),
+    length:val('ed_len'),width:val('ed_wid'),height:val('ed_hei'),weight_g:val('ed_weight'),
+    attributes:JSON.stringify(collectAttrs()),pricing:JSON.stringify(edPricing)});
+  const r=await (await fetch('/edit',{method:'POST',body:fd})).json();
+  if(r.ok){location.href='/review?pid='+edPid+'&edited=1';return;}edErr(r.error||'保存失败');
+}
 """
 
 STATES = ["discovered", "scored", "sourced", "checked", "profitable",
@@ -227,6 +385,7 @@ def page(title: str, tab: str, body: str) -> bytes:
 <button class="go" id="s7go" onclick="genSlot7()">生成尺寸图（约 1 分钟 · $0.03）</button>
 <div class="err" id="s7err"></div>
 </div></div>
+{EDITOR_HTML}
 <script>
 function zoom(src){{const z=document.getElementById('zoom');
 document.getElementById('zoomimg').src=src;z.classList.add('on')}}
@@ -258,6 +417,7 @@ function cancelReason(){{document.getElementById('reason').classList.remove('ope
 document.getElementById('decision').value='';
 document.getElementById('reasonbox').style.display='none';
 document.getElementById('reasonhint').style.display='inline';return false}}
+{EDITOR_JS}
 </script>
 </body></html>""".encode()
 
@@ -391,6 +551,8 @@ def review(pid: int | None, flash: str = "") -> bytes:
     with P.conn() as c:
         pend = c.execute("SELECT * FROM products WHERE state='review_pending'"
                          " ORDER BY updated_at").fetchall()
+        imaging = c.execute("SELECT * FROM products WHERE state='imaging'"
+                            " ORDER BY updated_at DESC").fetchall()
         regen = {r["product_id"]: r["n"] for r in c.execute(
             "SELECT product_id, COUNT(*) n FROM reviews"
             " WHERE decision='regenerate' GROUP BY product_id")}
@@ -415,8 +577,18 @@ def review(pid: int | None, flash: str = "") -> bytes:
             f'<a class="qitem{on}" href="/review?pid={p["id"]}">'
             f'<div class="t">{ESC(title)}</div>'
             f'<div class="m">{ESC(m.get("queryCn") or "")} · {ESC(cat)}<br>{sub}</div></a>')
+    imaging_html = "".join(
+        f'<a class="qitem" href="/product/{p["id"]}" style="opacity:.75">'
+        f'<div class="t">{ESC(load(p).get("ozon_title") or p["query"])}</div>'
+        f'<div class="m">#{p["id"]} · {ESC(p["updated_at"][:16])} · trace →</div></a>'
+        for p in imaging)
     queue_html = (f'<div class="queue"><h4>待审队列 · imaging →【待审】（{len(pend)}）</h4>'
-                  f'{"".join(items) or "<div class=dim>队列空 🎉</div>"}</div>')
+                  f'{"".join(items) or "<div class=dim>队列空 🎉</div>"}'
+                  + (f'<h4 style="margin-top:14px">🔁 生图/重生中 · imaging（{len(imaging)}）</h4>'
+                     f'{imaging_html}'
+                     '<div class="dim" style="margin:2px 4px">重跑 image_worker 出图后 '
+                     'sync 自动送回待审</div>' if imaging else "")
+                  + "</div>")
 
     if not cur:
         return page("图审", "review",
@@ -451,7 +623,11 @@ def review(pid: int | None, flash: str = "") -> bytes:
         ("六维漏斗", ESC(f"月搜 {sel.get('searchVolume', '—')} · 增长 {sel.get('growth30d', '—')}% · 竞争 {sel.get('competingProducts', '—')} · 均价 {sel.get('avgPrice', '—')}₽ · 退货 {sel.get('returnRate', '—')}%")),
         ("趋势", '<span class="dim">⚠ trend worker 未实现（任务3）</span>'),
         ("单位经济", '<span class="dim">⚠ econ worker 未实现（任务4）</span>'),
-        ("1688 货源", ESC(f"¥{src.get('price_cny', '—')} · 月销 {src.get('sold_count', '—')} · offer {src.get('offer_id', '—')}")),
+        ("1688 货源", ESC(f"¥{src.get('price_cny', '—')} · 月销 {src.get('sold_count', '—')} · ")
+         + (f'<a href="{ESC(src["url"])}" target="_blank">offer {src["offer_id"]} ↗</a>'
+            if src.get("url") else
+            f'<a href="https://detail.1688.com/offer/{src["offer_id"]}.html" target="_blank">'
+            f'offer {src["offer_id"]} ↗</a>' if src.get("offer_id") else "—")),
         ("Ozon 参考价", ESC(f"{sel.get('avgPrice', '—')}₽（竞品 {cur['ozon_id']}）")),
         ("prompt 版本", ESC(cur["prompt_version"] or "—")),
         ("机械校验", check),
@@ -479,12 +655,15 @@ def review(pid: int | None, flash: str = "") -> bytes:
   </div>
 </form>"""
 
+    edited_tag = ('<span class="tag t-manual">✏️ 已编辑·已确认</span>'
+                  if m.get("listing_edited") else "")
     detail = f"""<div class="detail">
   <div class="detail-head">
     <span class="title">{ESC(m.get('ozon_title') or cur['query'])}</span>
-    <span class="tag t-info">imaging → 待审</span>{econ_tag}
+    <span class="tag t-info">imaging → 待审</span>{econ_tag}{edited_tag}
     <span class="dim">#{cur['id']} · query: {ESC(cur['query'])} ·
       <a href="/product/{cur['id']}">完整 trace →</a></span>
+    <button class="calcbtn" onclick="openEditor({cur['id']})">✏️ 上架编辑</button>
   </div>
   {warn}
   <div class="detail-grid">
@@ -532,6 +711,113 @@ def trace(pid: int) -> bytes:
     return page(f"trace #{pid}", "board", body)
 
 
+def _spec_ids(m: dict) -> tuple[int, int]:
+    return OC.parse_category_ids(_spec(m).get("_meta", {}).get("categoryId", ""))
+
+
+# 编辑器上架属性白名单（按 Ozon 后台「特征」页顺序）：
+# API 必填 3 项 + 筛选项 + 运营必填（后台截图批注：主题标签/净重/每包数量/
+# 颜色/组合类似品/配套/原产国/原厂包装数量/HS 编码）。其余属性一律不显示。
+EDITOR_ATTR_IDS = [85, 9048, 8229,            # 品牌* / 型号名称* / 类型*
+                   23171, 4383, 22390, 8513,  # 主题标签 / 商品净重g / 组合类似品 / 每包数量
+                   10096, 10097,              # 商品颜色 / 颜色名称
+                   8415, 8416,                # 长度cm / 宽度cm（筛选）
+                   4384, 4389, 11650, 22232]  # 配套 / 原产国 / 原厂包装数量 / HS 编码
+
+
+def _editor_attrs(attrs: list[dict]) -> list[dict]:
+    """按白名单过滤并排序（编辑器只展示这些字段）。"""
+    by_id = {a["id"]: a for a in attrs}
+    return [by_id[i] for i in EDITOR_ATTR_IDS if i in by_id]
+
+
+def _commission_options(category_id: int) -> str:
+    """编辑器佣金档下拉：按类目显示真实三档费率（data/ozon-commission.json）。
+    档边界 1500/5000₽ 全类目统一；自动=按折后售价₽选档（服务端迭代）。"""
+    try:
+        tiers = pricing.commission_tiers(category_id)
+    except KeyError:
+        return '<option value="">自动（类目不在佣金库）</option>'
+    bounds = {1: "≤1500₽", 2: "≤5000₽", 3: ">5000₽"}
+    opts = ['<option value="">自动（按折后售价选档）</option>']
+    for t in sorted(tiers):
+        opts.append(f'<option value="{t}">档{t} {bounds[t]} · {tiers[t]:g}%</option>')
+    return "".join(opts)
+
+
+def editor_data(pid: int) -> dict:
+    """编辑器初始数据：文案/成本/已有编辑 + 该类目上架属性（实时拉 Ozon）。"""
+    with P.conn() as c:
+        row = c.execute("SELECT metrics_json FROM products WHERE id=?",
+                        (pid,)).fetchone()
+    if not row:
+        return {"error": "产品不存在"}
+    m = load(row)
+    out = {"ozon_title": m.get("ozon_title", ""),
+           "description_ru": m.get("description_ru", ""),
+           "price_cny": m.get("sourcing", {}).get("price_cny"),
+           "listing_edits": LE.get_edits(m), "attributes": [],
+           "commission_options": "<option value=\"\">自动</option>"}
+    try:
+        desc, typ = _spec_ids(m)
+        out["attributes"] = _editor_attrs(OC.get_attributes(desc, typ))
+        out["commission_options"] = _commission_options(desc)
+    except Exception as exc:
+        out["attr_error"] = str(exc)
+    return out
+
+
+def attr_values(pid: int, attr_id: int, query: str) -> dict:
+    with P.conn() as c:
+        m = load(c.execute("SELECT metrics_json FROM products WHERE id=?",
+                           (pid,)).fetchone())
+    desc, typ = _spec_ids(m)
+    return {"values": OC.get_attr_values(desc, typ, attr_id, query)}
+
+
+def shipping(purchase: float, weight: float) -> dict:
+    cls = pricing.logistics_class(purchase)
+    return {"class": cls, "options": pricing.shipping_options(cls, weight)}
+
+
+def api_price(form: dict) -> dict:
+    pid = int(form["pid"][0])
+    with P.conn() as c:
+        m = load(c.execute("SELECT metrics_json FROM products WHERE id=?",
+                           (pid,)).fetchone())
+    desc, _ = _spec_ids(m)   # 佣金库 cate_id = description_category_id
+    ship = form.get("ship", [""])[0]
+    provider, mode = ship.split("|") if "|" in ship else (None, None)
+    tier = form.get("tier", [""])[0]
+    return pricing.calc(
+        float(form["cost"][0]), float(form["weight"][0]), desc,
+        rate_cnyrub=float(form["rate"][0]),
+        profit_rate=float(form["profit"][0]) / 100,
+        old_price_rate=float(form["oldrate"][0]) / 100,
+        ad_rate=float(form["ad"][0]) / 100,
+        other_rate=float(form["other"][0]) / 100,
+        provider=provider or None, mode=mode or None,
+        commission_tier=int(tier) if tier else None)
+
+
+def api_edit(form: dict) -> dict:
+    pid = int(form["pid"][0])
+
+    def num(k):
+        v = form.get(k, [""])[0].strip()
+        return float(v) if v else None
+
+    edits = {"ozon_title": form.get("ozon_title", [""])[0],
+             "description_ru": form.get("description_ru", [""])[0],
+             "dimensions_cm": {"length": num("length"), "width": num("width"),
+                               "height": num("height")},
+             "weight_g": num("weight_g"),
+             "attributes": json.loads(form.get("attributes", ["[]"])[0]),
+             "pricing": json.loads(form.get("pricing", ["{}"])[0])}
+    err = LE.save(pid, edits)
+    return {"ok": not err, **({"error": err} if err else {})}
+
+
 class Handler(BaseHTTPRequestHandler):
     def _send(self, data: bytes, ctype="text/html; charset=utf-8", code=200):
         self.send_response(code)
@@ -556,7 +842,28 @@ class Handler(BaseHTTPRequestHandler):
             pid = int(qs["pid"][0]) if "pid" in qs else None
             flash = ('<div class="okbox">✅ 尺寸图已生成并入队列，'
                      '请重点核对数字与实物一致</div>' if qs.get("ok") else "")
+            if qs.get("edited"):
+                flash = ('<div class="okbox">✅ 上架编辑已保存到 spec（listing_edits），'
+                         'need_confirm 已人工确认清除</div>')
+            if qs.get("regen"):
+                rp = qs["regen"][0]
+                flash = (f'<div class="okbox">🔁 #{ESC(rp)} 已打回 → 生图队列（imaging），'
+                         f'见下方「重生中」列表或 <a href="/product/{ESC(rp)}">完整 trace</a>。'
+                         f'重跑 image_worker 换 seed 出图后，sync 会自动送回待审队列</div>')
             return self._send(review(pid, flash))
+        if u.path == "/api/editor-data":
+            return self._send(json.dumps(editor_data(int(qs["pid"][0])),
+                                         ensure_ascii=False).encode(),
+                              "application/json; charset=utf-8")
+        if u.path == "/api/attr-values":
+            return self._send(json.dumps(
+                attr_values(int(qs["pid"][0]), int(qs["attr"][0]),
+                            qs.get("q", [""])[0]), ensure_ascii=False).encode(),
+                "application/json; charset=utf-8")
+        if u.path == "/api/shipping":
+            return self._send(json.dumps(
+                shipping(float(qs["purchase"][0]), float(qs["weight"][0])),
+                ensure_ascii=False).encode(), "application/json; charset=utf-8")
         if u.path.startswith("/product/"):
             return self._send(trace(int(u.path.split("/")[-1])))
         if u.path.startswith("/media/"):
@@ -583,6 +890,16 @@ class Handler(BaseHTTPRequestHandler):
                 return self._send(
                     review(pid, f'<div class="warnbox">⚠️ {ESC(err)}</div>'))
             return self._redirect(f"/review?pid={pid}")
+        if self.path == "/api/price":
+            try:
+                r = api_price(form)
+            except Exception as exc:
+                r = {"error": str(exc)}
+            return self._send(json.dumps(r, ensure_ascii=False).encode(),
+                              "application/json; charset=utf-8")
+        if self.path == "/edit":
+            return self._send(json.dumps(api_edit(form), ensure_ascii=False).encode(),
+                              "application/json; charset=utf-8")
         if self.path != "/action":
             return self._send(b"404", code=404)
         pid = int(form["pid"][0])
@@ -600,7 +917,8 @@ class Handler(BaseHTTPRequestHandler):
                             decision, reason)
         except ValueError as exc:
             return self._send(review(pid, f'<div class="warnbox">⚠️ {ESC(str(exc))}</div>'))
-        self._redirect("/review")
+        self._redirect(f"/review?regen={pid}" if decision == "regenerate"
+                       else "/review")
 
     def log_message(self, *a):  # 静默
         pass

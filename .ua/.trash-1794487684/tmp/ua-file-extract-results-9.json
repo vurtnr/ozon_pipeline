@@ -1,0 +1,460 @@
+{
+  "scriptCompleted": true,
+  "filesAnalyzed": 6,
+  "filesSkipped": [
+    ".DS_Store",
+    "data/.DS_Store",
+    "prompts/style_ref/detail_strips_v1.webp",
+    "prompts/style_ref/main_headline_v1.webp",
+    "prompts/style_ref/scenarios_circle_v1.webp",
+    "prompts/style_ref/selling_point_v1.webp",
+    "prompts/style_ref/size_arrows_v1.webp",
+    "prompts/style_ref/usage_grid_v1.webp"
+  ],
+  "filesUnreadable": [],
+  "analysisOutcomes": {
+    "structure": {
+      "succeeded": 6,
+      "failed": 0
+    },
+    "callGraph": {
+      "succeeded": 1,
+      "failed": 0,
+      "skipped": 5
+    }
+  },
+  "results": [
+    {
+      "path": ".ua/config.json",
+      "language": "json",
+      "fileCategory": "config",
+      "totalLines": 3,
+      "nonEmptyLines": 3,
+      "sections": [
+        {
+          "heading": "outputLanguage",
+          "level": 1,
+          "line": 2
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 1
+      }
+    },
+    {
+      "path": "category_tree.py",
+      "language": "python",
+      "fileCategory": "code",
+      "totalLines": 67,
+      "nonEmptyLines": 55,
+      "functions": [
+        {
+          "name": "fetch_tree",
+          "startLine": 22,
+          "endLine": 26,
+          "params": []
+        },
+        {
+          "name": "flatten",
+          "startLine": 29,
+          "endLine": 46,
+          "params": [
+            "nodes",
+            "prefix",
+            "ids",
+            "out"
+          ]
+        },
+        {
+          "name": "main",
+          "startLine": 49,
+          "endLine": 63,
+          "params": []
+        }
+      ],
+      "exports": [
+        {
+          "name": "fetch_tree",
+          "line": 22,
+          "isDefault": false
+        },
+        {
+          "name": "flatten",
+          "line": 29,
+          "isDefault": false
+        },
+        {
+          "name": "main",
+          "line": 49,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "fetch_tree",
+          "callee": "json.dumps({\"language\": \"RU\"}).encode",
+          "lineNumber": 23
+        },
+        {
+          "caller": "fetch_tree",
+          "callee": "json.dumps",
+          "lineNumber": 23
+        },
+        {
+          "caller": "fetch_tree",
+          "callee": "urllib.request.Request",
+          "lineNumber": 24
+        },
+        {
+          "caller": "fetch_tree",
+          "callee": "urllib.request.urlopen",
+          "lineNumber": 25
+        },
+        {
+          "caller": "fetch_tree",
+          "callee": "json.load",
+          "lineNumber": 26
+        },
+        {
+          "caller": "flatten",
+          "callee": "node.get",
+          "lineNumber": 33
+        },
+        {
+          "caller": "flatten",
+          "callee": "node.get",
+          "lineNumber": 33
+        },
+        {
+          "caller": "flatten",
+          "callee": "str",
+          "lineNumber": 34
+        },
+        {
+          "caller": "flatten",
+          "callee": "node.get",
+          "lineNumber": 34
+        },
+        {
+          "caller": "flatten",
+          "callee": "node.get",
+          "lineNumber": 34
+        },
+        {
+          "caller": "flatten",
+          "callee": "node.get",
+          "lineNumber": 36
+        },
+        {
+          "caller": "flatten",
+          "callee": "flatten",
+          "lineNumber": 38
+        },
+        {
+          "caller": "flatten",
+          "callee": "out.append",
+          "lineNumber": 40
+        },
+        {
+          "caller": "flatten",
+          "callee": "\"_\".join",
+          "lineNumber": 41
+        },
+        {
+          "caller": "flatten",
+          "callee": "node.get",
+          "lineNumber": 42
+        },
+        {
+          "caller": "flatten",
+          "callee": "\"/\".join",
+          "lineNumber": 43
+        },
+        {
+          "caller": "flatten",
+          "callee": "node.get",
+          "lineNumber": 44
+        },
+        {
+          "caller": "flatten",
+          "callee": "len",
+          "lineNumber": 45
+        },
+        {
+          "caller": "main",
+          "callee": "fetch_tree",
+          "lineNumber": 50
+        },
+        {
+          "caller": "main",
+          "callee": "open",
+          "lineNumber": 51
+        },
+        {
+          "caller": "main",
+          "callee": "json.dump",
+          "lineNumber": 52
+        },
+        {
+          "caller": "main",
+          "callee": "flatten",
+          "lineNumber": 55
+        },
+        {
+          "caller": "main",
+          "callee": "tree.get",
+          "lineNumber": 55
+        },
+        {
+          "caller": "main",
+          "callee": "open",
+          "lineNumber": 56
+        },
+        {
+          "caller": "main",
+          "callee": "json.dump",
+          "lineNumber": 57
+        },
+        {
+          "caller": "main",
+          "callee": "Counter",
+          "lineNumber": 60
+        },
+        {
+          "caller": "main",
+          "callee": "p[\"pathRu\"].split",
+          "lineNumber": 60
+        },
+        {
+          "caller": "main",
+          "callee": "print",
+          "lineNumber": 61
+        },
+        {
+          "caller": "main",
+          "callee": "len",
+          "lineNumber": 61
+        },
+        {
+          "caller": "main",
+          "callee": "len",
+          "lineNumber": 61
+        },
+        {
+          "caller": "main",
+          "callee": "top.most_common",
+          "lineNumber": 62
+        },
+        {
+          "caller": "main",
+          "callee": "print",
+          "lineNumber": 63
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 3,
+        "functionCount": 3,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "data/attr-cache/17028714_594158428.json",
+      "language": "json",
+      "fileCategory": "config",
+      "totalLines": 345,
+      "nonEmptyLines": 345,
+      "sections": [
+        {
+          "heading": "version",
+          "level": 1,
+          "line": 2
+        },
+        {
+          "heading": "attributes",
+          "level": 1,
+          "line": 3
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 2
+      }
+    },
+    {
+      "path": "data/specs/дозатор_для_жидкого_мыла.json",
+      "language": "json",
+      "fileCategory": "config",
+      "totalLines": 80,
+      "nonEmptyLines": 80,
+      "sections": [
+        {
+          "heading": "category_path_ru",
+          "level": 1,
+          "line": 2
+        },
+        {
+          "heading": "style_note",
+          "level": 1,
+          "line": 3
+        },
+        {
+          "heading": "ozon_title",
+          "level": 1,
+          "line": 4
+        },
+        {
+          "heading": "description_ru",
+          "level": 1,
+          "line": 5
+        },
+        {
+          "heading": "slots",
+          "level": 1,
+          "line": 6
+        },
+        {
+          "heading": "need_confirm",
+          "level": 1,
+          "line": 61
+        },
+        {
+          "heading": "_meta",
+          "level": 1,
+          "line": 62
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 7
+      }
+    },
+    {
+      "path": "data/specs/органайзер_для_столовых_приборов_в_ящик.json",
+      "language": "json",
+      "fileCategory": "config",
+      "totalLines": 170,
+      "nonEmptyLines": 170,
+      "sections": [
+        {
+          "heading": "category_path_ru",
+          "level": 1,
+          "line": 2
+        },
+        {
+          "heading": "style_note",
+          "level": 1,
+          "line": 3
+        },
+        {
+          "heading": "ozon_title",
+          "level": 1,
+          "line": 4
+        },
+        {
+          "heading": "description_ru",
+          "level": 1,
+          "line": 5
+        },
+        {
+          "heading": "slots",
+          "level": 1,
+          "line": 6
+        },
+        {
+          "heading": "need_confirm",
+          "level": 1,
+          "line": 61
+        },
+        {
+          "heading": "_meta",
+          "level": 1,
+          "line": 62
+        },
+        {
+          "heading": "listing_edits",
+          "level": 1,
+          "line": 86
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 8
+      }
+    },
+    {
+      "path": "docs/handoffs/2026-11-11-ozon-listing-editor.md",
+      "language": "markdown",
+      "fileCategory": "docs",
+      "totalLines": 74,
+      "nonEmptyLines": 58,
+      "sections": [
+        {
+          "heading": "Handoff: Ozon 上架链路调研 → OSS 图床 → 定价数据库/公式 → slot1 v4 → 审核台编辑器 v1",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "1. 本会话完成（全部未提交 git）",
+          "level": 2,
+          "line": 7
+        },
+        {
+          "heading": "新增/改动代码文件",
+          "level": 3,
+          "line": 20
+        },
+        {
+          "heading": "2. 关键实测结论（不要重复验证）",
+          "level": 2,
+          "line": 25
+        },
+        {
+          "heading": "3. 当前实况",
+          "level": 2,
+          "line": 33
+        },
+        {
+          "heading": "4. Next Steps（按优先级）",
+          "level": 2,
+          "line": 41
+        },
+        {
+          "heading": "5. 重要规则沉淀",
+          "level": 2,
+          "line": 51
+        },
+        {
+          "heading": "6. Suggested skills",
+          "level": 2,
+          "line": 58
+        },
+        {
+          "heading": "7. 参考文档（勿重复调研）",
+          "level": 2,
+          "line": 68
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 9
+      }
+    }
+  ]
+}

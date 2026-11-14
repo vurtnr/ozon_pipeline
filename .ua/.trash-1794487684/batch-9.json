@@ -1,0 +1,287 @@
+{
+  "nodes": [
+    {
+      "id": "file:.DS_Store",
+      "type": "file",
+      "name": ".DS_Store",
+      "filePath": ".DS_Store",
+      "summary": "macOS Finder 元数据文件，不承载项目业务逻辑，仅作为扫描到的二进制杂项文件保留节点。",
+      "tags": [
+        "元数据",
+        "macos",
+        "杂项"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "config:.ua/config.json",
+      "type": "config",
+      "name": "config.json",
+      "filePath": ".ua/config.json",
+      "summary": "Understand-Anything 本项目配置，声明图谱输出语言为中文。",
+      "tags": [
+        "配置",
+        "项目-设置",
+        "json"
+      ],
+      "complexity": "simple",
+      "languageNotes": "JSON 文件作为本地事实缓存或配置输入，由对应 worker 直接读取。"
+    },
+    {
+      "id": "file:category_tree.py",
+      "type": "file",
+      "name": "category_tree.py",
+      "filePath": "category_tree.py",
+      "summary": "拉取 Ozon Seller 类目树并展开为末级类目表，供类目匹配和关键词 harvest 使用。",
+      "tags": [
+        "类目-树",
+        "ozon-api",
+        "数据-导出"
+      ],
+      "complexity": "moderate",
+      "languageNotes": "Python 脚本以标准库和少量外部 SDK 组合为主，模块级函数承担主要业务步骤。"
+    },
+    {
+      "id": "function:category_tree.py:fetch_tree",
+      "type": "function",
+      "name": "fetch_tree",
+      "filePath": "category_tree.py",
+      "lineRange": [
+        22,
+        26
+      ],
+      "summary": "调用 Ozon Seller API 拉取俄语类目树。",
+      "tags": [
+        "业务-逻辑",
+        "工具函数",
+        "python"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:category_tree.py:flatten",
+      "type": "function",
+      "name": "flatten",
+      "filePath": "category_tree.py",
+      "lineRange": [
+        29,
+        46
+      ],
+      "summary": "递归展开类目树叶子节点，生成 categoryId、typeId 和俄语路径。",
+      "tags": [
+        "业务-逻辑",
+        "工具函数",
+        "python"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:category_tree.py:main",
+      "type": "function",
+      "name": "main",
+      "filePath": "category_tree.py",
+      "lineRange": [
+        49,
+        63
+      ],
+      "summary": "解析命令行参数并串联本文件的主要流程。",
+      "tags": [
+        "入口点",
+        "cli",
+        "编排"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:data/.DS_Store",
+      "type": "file",
+      "name": ".DS_Store",
+      "filePath": "data/.DS_Store",
+      "summary": "data 目录下的 macOS Finder 元数据文件，不参与流水线运行。",
+      "tags": [
+        "元数据",
+        "macos",
+        "杂项"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "config:data/attr-cache/17028714_594158428.json",
+      "type": "config",
+      "name": "17028714_594158428.json",
+      "filePath": "data/attr-cache/17028714_594158428.json",
+      "summary": "缓存 Ozon 指定类目的属性定义，供审核台编辑器展示必填、筛选和多值字段。",
+      "tags": [
+        "数据-缓存",
+        "配置",
+        "业务-规则"
+      ],
+      "complexity": "complex",
+      "languageNotes": "JSON 文件作为本地事实缓存或配置输入，由对应 worker 直接读取。"
+    },
+    {
+      "id": "config:data/specs/дозатор_для_жидкого_мыла.json",
+      "type": "config",
+      "name": "дозатор_для_жидкого_мыла.json",
+      "filePath": "data/specs/дозатор_для_жидкого_мыла.json",
+      "summary": "保存皂液器商品的俄语标题、详情、8-slot 套图规格和元数据校验结果。",
+      "tags": [
+        "数据-缓存",
+        "配置",
+        "业务-规则"
+      ],
+      "complexity": "moderate",
+      "languageNotes": "JSON 文件作为本地事实缓存或配置输入，由对应 worker 直接读取。"
+    },
+    {
+      "id": "config:data/specs/органайзер_для_столовых_приборов_в_ящик.json",
+      "type": "config",
+      "name": "органайзер_для_столовых_приборов_в_ящик.json",
+      "filePath": "data/specs/органайзер_для_столовых_приборов_в_ящик.json",
+      "summary": "保存抽屉餐具收纳商品的俄语文案、套图规格和可编辑上架字段基础数据。",
+      "tags": [
+        "数据-缓存",
+        "配置",
+        "业务-规则"
+      ],
+      "complexity": "moderate",
+      "languageNotes": "JSON 文件作为本地事实缓存或配置输入，由对应 worker 直接读取。"
+    },
+    {
+      "id": "document:docs/handoffs/2026-11-11-ozon-listing-editor.md",
+      "type": "document",
+      "name": "2026-11-11-ozon-listing-editor.md",
+      "filePath": "docs/handoffs/2026-11-11-ozon-listing-editor.md",
+      "summary": "记录上架链路调研、OSS 图床、定价公式、slot1 v4 和审核台编辑器的交接状态。",
+      "tags": [
+        "文档",
+        "项目-说明",
+        "知识-库"
+      ],
+      "complexity": "moderate",
+      "languageNotes": "Markdown 文档以研究结论和执行约束为主，服务后续实现决策。"
+    },
+    {
+      "id": "file:prompts/style_ref/detail_strips_v1.webp",
+      "type": "file",
+      "name": "detail_strips_v1.webp",
+      "filePath": "prompts/style_ref/detail_strips_v1.webp",
+      "summary": "slot6 细节条带风格参考 WebP 素材，曾用于提示图像构图与视觉方向。",
+      "tags": [
+        "视觉-参考",
+        "webp",
+        "素材"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:prompts/style_ref/main_headline_v1.webp",
+      "type": "file",
+      "name": "main_headline_v1.webp",
+      "filePath": "prompts/style_ref/main_headline_v1.webp",
+      "summary": "slot1 主标题风格参考 WebP 素材，记录封面标题构图的视觉样例。",
+      "tags": [
+        "视觉-参考",
+        "webp",
+        "素材"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:prompts/style_ref/scenarios_circle_v1.webp",
+      "type": "file",
+      "name": "scenarios_circle_v1.webp",
+      "filePath": "prompts/style_ref/scenarios_circle_v1.webp",
+      "summary": "slot8 场景圆形布局风格参考 WebP 素材，记录适用场景图的视觉样例。",
+      "tags": [
+        "视觉-参考",
+        "webp",
+        "素材"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:prompts/style_ref/selling_point_v1.webp",
+      "type": "file",
+      "name": "selling_point_v1.webp",
+      "filePath": "prompts/style_ref/selling_point_v1.webp",
+      "summary": "卖点图风格参考 WebP 素材，记录商品利益点表达的视觉样例。",
+      "tags": [
+        "视觉-参考",
+        "webp",
+        "素材"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:prompts/style_ref/size_arrows_v1.webp",
+      "type": "file",
+      "name": "size_arrows_v1.webp",
+      "filePath": "prompts/style_ref/size_arrows_v1.webp",
+      "summary": "slot7 尺寸箭头风格参考 WebP 素材，记录规格标注图的视觉样例。",
+      "tags": [
+        "视觉-参考",
+        "webp",
+        "素材"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:prompts/style_ref/usage_grid_v1.webp",
+      "type": "file",
+      "name": "usage_grid_v1.webp",
+      "filePath": "prompts/style_ref/usage_grid_v1.webp",
+      "summary": "slot4 使用网格风格参考 WebP 素材，记录使用演示图的视觉样例。",
+      "tags": [
+        "视觉-参考",
+        "webp",
+        "素材"
+      ],
+      "complexity": "complex"
+    }
+  ],
+  "edges": [
+    {
+      "source": "file:category_tree.py",
+      "target": "function:category_tree.py:fetch_tree",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:category_tree.py",
+      "target": "function:category_tree.py:fetch_tree",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:category_tree.py",
+      "target": "function:category_tree.py:flatten",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:category_tree.py",
+      "target": "function:category_tree.py:flatten",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:category_tree.py",
+      "target": "function:category_tree.py:main",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:category_tree.py",
+      "target": "function:category_tree.py:main",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    }
+  ]
+}

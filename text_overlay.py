@@ -9,7 +9,7 @@ AI 只画场景+图标，主图大标题由本模块叠加（Manrope Bold，西�
 import sys
 from pathlib import Path
 
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image, ImageDraw, ImageFont, ImageStat
 
 ROOT = Path(__file__).parent
 FONT = ROOT / "fonts/Manrope.ttf"          # 变量字体，取 Bold 实例
@@ -47,14 +47,22 @@ def _wrap(draw, words, font, max_w):
     return lines if len(lines) <= MAX_LINES else None
 
 
+def _adaptive_color(img: Image.Image, band_h: float) -> tuple:
+    """按标题区平均亮度选字色：亮底深字、暗底浅字（[user-decided] 2026-11-11）。"""
+    band = img.crop((0, 0, img.width, int(band_h))).convert("L")
+    return (38, 38, 38) if ImageStat.Stat(band).mean[0] > 140 else (245, 245, 245)
+
+
 def overlay_title(src: str | Path, title: str, out: str | Path,
-                  color: tuple = COLOR) -> dict:
+                  color: tuple | None = None) -> dict:
     """在图片顶部 22% 区域居中叠加俄语大标题（≤2 行，字号自适应收缩）。"""
     img = Image.open(src).convert("RGB")
     w, h = img.size
     draw = ImageDraw.Draw(img)
     max_w = w * (1 - 2 * MARGIN_RATIO)
     area_h = h * AREA_RATIO
+    if color is None:
+        color = _adaptive_color(img, area_h)
 
     placed = None
     for size in range(int(h * 0.11), 28, -2):   # 从大字往下缩

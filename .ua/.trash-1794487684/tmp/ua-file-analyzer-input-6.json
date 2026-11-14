@@ -1,0 +1,56 @@
+{
+  "projectRoot": "/Users/jiaoyumin/rust_workspace/ozon-pipeline",
+  "batchFiles": [
+    {
+      "path": "data/candidates-2026-11-10.json",
+      "language": "json",
+      "sizeLines": 160,
+      "fileCategory": "config"
+    },
+    {
+      "path": "data/categories-leaf.json",
+      "language": "json",
+      "sizeLines": 51542,
+      "fileCategory": "config"
+    },
+    {
+      "path": "data/category-tree-ru.json",
+      "language": "json",
+      "sizeLines": 0,
+      "fileCategory": "config"
+    },
+    {
+      "path": "data/image-search-tasks-2026-11-10.json",
+      "language": "json",
+      "sizeLines": 76,
+      "fileCategory": "config"
+    },
+    {
+      "path": "data/ozon-commission.json",
+      "language": "json",
+      "sizeLines": 5433,
+      "fileCategory": "config"
+    },
+    {
+      "path": "data/ozon-logistics.json",
+      "language": "json",
+      "sizeLines": 865,
+      "fileCategory": "config"
+    },
+    {
+      "path": "data/sourcing-2026-11-10.json",
+      "language": "json",
+      "sizeLines": 285,
+      "fileCategory": "config"
+    }
+  ],
+  "batchImportData": {
+    "data/candidates-2026-11-10.json": [],
+    "data/categories-leaf.json": [],
+    "data/category-tree-ru.json": [],
+    "data/image-search-tasks-2026-11-10.json": [],
+    "data/ozon-commission.json": [],
+    "data/ozon-logistics.json": [],
+    "data/sourcing-2026-11-10.json": []
+  }
+}

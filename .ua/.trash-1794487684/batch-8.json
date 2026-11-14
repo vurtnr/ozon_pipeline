@@ -1,0 +1,122 @@
+{
+  "nodes": [
+    {
+      "id": "document:prompts/slot1_cover_hook_v3.txt",
+      "type": "document",
+      "name": "slot1_cover_hook_v3.txt",
+      "filePath": "prompts/slot1_cover_hook_v3.txt",
+      "summary": "定义 slot1 封面钩子图 v3 的 I2I 提示词，约束产品不变、构图留白和平台角标区。",
+      "tags": [
+        "提示词",
+        "套图-生成",
+        "文档"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "document:prompts/slot1_payoff_v4.txt",
+      "type": "document",
+      "name": "slot1_payoff_v4.txt",
+      "filePath": "prompts/slot1_payoff_v4.txt",
+      "summary": "定义 slot1 payoff moment v4 提示词，强调产品交付核心价值瞬间与情绪化场景。",
+      "tags": [
+        "提示词",
+        "套图-生成",
+        "文档"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "document:prompts/slot2_white_bg_v1.txt",
+      "type": "document",
+      "name": "slot2_white_bg_v1.txt",
+      "filePath": "prompts/slot2_white_bg_v1.txt",
+      "summary": "定义 Ozon 白底主图提示词，要求去除文字水印并保持商品居中和形态不变。",
+      "tags": [
+        "提示词",
+        "套图-生成",
+        "文档"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "document:prompts/slot3_arguments_v3.txt",
+      "type": "document",
+      "name": "slot3_arguments_v3.txt",
+      "filePath": "prompts/slot3_arguments_v3.txt",
+      "summary": "定义 slot3 数字化论据图提示词，让 AI 只生成产品英雄照，论据芯片交给 text_overlay。",
+      "tags": [
+        "提示词",
+        "套图-生成",
+        "文档"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "document:prompts/slot4_usage_v3.txt",
+      "type": "document",
+      "name": "slot4_usage_v3.txt",
+      "filePath": "prompts/slot4_usage_v3.txt",
+      "summary": "定义 slot4 使用演示图提示词，强调真实使用动作、尺度感和无包装无文字场景。",
+      "tags": [
+        "提示词",
+        "套图-生成",
+        "文档"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "document:prompts/slot5_scene_v3.txt",
+      "type": "document",
+      "name": "slot5_scene_v3.txt",
+      "filePath": "prompts/slot5_scene_v3.txt",
+      "summary": "定义 slot5 第二使用场景图提示词，要求与封面不同的生活方式场景和稳定产品外观。",
+      "tags": [
+        "提示词",
+        "套图-生成",
+        "文档"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "document:prompts/slot6_detail_v3.txt",
+      "type": "document",
+      "name": "slot6_detail_v3.txt",
+      "filePath": "prompts/slot6_detail_v3.txt",
+      "summary": "定义 slot6 材质细节特写提示词，预留底部贴字带并突出质感、缝线和结构。",
+      "tags": [
+        "提示词",
+        "套图-生成",
+        "文档"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "document:prompts/slot7_size_v3.txt",
+      "type": "document",
+      "name": "slot7_size_v3.txt",
+      "filePath": "prompts/slot7_size_v3.txt",
+      "summary": "定义 slot7 规格尺寸标注图提示词，配合数字溯源闸生成带俄语尺寸标签的白底图。",
+      "tags": [
+        "提示词",
+        "套图-生成",
+        "文档"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "document:prompts/slot8_scenarios_v3.txt",
+      "type": "document",
+      "name": "slot8_scenarios_v3.txt",
+      "filePath": "prompts/slot8_scenarios_v3.txt",
+      "summary": "定义 slot8 适用场景三列网格提示词，AI 负责无字场景图，标签由 PIL 后贴。",
+      "tags": [
+        "提示词",
+        "套图-生成",
+        "文档"
+      ],
+      "complexity": "simple"
+    }
+  ],
+  "edges": []
+}

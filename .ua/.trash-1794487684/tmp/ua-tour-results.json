@@ -1,0 +1,858 @@
+{
+  "scriptCompleted": true,
+  "entryPointCandidates": [
+    {
+      "id": "document:README.md",
+      "score": 5,
+      "name": "README.md",
+      "summary": "项目入口说明，仅保留项目名称标题，作为仓库的最小概览文档。"
+    },
+    {
+      "id": "file:review_server.py",
+      "score": 3,
+      "name": "review_server.py",
+      "summary": "提供本地图审台 Web 服务，展示流水线看板、图审队列、商品 trace 和上架编辑 API。"
+    },
+    {
+      "id": "file:tests/test_identity_gate.py",
+      "score": 3,
+      "name": "test_identity_gate.py",
+      "summary": "覆盖 1688 货源同一性闸、slot2 供应商图文字闸和 slot7 数字溯源闸的回归测试。"
+    },
+    {
+      "id": "file:tests/test_nexscope_flow.py",
+      "score": 3,
+      "name": "test_nexscope_flow.py",
+      "summary": "覆盖 Nexscope 关键词库构建、消费、防重复、趋势检查和积分熔断的端到端流程。"
+    },
+    {
+      "id": "document:GLOSSARY.md",
+      "score": 2,
+      "name": "GLOSSARY.md",
+      "summary": "维护 Ozon Pipeline 的核心术语与语言约定，帮助后续协作者理解业务缩写和状态词。"
+    }
+  ],
+  "fanInRanking": [
+    {
+      "id": "file:pipeline.py",
+      "fanIn": 9,
+      "name": "pipeline.py"
+    },
+    {
+      "id": "file:config.py",
+      "fanIn": 7,
+      "name": "config.py"
+    },
+    {
+      "id": "file:listing_edit.py",
+      "fanIn": 3,
+      "name": "listing_edit.py"
+    },
+    {
+      "id": "file:nexscope_client.py",
+      "fanIn": 3,
+      "name": "nexscope_client.py"
+    },
+    {
+      "id": "file:ozon_client.py",
+      "fanIn": 3,
+      "name": "ozon_client.py"
+    },
+    {
+      "id": "file:keyword_library.py",
+      "fanIn": 2,
+      "name": "keyword_library.py"
+    },
+    {
+      "id": "file:pricing.py",
+      "fanIn": 2,
+      "name": "pricing.py"
+    },
+    {
+      "id": "file:image_worker.py",
+      "fanIn": 1,
+      "name": "image_worker.py"
+    },
+    {
+      "id": "file:listing_worker.py",
+      "fanIn": 1,
+      "name": "listing_worker.py"
+    },
+    {
+      "id": "file:select_products.py",
+      "fanIn": 1,
+      "name": "select_products.py"
+    },
+    {
+      "id": "file:sourcing_agent.py",
+      "fanIn": 1,
+      "name": "sourcing_agent.py"
+    },
+    {
+      "id": "file:tests/test_listing_edit.py",
+      "fanIn": 1,
+      "name": "test_listing_edit.py"
+    },
+    {
+      "id": "file:tests/test_listing_worker.py",
+      "fanIn": 1,
+      "name": "test_listing_worker.py"
+    },
+    {
+      "id": "file:tests/test_ozon_client.py",
+      "fanIn": 1,
+      "name": "test_ozon_client.py"
+    },
+    {
+      "id": "file:tests/test_pricing.py",
+      "fanIn": 1,
+      "name": "test_pricing.py"
+    },
+    {
+      "id": "file:text_overlay.py",
+      "fanIn": 1,
+      "name": "text_overlay.py"
+    },
+    {
+      "id": "file:trend_check.py",
+      "fanIn": 1,
+      "name": "trend_check.py"
+    },
+    {
+      "id": "config:.ua/config.json",
+      "fanIn": 0,
+      "name": "config.json"
+    },
+    {
+      "id": "config:data/attr-cache/17028714_594158428.json",
+      "fanIn": 0,
+      "name": "17028714_594158428.json"
+    },
+    {
+      "id": "config:data/candidates-2026-11-10.json",
+      "fanIn": 0,
+      "name": "candidates-2026-11-10.json"
+    }
+  ],
+  "fanOutRanking": [
+    {
+      "id": "file:listing_worker.py",
+      "fanOut": 5,
+      "name": "listing_worker.py"
+    },
+    {
+      "id": "file:tests/test_nexscope_flow.py",
+      "fanOut": 5,
+      "name": "test_nexscope_flow.py"
+    },
+    {
+      "id": "file:review_server.py",
+      "fanOut": 4,
+      "name": "review_server.py"
+    },
+    {
+      "id": "file:image_worker.py",
+      "fanOut": 2,
+      "name": "image_worker.py"
+    },
+    {
+      "id": "file:keyword_library.py",
+      "fanOut": 2,
+      "name": "keyword_library.py"
+    },
+    {
+      "id": "file:listing_edit.py",
+      "fanOut": 2,
+      "name": "listing_edit.py"
+    },
+    {
+      "id": "file:nexscope_client.py",
+      "fanOut": 2,
+      "name": "nexscope_client.py"
+    },
+    {
+      "id": "file:ozon_client.py",
+      "fanOut": 2,
+      "name": "ozon_client.py"
+    },
+    {
+      "id": "file:tests/test_identity_gate.py",
+      "fanOut": 2,
+      "name": "test_identity_gate.py"
+    },
+    {
+      "id": "file:tests/test_listing_edit.py",
+      "fanOut": 2,
+      "name": "test_listing_edit.py"
+    },
+    {
+      "id": "file:trend_check.py",
+      "fanOut": 2,
+      "name": "trend_check.py"
+    },
+    {
+      "id": "file:content_agent.py",
+      "fanOut": 1,
+      "name": "content_agent.py"
+    },
+    {
+      "id": "file:dimensions.py",
+      "fanOut": 1,
+      "name": "dimensions.py"
+    },
+    {
+      "id": "file:pricing.py",
+      "fanOut": 1,
+      "name": "pricing.py"
+    },
+    {
+      "id": "file:select_products.py",
+      "fanOut": 1,
+      "name": "select_products.py"
+    },
+    {
+      "id": "file:sourcing_agent.py",
+      "fanOut": 1,
+      "name": "sourcing_agent.py"
+    },
+    {
+      "id": "file:sync_to_db.py",
+      "fanOut": 1,
+      "name": "sync_to_db.py"
+    },
+    {
+      "id": "file:tests/test_listing_worker.py",
+      "fanOut": 1,
+      "name": "test_listing_worker.py"
+    },
+    {
+      "id": "file:tests/test_ozon_client.py",
+      "fanOut": 1,
+      "name": "test_ozon_client.py"
+    },
+    {
+      "id": "file:tests/test_pricing.py",
+      "fanOut": 1,
+      "name": "test_pricing.py"
+    }
+  ],
+  "bfsTraversal": {
+    "startNode": "file:review_server.py",
+    "order": [
+      "file:review_server.py",
+      "file:listing_edit.py",
+      "file:ozon_client.py",
+      "file:pipeline.py",
+      "file:pricing.py",
+      "file:config.py"
+    ],
+    "depthMap": {
+      "file:review_server.py": 0,
+      "file:listing_edit.py": 1,
+      "file:ozon_client.py": 1,
+      "file:pipeline.py": 1,
+      "file:pricing.py": 1,
+      "file:config.py": 2
+    },
+    "byDepth": {
+      "0": [
+        "file:review_server.py"
+      ],
+      "1": [
+        "file:listing_edit.py",
+        "file:ozon_client.py",
+        "file:pipeline.py",
+        "file:pricing.py"
+      ],
+      "2": [
+        "file:config.py"
+      ]
+    }
+  },
+  "nonCodeFiles": {
+    "documentation": [
+      {
+        "id": "document:GLOSSARY.md",
+        "name": "GLOSSARY.md",
+        "type": "document",
+        "summary": "维护 Ozon Pipeline 的核心术语与语言约定，帮助后续协作者理解业务缩写和状态词。"
+      },
+      {
+        "id": "document:README.md",
+        "name": "README.md",
+        "type": "document",
+        "summary": "项目入口说明，仅保留项目名称标题，作为仓库的最小概览文档。"
+      },
+      {
+        "id": "document:ROADMAP.md",
+        "name": "ROADMAP.md",
+        "type": "document",
+        "summary": "记录 Ozon 自动化工具从 V0 到 V1 的产品路线、任务拆分和必须关闭的红色缺口。"
+      },
+      {
+        "id": "document:seeds.txt",
+        "name": "seeds.txt",
+        "type": "document",
+        "summary": "保存首批 Ozon 俄语种子词，供关键词库 harvest 和选品 PoC 使用。"
+      },
+      {
+        "id": "document:docs/research/1688-real-dimensions.md",
+        "name": "1688-real-dimensions.md",
+        "type": "document",
+        "summary": "调研 1688 商品真实尺寸数据来源与备选方案，为 slot7 尺寸图溯源闸提供依据。"
+      },
+      {
+        "id": "document:docs/research/nexscope-free-alternatives.md",
+        "name": "nexscope-free-alternatives.md",
+        "type": "document",
+        "summary": "调研 Nexscope 余额耗尽后的免费选品与热词替代来源，并给出字段映射。"
+      },
+      {
+        "id": "document:docs/research/ozon-commission-rules.md",
+        "name": "ozon-commission-rules.md",
+        "type": "document",
+        "summary": "梳理 Ozon 佣金按类目与售价档计算的规则，并指向 pricing.py 的实现落点。"
+      },
+      {
+        "id": "document:docs/research/ozon-cover-emotion-v4.md",
+        "name": "ozon-cover-emotion-v4.md",
+        "type": "document",
+        "summary": "研究 Ozon 封面图的情绪价值与 slot1 v4 优化方向，用于提高 CTR 和加购率。"
+      },
+      {
+        "id": "document:docs/research/ozon-image-set-hot-logic.md",
+        "name": "ozon-image-set-hot-logic.md",
+        "type": "document",
+        "summary": "总结 Ozon 热卖商品 8 张套图的漏斗逻辑和 qwen-image I2I 提示词实践。"
+      },
+      {
+        "id": "document:docs/research/ozon-listing-api.md",
+        "name": "ozon-listing-api.md",
+        "type": "document",
+        "summary": "调研 Ozon Seller API 上架链路、类目属性、价格库存接口与限流注意点。"
+      },
+      {
+        "id": "document:docs/research/ozon-pricing-formula.md",
+        "name": "ozon-pricing-formula.md",
+        "type": "document",
+        "summary": "记录跨境定价公式、佣金迭代和物流尺寸档规则，是 pricing.py 的业务依据。"
+      },
+      {
+        "id": "document:docs/research/ozon-seller-form-alignment.md",
+        "name": "ozon-seller-form-alignment.md",
+        "type": "document",
+        "summary": "对齐 Ozon 后台上架表单字段与本地审核台编辑器需要展示的属性。"
+      },
+      {
+        "id": "document:prompts/slot1_cover_hook_v3.txt",
+        "name": "slot1_cover_hook_v3.txt",
+        "type": "document",
+        "summary": "定义 slot1 封面钩子图 v3 的 I2I 提示词，约束产品不变、构图留白和平台角标区。"
+      },
+      {
+        "id": "document:prompts/slot1_payoff_v4.txt",
+        "name": "slot1_payoff_v4.txt",
+        "type": "document",
+        "summary": "定义 slot1 payoff moment v4 提示词，强调产品交付核心价值瞬间与情绪化场景。"
+      },
+      {
+        "id": "document:prompts/slot2_white_bg_v1.txt",
+        "name": "slot2_white_bg_v1.txt",
+        "type": "document",
+        "summary": "定义 Ozon 白底主图提示词，要求去除文字水印并保持商品居中和形态不变。"
+      },
+      {
+        "id": "document:prompts/slot3_arguments_v3.txt",
+        "name": "slot3_arguments_v3.txt",
+        "type": "document",
+        "summary": "定义 slot3 数字化论据图提示词，让 AI 只生成产品英雄照，论据芯片交给 text_overlay。"
+      },
+      {
+        "id": "document:prompts/slot4_usage_v3.txt",
+        "name": "slot4_usage_v3.txt",
+        "type": "document",
+        "summary": "定义 slot4 使用演示图提示词，强调真实使用动作、尺度感和无包装无文字场景。"
+      },
+      {
+        "id": "document:prompts/slot5_scene_v3.txt",
+        "name": "slot5_scene_v3.txt",
+        "type": "document",
+        "summary": "定义 slot5 第二使用场景图提示词，要求与封面不同的生活方式场景和稳定产品外观。"
+      },
+      {
+        "id": "document:prompts/slot6_detail_v3.txt",
+        "name": "slot6_detail_v3.txt",
+        "type": "document",
+        "summary": "定义 slot6 材质细节特写提示词，预留底部贴字带并突出质感、缝线和结构。"
+      },
+      {
+        "id": "document:prompts/slot7_size_v3.txt",
+        "name": "slot7_size_v3.txt",
+        "type": "document",
+        "summary": "定义 slot7 规格尺寸标注图提示词，配合数字溯源闸生成带俄语尺寸标签的白底图。"
+      },
+      {
+        "id": "document:prompts/slot8_scenarios_v3.txt",
+        "name": "slot8_scenarios_v3.txt",
+        "type": "document",
+        "summary": "定义 slot8 适用场景三列网格提示词，AI 负责无字场景图，标签由 PIL 后贴。"
+      },
+      {
+        "id": "document:docs/handoffs/2026-11-11-ozon-listing-editor.md",
+        "name": "2026-11-11-ozon-listing-editor.md",
+        "type": "document",
+        "summary": "记录上架链路调研、OSS 图床、定价公式、slot1 v4 和审核台编辑器的交接状态。"
+      }
+    ],
+    "infrastructure": [],
+    "data": [],
+    "config": [
+      {
+        "id": "config:data/candidates-2026-11-10.json",
+        "name": "candidates-2026-11-10.json",
+        "type": "config",
+        "summary": "保存由关键词库生成的候选词与 Ozon top 商品快照，是选品阶段的输入数据。"
+      },
+      {
+        "id": "config:data/categories-leaf.json",
+        "name": "categories-leaf.json",
+        "type": "config",
+        "summary": "保存 Ozon 末级类目展开表，供 content_agent 查类目路径和 keyword_library 生成白名单。"
+      },
+      {
+        "id": "config:data/category-tree-ru.json",
+        "name": "category-tree-ru.json",
+        "type": "config",
+        "summary": "保存 Ozon Seller API 返回的俄语原始类目树，是末级类目表的上游缓存。"
+      },
+      {
+        "id": "config:data/image-search-tasks-2026-11-10.json",
+        "name": "image-search-tasks-2026-11-10.json",
+        "type": "config",
+        "summary": "保存待执行 1688 图搜的 Ozon 图片任务列表，连接选品结果与找货 worker。"
+      },
+      {
+        "id": "config:data/ozon-commission.json",
+        "name": "ozon-commission.json",
+        "type": "config",
+        "summary": "保存 Ozon 类目佣金三档费率数据，pricing.py 用它按售价档计算佣金。"
+      },
+      {
+        "id": "config:data/ozon-logistics.json",
+        "name": "ozon-logistics.json",
+        "type": "config",
+        "summary": "保存 Ozon 跨境物流方案、费用公式和尺寸档元数据，支撑 pricing.py 的运费计算。"
+      },
+      {
+        "id": "config:data/sourcing-2026-11-10.json",
+        "name": "sourcing-2026-11-10.json",
+        "type": "config",
+        "summary": "保存 1688 找货结果、供应商价格、销量和同一性筛选信息，是成本核算与生图的输入。"
+      },
+      {
+        "id": "config:.ua/config.json",
+        "name": "config.json",
+        "type": "config",
+        "summary": "Understand-Anything 本项目配置，声明图谱输出语言为中文。"
+      },
+      {
+        "id": "config:data/attr-cache/17028714_594158428.json",
+        "name": "17028714_594158428.json",
+        "type": "config",
+        "summary": "缓存 Ozon 指定类目的属性定义，供审核台编辑器展示必填、筛选和多值字段。"
+      },
+      {
+        "id": "config:data/specs/дозатор_для_жидкого_мыла.json",
+        "name": "дозатор_для_жидкого_мыла.json",
+        "type": "config",
+        "summary": "保存皂液器商品的俄语标题、详情、8-slot 套图规格和元数据校验结果。"
+      },
+      {
+        "id": "config:data/specs/органайзер_для_столовых_приборов_в_ящик.json",
+        "name": "органайзер_для_столовых_приборов_в_ящик.json",
+        "type": "config",
+        "summary": "保存抽屉餐具收纳商品的俄语文案、套图规格和可编辑上架字段基础数据。"
+      }
+    ]
+  },
+  "clusters": [],
+  "layers": {
+    "count": 7,
+    "list": [
+      {
+        "id": "layer:sourcing",
+        "name": "选品与找货层",
+        "description": "负责从 Ozon/Nexscope 关键词与类目数据中筛选候选商品，并驱动 1688 图搜和同一性筛选。"
+      },
+      {
+        "id": "layer:listing-generation",
+        "name": "内容与套图生成层",
+        "description": "负责生成 Ozon listing 文案、8-slot 套图规格、图像处理提示词和视觉参考素材。"
+      },
+      {
+        "id": "layer:data",
+        "name": "数据与定价层",
+        "description": "维护 SQLite 事实源、离线 artifact 同步、Ozon 佣金物流规则、类目缓存和商品 spec 数据。"
+      },
+      {
+        "id": "layer:review-publish",
+        "name": "审核台与发布层",
+        "description": "提供本地图审台、上架编辑校验、Ozon Seller API 属性能力和最终 listing 发布链路。"
+      },
+      {
+        "id": "layer:config",
+        "name": "配置与项目支持层",
+        "description": "集中保存外部服务凭据入口、Understand-Anything 项目配置和扫描到的仓库级元数据。"
+      },
+      {
+        "id": "layer:documentation",
+        "name": "文档与调研层",
+        "description": "记录项目路线、术语、业务规则调研和阶段性交接，为 Ozon Pipeline 的人工决策提供依据。"
+      },
+      {
+        "id": "layer:test",
+        "name": "测试层",
+        "description": "用 pytest 覆盖选品、同一性闸、定价、审核编辑、Ozon 客户端和上架 payload 的关键回归路径。"
+      }
+    ]
+  },
+  "nodeSummaryIndex": {
+    "file:config.py": {
+      "name": "config.py",
+      "type": "file",
+      "summary": "加载项目根目录的 .env，并导出各类 API 与 OSS 凭据常量，是所有外部服务客户端共享的配置入口。"
+    },
+    "file:content_agent.py": {
+      "name": "content_agent.py",
+      "type": "file",
+      "summary": "把 Ozon 关键词、1688 标题和类目树约束交给 LLM，生成可校验的商品文案与 8-slot 套图规格 JSON。"
+    },
+    "file:dimensions.py": {
+      "name": "dimensions.py",
+      "type": "file",
+      "summary": "调用 qwen3-vl-plus 从商品图中读取尺寸标注文本，为 slot7 尺寸图提供可溯源的原始数字。"
+    },
+    "file:image_worker.py": {
+      "name": "image_worker.py",
+      "type": "file",
+      "summary": "消费 content spec 与货源图，调用 qwen-image I2I 生成 Ozon 8-slot 套图，并用本地 text_overlay 贴俄语文案。"
+    },
+    "file:sourcing_agent.py": {
+      "name": "sourcing_agent.py",
+      "type": "file",
+      "summary": "把 Ozon 爆款图喂给 1688 图搜 skill，并用 VL 同一性闸筛出可采购货源。"
+    },
+    "file:tests/test_identity_gate.py": {
+      "name": "test_identity_gate.py",
+      "type": "file",
+      "summary": "覆盖 1688 货源同一性闸、slot2 供应商图文字闸和 slot7 数字溯源闸的回归测试。"
+    },
+    "file:text_overlay.py": {
+      "name": "text_overlay.py",
+      "type": "file",
+      "summary": "基于 PIL 在生成图上叠加俄语标题、徽章、芯片和场景标签，避免 AI 直接渲染西里尔文字。"
+    },
+    "file:listing_edit.py": {
+      "name": "listing_edit.py",
+      "type": "file",
+      "summary": "保存审核台中的上架编辑内容，校验标题、重量、价格和属性后写回 SQLite 与 spec 文件。"
+    },
+    "file:pipeline.py": {
+      "name": "pipeline.py",
+      "type": "file",
+      "summary": "定义 pipeline.db 的 SQLite 状态机、表结构和命令行操作，是选品到上架流水线的唯一事实源。"
+    },
+    "file:pricing.py": {
+      "name": "pricing.py",
+      "type": "file",
+      "summary": "实现 Ozon 跨境定价公式，按佣金档、物流档和利润率计算售价、划线价与费用拆分。"
+    },
+    "file:review_server.py": {
+      "name": "review_server.py",
+      "type": "file",
+      "summary": "提供本地图审台 Web 服务，展示流水线看板、图审队列、商品 trace 和上架编辑 API。"
+    },
+    "file:sync_to_db.py": {
+      "name": "sync_to_db.py",
+      "type": "file",
+      "summary": "把 candidates、sourcing、specs 和生成图等离线 artifacts 幂等同步回 pipeline.db。"
+    },
+    "file:tests/test_listing_edit.py": {
+      "name": "test_listing_edit.py",
+      "type": "file",
+      "summary": "验证审核台上架编辑保存、字段校验和读取 roundtrip 行为。"
+    },
+    "file:tests/test_pricing.py": {
+      "name": "test_pricing.py",
+      "type": "file",
+      "summary": "验证跨境定价公式、佣金档迭代、物流档阈值和编辑器属性白名单。"
+    },
+    "file:keyword_library.py": {
+      "name": "keyword_library.py",
+      "type": "file",
+      "summary": "把 Nexscope 词级指标资产化到本地 SQLite，支持类目 harvest、合格词消费、刷新和统计。"
+    },
+    "file:nexscope_client.py": {
+      "name": "nexscope_client.py",
+      "type": "file",
+      "summary": "封装 Nexscope API 调用、积分记账与日熔断，避免批量循环误烧额度。"
+    },
+    "file:select_products.py": {
+      "name": "select_products.py",
+      "type": "file",
+      "summary": "从本地关键词库消费合格词，导出候选商品及 top Ozon 商品，驱动后续找货阶段。"
+    },
+    "file:tests/test_nexscope_flow.py": {
+      "name": "test_nexscope_flow.py",
+      "type": "file",
+      "summary": "覆盖 Nexscope 关键词库构建、消费、防重复、趋势检查和积分熔断的端到端流程。"
+    },
+    "file:trend_check.py": {
+      "name": "trend_check.py",
+      "type": "file",
+      "summary": "对在监商品重新查询 Nexscope 词级指标，发现搜索量或均价剧烈变化时输出告警。"
+    },
+    "file:listing_worker.py": {
+      "name": "listing_worker.py",
+      "type": "file",
+      "summary": "把审核通过的商品组装成 Ozon /v3/product/import payload，上传本地套图到 OSS 后发起上架。"
+    },
+    "file:ozon_client.py": {
+      "name": "ozon_client.py",
+      "type": "file",
+      "summary": "封装 Ozon Seller API 中审核台需要的类目属性、字典值和类目 ID 解析能力，并维护属性缓存。"
+    },
+    "file:tests/test_listing_worker.py": {
+      "name": "test_listing_worker.py",
+      "type": "file",
+      "summary": "验证 Ozon 上架 payload 的核心字段、尺寸单位换算、品牌默认值、主图顺序和必填校验。"
+    },
+    "file:tests/test_ozon_client.py": {
+      "name": "test_ozon_client.py",
+      "type": "file",
+      "summary": "验证 Ozon 类目属性缓存保留可选属性、多值属性并按必填与筛选字段排序。"
+    },
+    "document:GLOSSARY.md": {
+      "name": "GLOSSARY.md",
+      "type": "document",
+      "summary": "维护 Ozon Pipeline 的核心术语与语言约定，帮助后续协作者理解业务缩写和状态词。"
+    },
+    "document:README.md": {
+      "name": "README.md",
+      "type": "document",
+      "summary": "项目入口说明，仅保留项目名称标题，作为仓库的最小概览文档。"
+    },
+    "document:ROADMAP.md": {
+      "name": "ROADMAP.md",
+      "type": "document",
+      "summary": "记录 Ozon 自动化工具从 V0 到 V1 的产品路线、任务拆分和必须关闭的红色缺口。"
+    },
+    "file:pipeline.html": {
+      "name": "pipeline.html",
+      "type": "file",
+      "summary": "用静态 HTML 展示选品到上架的自动化流程蓝图，包含阶段、状态和人工闸点。"
+    },
+    "document:seeds.txt": {
+      "name": "seeds.txt",
+      "type": "document",
+      "summary": "保存首批 Ozon 俄语种子词，供关键词库 harvest 和选品 PoC 使用。"
+    },
+    "file:ui-sketch.html": {
+      "name": "ui-sketch.html",
+      "type": "file",
+      "summary": "用静态 HTML 描绘审核台操作界面草图，覆盖看板、图审队列和编辑区布局。"
+    },
+    "config:data/candidates-2026-11-10.json": {
+      "name": "candidates-2026-11-10.json",
+      "type": "config",
+      "summary": "保存由关键词库生成的候选词与 Ozon top 商品快照，是选品阶段的输入数据。"
+    },
+    "config:data/categories-leaf.json": {
+      "name": "categories-leaf.json",
+      "type": "config",
+      "summary": "保存 Ozon 末级类目展开表，供 content_agent 查类目路径和 keyword_library 生成白名单。"
+    },
+    "config:data/category-tree-ru.json": {
+      "name": "category-tree-ru.json",
+      "type": "config",
+      "summary": "保存 Ozon Seller API 返回的俄语原始类目树，是末级类目表的上游缓存。"
+    },
+    "config:data/image-search-tasks-2026-11-10.json": {
+      "name": "image-search-tasks-2026-11-10.json",
+      "type": "config",
+      "summary": "保存待执行 1688 图搜的 Ozon 图片任务列表，连接选品结果与找货 worker。"
+    },
+    "config:data/ozon-commission.json": {
+      "name": "ozon-commission.json",
+      "type": "config",
+      "summary": "保存 Ozon 类目佣金三档费率数据，pricing.py 用它按售价档计算佣金。"
+    },
+    "config:data/ozon-logistics.json": {
+      "name": "ozon-logistics.json",
+      "type": "config",
+      "summary": "保存 Ozon 跨境物流方案、费用公式和尺寸档元数据，支撑 pricing.py 的运费计算。"
+    },
+    "config:data/sourcing-2026-11-10.json": {
+      "name": "sourcing-2026-11-10.json",
+      "type": "config",
+      "summary": "保存 1688 找货结果、供应商价格、销量和同一性筛选信息，是成本核算与生图的输入。"
+    },
+    "document:docs/research/1688-real-dimensions.md": {
+      "name": "1688-real-dimensions.md",
+      "type": "document",
+      "summary": "调研 1688 商品真实尺寸数据来源与备选方案，为 slot7 尺寸图溯源闸提供依据。"
+    },
+    "document:docs/research/nexscope-free-alternatives.md": {
+      "name": "nexscope-free-alternatives.md",
+      "type": "document",
+      "summary": "调研 Nexscope 余额耗尽后的免费选品与热词替代来源，并给出字段映射。"
+    },
+    "document:docs/research/ozon-commission-rules.md": {
+      "name": "ozon-commission-rules.md",
+      "type": "document",
+      "summary": "梳理 Ozon 佣金按类目与售价档计算的规则，并指向 pricing.py 的实现落点。"
+    },
+    "document:docs/research/ozon-cover-emotion-v4.md": {
+      "name": "ozon-cover-emotion-v4.md",
+      "type": "document",
+      "summary": "研究 Ozon 封面图的情绪价值与 slot1 v4 优化方向，用于提高 CTR 和加购率。"
+    },
+    "document:docs/research/ozon-image-set-hot-logic.md": {
+      "name": "ozon-image-set-hot-logic.md",
+      "type": "document",
+      "summary": "总结 Ozon 热卖商品 8 张套图的漏斗逻辑和 qwen-image I2I 提示词实践。"
+    },
+    "document:docs/research/ozon-listing-api.md": {
+      "name": "ozon-listing-api.md",
+      "type": "document",
+      "summary": "调研 Ozon Seller API 上架链路、类目属性、价格库存接口与限流注意点。"
+    },
+    "document:docs/research/ozon-pricing-formula.md": {
+      "name": "ozon-pricing-formula.md",
+      "type": "document",
+      "summary": "记录跨境定价公式、佣金迭代和物流尺寸档规则，是 pricing.py 的业务依据。"
+    },
+    "document:docs/research/ozon-seller-form-alignment.md": {
+      "name": "ozon-seller-form-alignment.md",
+      "type": "document",
+      "summary": "对齐 Ozon 后台上架表单字段与本地审核台编辑器需要展示的属性。"
+    },
+    "document:prompts/slot1_cover_hook_v3.txt": {
+      "name": "slot1_cover_hook_v3.txt",
+      "type": "document",
+      "summary": "定义 slot1 封面钩子图 v3 的 I2I 提示词，约束产品不变、构图留白和平台角标区。"
+    },
+    "document:prompts/slot1_payoff_v4.txt": {
+      "name": "slot1_payoff_v4.txt",
+      "type": "document",
+      "summary": "定义 slot1 payoff moment v4 提示词，强调产品交付核心价值瞬间与情绪化场景。"
+    },
+    "document:prompts/slot2_white_bg_v1.txt": {
+      "name": "slot2_white_bg_v1.txt",
+      "type": "document",
+      "summary": "定义 Ozon 白底主图提示词，要求去除文字水印并保持商品居中和形态不变。"
+    },
+    "document:prompts/slot3_arguments_v3.txt": {
+      "name": "slot3_arguments_v3.txt",
+      "type": "document",
+      "summary": "定义 slot3 数字化论据图提示词，让 AI 只生成产品英雄照，论据芯片交给 text_overlay。"
+    },
+    "document:prompts/slot4_usage_v3.txt": {
+      "name": "slot4_usage_v3.txt",
+      "type": "document",
+      "summary": "定义 slot4 使用演示图提示词，强调真实使用动作、尺度感和无包装无文字场景。"
+    },
+    "document:prompts/slot5_scene_v3.txt": {
+      "name": "slot5_scene_v3.txt",
+      "type": "document",
+      "summary": "定义 slot5 第二使用场景图提示词，要求与封面不同的生活方式场景和稳定产品外观。"
+    },
+    "document:prompts/slot6_detail_v3.txt": {
+      "name": "slot6_detail_v3.txt",
+      "type": "document",
+      "summary": "定义 slot6 材质细节特写提示词，预留底部贴字带并突出质感、缝线和结构。"
+    },
+    "document:prompts/slot7_size_v3.txt": {
+      "name": "slot7_size_v3.txt",
+      "type": "document",
+      "summary": "定义 slot7 规格尺寸标注图提示词，配合数字溯源闸生成带俄语尺寸标签的白底图。"
+    },
+    "document:prompts/slot8_scenarios_v3.txt": {
+      "name": "slot8_scenarios_v3.txt",
+      "type": "document",
+      "summary": "定义 slot8 适用场景三列网格提示词，AI 负责无字场景图，标签由 PIL 后贴。"
+    },
+    "file:.DS_Store": {
+      "name": ".DS_Store",
+      "type": "file",
+      "summary": "macOS Finder 元数据文件，不承载项目业务逻辑，仅作为扫描到的二进制杂项文件保留节点。"
+    },
+    "config:.ua/config.json": {
+      "name": "config.json",
+      "type": "config",
+      "summary": "Understand-Anything 本项目配置，声明图谱输出语言为中文。"
+    },
+    "file:category_tree.py": {
+      "name": "category_tree.py",
+      "type": "file",
+      "summary": "拉取 Ozon Seller 类目树并展开为末级类目表，供类目匹配和关键词 harvest 使用。"
+    },
+    "file:data/.DS_Store": {
+      "name": ".DS_Store",
+      "type": "file",
+      "summary": "data 目录下的 macOS Finder 元数据文件，不参与流水线运行。"
+    },
+    "config:data/attr-cache/17028714_594158428.json": {
+      "name": "17028714_594158428.json",
+      "type": "config",
+      "summary": "缓存 Ozon 指定类目的属性定义，供审核台编辑器展示必填、筛选和多值字段。"
+    },
+    "config:data/specs/дозатор_для_жидкого_мыла.json": {
+      "name": "дозатор_для_жидкого_мыла.json",
+      "type": "config",
+      "summary": "保存皂液器商品的俄语标题、详情、8-slot 套图规格和元数据校验结果。"
+    },
+    "config:data/specs/органайзер_для_столовых_приборов_в_ящик.json": {
+      "name": "органайзер_для_столовых_приборов_в_ящик.json",
+      "type": "config",
+      "summary": "保存抽屉餐具收纳商品的俄语文案、套图规格和可编辑上架字段基础数据。"
+    },
+    "document:docs/handoffs/2026-11-11-ozon-listing-editor.md": {
+      "name": "2026-11-11-ozon-listing-editor.md",
+      "type": "document",
+      "summary": "记录上架链路调研、OSS 图床、定价公式、slot1 v4 和审核台编辑器的交接状态。"
+    },
+    "file:prompts/style_ref/detail_strips_v1.webp": {
+      "name": "detail_strips_v1.webp",
+      "type": "file",
+      "summary": "slot6 细节条带风格参考 WebP 素材，曾用于提示图像构图与视觉方向。"
+    },
+    "file:prompts/style_ref/main_headline_v1.webp": {
+      "name": "main_headline_v1.webp",
+      "type": "file",
+      "summary": "slot1 主标题风格参考 WebP 素材，记录封面标题构图的视觉样例。"
+    },
+    "file:prompts/style_ref/scenarios_circle_v1.webp": {
+      "name": "scenarios_circle_v1.webp",
+      "type": "file",
+      "summary": "slot8 场景圆形布局风格参考 WebP 素材，记录适用场景图的视觉样例。"
+    },
+    "file:prompts/style_ref/selling_point_v1.webp": {
+      "name": "selling_point_v1.webp",
+      "type": "file",
+      "summary": "卖点图风格参考 WebP 素材，记录商品利益点表达的视觉样例。"
+    },
+    "file:prompts/style_ref/size_arrows_v1.webp": {
+      "name": "size_arrows_v1.webp",
+      "type": "file",
+      "summary": "slot7 尺寸箭头风格参考 WebP 素材，记录规格标注图的视觉样例。"
+    },
+    "file:prompts/style_ref/usage_grid_v1.webp": {
+      "name": "usage_grid_v1.webp",
+      "type": "file",
+      "summary": "slot4 使用网格风格参考 WebP 素材，记录使用演示图的视觉样例。"
+    }
+  },
+  "totalNodes": 67,
+  "totalEdges": 39
+}

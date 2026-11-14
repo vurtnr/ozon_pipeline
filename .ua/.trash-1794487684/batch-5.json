@@ -1,0 +1,86 @@
+{
+  "nodes": [
+    {
+      "id": "document:GLOSSARY.md",
+      "type": "document",
+      "name": "GLOSSARY.md",
+      "filePath": "GLOSSARY.md",
+      "summary": "维护 Ozon Pipeline 的核心术语与语言约定，帮助后续协作者理解业务缩写和状态词。",
+      "tags": [
+        "文档",
+        "项目-说明",
+        "知识-库"
+      ],
+      "complexity": "simple",
+      "languageNotes": "Markdown 文档以研究结论和执行约束为主，服务后续实现决策。"
+    },
+    {
+      "id": "document:README.md",
+      "type": "document",
+      "name": "README.md",
+      "filePath": "README.md",
+      "summary": "项目入口说明，仅保留项目名称标题，作为仓库的最小概览文档。",
+      "tags": [
+        "文档",
+        "项目-说明",
+        "知识-库"
+      ],
+      "complexity": "simple",
+      "languageNotes": "Markdown 文档以研究结论和执行约束为主，服务后续实现决策。"
+    },
+    {
+      "id": "document:ROADMAP.md",
+      "type": "document",
+      "name": "ROADMAP.md",
+      "filePath": "ROADMAP.md",
+      "summary": "记录 Ozon 自动化工具从 V0 到 V1 的产品路线、任务拆分和必须关闭的红色缺口。",
+      "tags": [
+        "文档",
+        "项目-说明",
+        "知识-库"
+      ],
+      "complexity": "moderate",
+      "languageNotes": "Markdown 文档以研究结论和执行约束为主，服务后续实现决策。"
+    },
+    {
+      "id": "file:pipeline.html",
+      "type": "file",
+      "name": "pipeline.html",
+      "filePath": "pipeline.html",
+      "summary": "用静态 HTML 展示选品到上架的自动化流程蓝图，包含阶段、状态和人工闸点。",
+      "tags": [
+        "静态-页面",
+        "原型",
+        "html"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "document:seeds.txt",
+      "type": "document",
+      "name": "seeds.txt",
+      "filePath": "seeds.txt",
+      "summary": "保存首批 Ozon 俄语种子词，供关键词库 harvest 和选品 PoC 使用。",
+      "tags": [
+        "文档",
+        "项目-说明",
+        "知识-库"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:ui-sketch.html",
+      "type": "file",
+      "name": "ui-sketch.html",
+      "filePath": "ui-sketch.html",
+      "summary": "用静态 HTML 描绘审核台操作界面草图，覆盖看板、图审队列和编辑区布局。",
+      "tags": [
+        "静态-页面",
+        "原型",
+        "html"
+      ],
+      "complexity": "complex"
+    }
+  ],
+  "edges": []
+}

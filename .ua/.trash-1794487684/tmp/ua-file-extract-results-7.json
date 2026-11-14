@@ -1,0 +1,442 @@
+{
+  "scriptCompleted": true,
+  "filesAnalyzed": 8,
+  "filesSkipped": [],
+  "filesUnreadable": [],
+  "analysisOutcomes": {
+    "structure": {
+      "succeeded": 8,
+      "failed": 0
+    },
+    "callGraph": {
+      "succeeded": 0,
+      "failed": 0,
+      "skipped": 8
+    }
+  },
+  "results": [
+    {
+      "path": "docs/research/1688-real-dimensions.md",
+      "language": "markdown",
+      "fileCategory": "docs",
+      "totalLines": 77,
+      "nonEmptyLines": 55,
+      "sections": [
+        {
+          "heading": "Research: 1688 商品真实规格尺寸数据来源（slot7 解锁）",
+          "level": 1,
+          "line": 5
+        },
+        {
+          "heading": "结论（TL;DR）",
+          "level": 2,
+          "line": 7
+        },
+        {
+          "heading": "一、本 repo 已集成的 endpoint 与字段证据",
+          "level": 2,
+          "line": 16
+        },
+        {
+          "heading": "二、官方 API 证据：哪里能拿到真实尺寸",
+          "level": 2,
+          "line": 26
+        },
+        {
+          "heading": "三、备选方案排序（若不走开放平台注册）",
+          "level": 2,
+          "line": 45
+        },
+        {
+          "heading": "Sources",
+          "level": 2,
+          "line": 52
+        },
+        {
+          "heading": "Contradictions",
+          "level": 2,
+          "line": 66
+        },
+        {
+          "heading": "Missing evidence",
+          "level": 2,
+          "line": 70
+        },
+        {
+          "heading": "Next steps",
+          "level": 2,
+          "line": 74
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 9
+      }
+    },
+    {
+      "path": "docs/research/nexscope-free-alternatives.md",
+      "language": "markdown",
+      "fileCategory": "docs",
+      "totalLines": 55,
+      "nonEmptyLines": 47,
+      "sections": [
+        {
+          "heading": "Research: Nexscope 余额耗尽后的 Ozon 热词/选品免费替代",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "结论（按优先级）",
+          "level": 2,
+          "line": 3
+        },
+        {
+          "heading": "Seerfar 能力清单（(a)能否用 Seerfar 导出热销产品 Excel 做热词库 → 能）",
+          "level": 2,
+          "line": 9
+        },
+        {
+          "heading": "Ozon 官方免费数据源",
+          "level": 2,
+          "line": 21
+        },
+        {
+          "heading": "字段映射（漏斗 6 字段 ← 各来源）",
+          "level": 2,
+          "line": 29
+        },
+        {
+          "heading": "矛盾与缺口",
+          "level": 2,
+          "line": 39
+        },
+        {
+          "heading": "Sources",
+          "level": 2,
+          "line": 44
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 7
+      }
+    },
+    {
+      "path": "docs/research/ozon-commission-rules.md",
+      "language": "markdown",
+      "fileCategory": "docs",
+      "totalLines": 37,
+      "nonEmptyLines": 29,
+      "sections": [
+        {
+          "heading": "Ozon 佣金档位计算规则（跨境中国卖家）",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "1. 规则：类目 × 价格档，两个维度",
+          "level": 2,
+          "line": 5
+        },
+        {
+          "heading": "2. 注意：两套口径不要混",
+          "level": 2,
+          "line": 18
+        },
+        {
+          "heading": "3. 实现落点",
+          "level": 2,
+          "line": 29
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 4
+      }
+    },
+    {
+      "path": "docs/research/ozon-cover-emotion-v4.md",
+      "language": "markdown",
+      "fileCategory": "docs",
+      "totalLines": 99,
+      "nonEmptyLines": 72,
+      "sections": [
+        {
+          "heading": "Ozon 封面情绪价值 · slot1 v4 优化方案",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "1. 外部证据（本轮新调研）",
+          "level": 2,
+          "line": 6
+        },
+        {
+          "heading": "2. 现状评审：两张 slot1 成品（亲眼目检）",
+          "level": 2,
+          "line": 17
+        },
+        {
+          "heading": "卡1 皂液器（自动感应出泡）",
+          "level": 3,
+          "line": 19
+        },
+        {
+          "heading": "卡2 抽屉餐具收纳",
+          "level": 3,
+          "line": 24
+        },
+        {
+          "heading": "运营视角诊断（根因）",
+          "level": 3,
+          "line": 29
+        },
+        {
+          "heading": "3. 第一性原理：搜索页封面的三个任务",
+          "level": 2,
+          "line": 32
+        },
+        {
+          "heading": "4. slot1 v4 方案（草案）",
+          "level": 2,
+          "line": 41
+        },
+        {
+          "heading": "4.1 核心变更",
+          "level": 3,
+          "line": 43
+        },
+        {
+          "heading": "4.2 content_agent 配套",
+          "level": 3,
+          "line": 50
+        },
+        {
+          "heading": "4.3 手部畸形兜底（已知 AI 通病，slot4 注释已有此模式）",
+          "level": 3,
+          "line": 55
+        },
+        {
+          "heading": "4.4 A/B 闭环（接 eval 体系）",
+          "level": 3,
+          "line": 58
+        },
+        {
+          "heading": "5. 决策点（待用户拍板）",
+          "level": 2,
+          "line": 61
+        },
+        {
+          "heading": "7. 实战测试记录（2026-11-11，6 张图 $0.198）",
+          "level": 2,
+          "line": 68
+        },
+        {
+          "heading": "8. 跨品类压测（2026-11-11 狗玩具，4 张图 $0.132）",
+          "level": 2,
+          "line": 80
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 15
+      }
+    },
+    {
+      "path": "docs/research/ozon-image-set-hot-logic.md",
+      "language": "markdown",
+      "fileCategory": "docs",
+      "totalLines": 69,
+      "nonEmptyLines": 53,
+      "sections": [
+        {
+          "heading": "Ozon 热卖商品卡套图逻辑 + qwen-image I2I 提示词实践",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "1. Ozon 官方/平台规则（硬约束）",
+          "level": 2,
+          "line": 6
+        },
+        {
+          "heading": "2. 热卖套图的 8 张漏斗结构（核心结论）",
+          "level": 2,
+          "line": 17
+        },
+        {
+          "heading": "3. qwen-image I2I 提示词工程（官方+实践）",
+          "level": 2,
+          "line": 41
+        },
+        {
+          "heading": "4. 对本流水线的设计结论 [推断]",
+          "level": 2,
+          "line": 54
+        },
+        {
+          "heading": "5. 2026-11-10 乱码事故补充 [direct: 实测]",
+          "level": 2,
+          "line": 63
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 6
+      }
+    },
+    {
+      "path": "docs/research/ozon-listing-api.md",
+      "language": "markdown",
+      "fileCategory": "docs",
+      "totalLines": 67,
+      "nonEmptyLines": 47,
+      "sections": [
+        {
+          "heading": "Ozon Seller API 上架链路 · 一手来源调研",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "1. 商品创建：POST /v3/product/import",
+          "level": 2,
+          "line": 7
+        },
+        {
+          "heading": "2. 类目与属性发现",
+          "level": 2,
+          "line": 29
+        },
+        {
+          "heading": "3. 价格与库存（realFBS）",
+          "level": 2,
+          "line": 38
+        },
+        {
+          "heading": "4. 配额与限流",
+          "level": 2,
+          "line": 45
+        },
+        {
+          "heading": "5. 上架后状态查询",
+          "level": 2,
+          "line": 53
+        },
+        {
+          "heading": "6. 与本项目相关的坑（按踩坑概率排序）",
+          "level": 2,
+          "line": 59
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 7
+      }
+    },
+    {
+      "path": "docs/research/ozon-pricing-formula.md",
+      "language": "markdown",
+      "fileCategory": "docs",
+      "totalLines": 62,
+      "nonEmptyLines": 44,
+      "sections": [
+        {
+          "heading": "Ozon 跨境定价公式 · 逆向自毛子ERP定价工具",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "1. 定价公式（已验证到分）",
+          "level": 2,
+          "line": 7
+        },
+        {
+          "heading": "2. 佣金按售价分档（实现必须迭代）",
+          "level": 2,
+          "line": 32
+        },
+        {
+          "heading": "3. 物流尺寸档（按货值匹配）",
+          "level": 2,
+          "line": 38
+        },
+        {
+          "heading": "4. 与 ROADMAP 任务 4（unit_econ）的关系 [user-decided 2026-11-11]",
+          "level": 2,
+          "line": 51
+        },
+        {
+          "heading": "5. 数据来源与维护",
+          "level": 2,
+          "line": 57
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 6
+      }
+    },
+    {
+      "path": "docs/research/ozon-seller-form-alignment.md",
+      "language": "markdown",
+      "fileCategory": "docs",
+      "totalLines": 52,
+      "nonEmptyLines": 41,
+      "sections": [
+        {
+          "heading": "Ozon 后台上架表单字段对齐（seller.ozon.ru）",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "第 1 步：商品信息（listing_worker 必填映射）",
+          "level": 2,
+          "line": 8
+        },
+        {
+          "heading": "第 2 步：特征（该类目实测 21 个属性）",
+          "level": 2,
+          "line": 25
+        },
+        {
+          "heading": "审核台编辑器对齐实现（2026-11-11）",
+          "level": 2,
+          "line": 40
+        },
+        {
+          "heading": "内容评级（右侧栏）",
+          "level": 2,
+          "line": 49
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 5
+      }
+    }
+  ]
+}
